@@ -7,3 +7,4 @@ exports.convertTimestampToDate = ({ created_at, ...otherProperties }) => {
 
 
 
+// Correcting issue where articles.js data does not store article_id
