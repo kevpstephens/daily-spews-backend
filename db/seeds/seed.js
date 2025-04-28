@@ -1,16 +1,12 @@
-// import db object from connection file - gives access to PostgreSQL database through pg client
 const db = require("../connection");
-// import pg-format, Node.js package that helps build SQL queries.
 const format = require("pg-format");
 const { convertTimestampToDate, createRef } = require("./utils");
 
 const seed = async ({ topicData, userData, articleData, commentData }) => {
-  // using async means this function will return a promise - grants use of await keyword inside function.
-  await db.query(`DROP TABLE IF EXISTS comments;`); // have in reverse dependency order
+  await db.query(`DROP TABLE IF EXISTS comments;`); 
   await db.query(`DROP TABLE IF EXISTS articles;`);
   await db.query(`DROP TABLE IF EXISTS users;`);
   await db.query(`DROP TABLE IF EXISTS topics;`);
-  // to view table -> terminal: psql nc_news_test -> \d topics
 
   await db.query(`CREATE TABLE topics (
     slug VARCHAR PRIMARY KEY,
@@ -43,8 +39,6 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
     author VARCHAR REFERENCES users(username),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )`);
-
-  // to view insertions => terminal: psql psql nc_news_test -> SELECT * FROM topics;
 
   //! Insert Topics Data
   const formattedTopics = topicData.map(({ slug, description, img_url }) => [
@@ -92,7 +86,6 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
   const insertedArticles = await db.query(insertArticlesData)
 
   //! Insert Comments Data
-  // console.log(insertedArticles, '<<<<<<<<<<<<<<<<<<<<---------------------insertedArticles')
   const articlesRefObject = createRef(insertedArticles.rows)
   const createdAtErrorCorrectedCommentsData = commentData.map(convertTimestampToDate);
   const formattedComments = createdAtErrorCorrectedCommentsData.map((comment) => {
@@ -112,41 +105,3 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
 };
 
 module.exports = seed;
-
-
-
-
-// sql = format('INSERT INTO t (name, age) VALUES %L', myNestedArray);
-// %L = Literal values - used for strings, numbers, dates etc. - like a place holder for the values passed as second argument
-
-
-
-
-
-// // .then version
-
-// // console.log(formattedArticles, '<<<<<<<<<<<<<<<<<<<<----------------------formattedArticles')
-// // console.log(insertArticlesData, '<<<<<<<<<<<<<<<<<<<<----------------------insertArticlesData')
-// .then((result) => {
-//   // console.log(result, '<<<<<<<<<<<<<<<<<<<<----------------------result')
-//   // console.log(result.rows, '<<<<<<<<<<<<<<<<<<<<----------------------result')
-//   const articlesRefObject = createRef(result.rows)
-//   // console.log(articlesRefObject, '<<<<<<<<<<<<<<<<<<<<----------------------articlesRefObject')
-//   const createdAtErrorCorrectedCommentsData = commentData.map(convertTimestampToDate);
-//   const formattedComments = createdAtErrorCorrectedCommentsData.map((comment) => {
-//     return [
-//       articlesRefObject[comment.article_title], 
-//       comment.body, 
-//       comment.votes, 
-//       comment.author, 
-//       comment.created_at
-//     ]
-//   })
-//   // console.log(formattedComments, '<<<<<<<<<<<<<<<<<<<<----------------------formattedComments')
-//   const insertCommentsData = format(
-//     `INSERT INTO comments (article_id, body, votes, author, created_at) VALUES %L;`,
-//     formattedComments
-//   )
-//   return db.query(insertCommentsData)
-// })  
-// await console.log("seed complete")
