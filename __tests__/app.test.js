@@ -21,3 +21,32 @@ describe("GET /api", () => {
       });
   });
 });
+
+describe("GET /api/topics", () => {
+  test("200: Responds with an array containing topic objects", () => {
+    // Arrange
+    return request(app)
+    .get("/api/topics")
+    .expect(200)
+    .then(({body: {topics}}) => {
+      expect(Array.isArray(topics)).toBe(true)
+      expect(topics.length).toBe(3)
+      topics.forEach((topic) => {
+        expect(typeof topic.slug).toBe("string")
+        expect(typeof topic.description).toBe("string")
+      })
+    })
+  })
+  test.only("200: responds with an empty array when no topics exist", () => {
+    // Arrange
+    return db.query("TRUNCATE TABLE topics CASCADE;")
+    .then(() => {
+    return request(app)
+    .get("/api/topics")
+    .expect(200)
+    .then(({body: {topics}}) => {
+      expect(topics).toEqual([])
+    })  
+    })
+  })
+})
