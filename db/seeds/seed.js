@@ -108,7 +108,7 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
     `INSERT INTO comments (article_id, body, votes, author, created_at) VALUES %L;`, formattedComments
   );
   await db.query(insertCommentsData)
-  console.log("seed complete!")
+  console.log("Seed complete!")
 };
 
 module.exports = seed;
