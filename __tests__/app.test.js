@@ -177,3 +177,76 @@ describe("GET /api/articles/:article_id/comments", () => {
     })
   })
 })
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: Posts a comment on selected article, and responds with the newly created comment", () => {
+    // Arrange
+    const testComment = {
+      username: "lurker",
+      body: "test body of text"
+    }
+
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send(testComment)
+    .expect(201)
+    .then((result) => {
+      const {comment} = result.body
+      expect(comment).toEqual(expect.objectContaining({
+        comment_id: 19,
+        article_id: 1,
+        author: "lurker",
+        body: 'test body of text',
+        votes: 0,
+        created_at: expect.any(String)
+      }))
+    })
+  })
+
+  test("ERROR - 400: Post is missing a body of text", () => {
+    // Arrange
+    const testComment = {
+      username: "lurker"
+    }
+
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send(testComment)
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe("Bad request!")
+    })
+  })
+
+  test("ERROR - 404: User attempting to post comment does not exist ", () => {
+    // Arrange
+    const testComment = {
+      username: "non-existant-user",
+      body: "I literally don't exist"
+    }
+
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send(testComment)
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe("User does not exist")
+    })
+  })
+
+  test("ERROR - 404: Article queried does not exist", () => {
+    // Arrange
+    const testComment = {
+      username: "lurker",
+      body: "test body of text"
+    }
+
+    return request(app)
+    .post("/api/articles/123456789/comments")
+    .send(testComment)
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe("Article not found!")
+    })
+  })
+})
