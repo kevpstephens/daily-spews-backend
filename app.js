@@ -1,24 +1,43 @@
+// ~~~~~~~~~~~~~~~~~~~~ Core modules ~~~~~~~~~~~~~~~~~~~~
 const express = require("express")
 const app = express()
-const { getApi } = require("./app/controllers/api.cotroller.js")
-const { getTopics, getArticlesById, getAllArticles, getCommentsByArticleId, postCommentByArticleId, patchArticleById, deleteCommentById } = require("./app/controllers/topics.controller.js")
+// ~~~~~~~~~~~~~~~~~~~~ Controllers ~~~~~~~~~~~~~~~~~~~~
+const { getApi } = require("./app/controllers/api.controller.js")
+const { getArticlesById, getAllArticles, patchArticleById } = require("./app/controllers/articles.controller.js")
+const { getCommentsByArticleId, deleteCommentById, postCommentByArticleId } = require("./app/controllers/comments.controller.js")
+const { getTopics } = require("./app/controllers/topics.controller.js")
+const { getUsers } = require("./app/controllers/users.controller.js")
+// ~~~~~~~~~~~~~~~~~~~~ Error Handlers ~~~~~~~~~~~~~~~~~~~~
 const { handleCustomErrors, handleServerErrors, handlePSQLErrors } = require("./errors/errorHandlers.js")
 
-// Middleware
+
+
+// ~~~~~~~~~~~~~~~~~~~~ Middleware ~~~~~~~~~~~~~~~~~~~~
 app.use(express.json())
 
-// Endpoints
+
+// ~~~~~~~~~~~~~~~~~~~~ Endpoints ~~~~~~~~~~~~~~~~~~~~
+// API info
 app.get("/api", getApi)
-app.get("/api/topics", getTopics)
+
+// Articles
 app.get("/api/articles/:article_id", getArticlesById)
 app.get("/api/articles", getAllArticles)
+app.patch("/api/articles/:article_id", patchArticleById)
+
+// Comments
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
 app.post("/api/articles/:article_id/comments", postCommentByArticleId)
-app.patch("/api/articles/:article_id", patchArticleById)
 app.delete("/api/comments/:comment_id", deleteCommentById)
 
+// Topics
+app.get("/api/topics", getTopics)
 
-// Error Handling
+// Users
+app.get("/api/users", getUsers)
+
+
+// ~~~~~~~~~~~~~~~~~~~~ Error Handling ~~~~~~~~~~~~~~~~~~~~
 app.use(handleCustomErrors) 
 app.use(handlePSQLErrors)
 app.use(handleServerErrors)

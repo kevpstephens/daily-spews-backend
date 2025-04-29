@@ -32,6 +32,7 @@ describe("GET /api/topics", () => {
     .then(({body: {topics}}) => {
       expect(Array.isArray(topics)).toBe(true)
       expect(topics.length).toBe(3)
+
       topics.forEach((topic) => {
         expect(typeof topic.slug).toBe("string")
         expect(typeof topic.description).toBe("string")
@@ -368,6 +369,28 @@ describe("DELETE /api/comments/:comment_id", () => {
     .expect(404)
     .then((response) => {
       expect(response.body.msg).toBe("Comment not found!")
+    })
+  })
+})
+
+describe("GET /api/users", () => {
+  test("200: Responds with an array containing all of users, stored in user objects", () => {
+    // Arrange
+    return request(app)
+    .get("/api/users")
+    .expect(200)
+    .then(({body}) => {
+      const users = body.users
+      expect(Array.isArray(users)).toBe(true)
+      expect(users.length).toBeGreaterThan(0)
+      
+      users.forEach((user) => {
+        expect(user).toEqual(expect.objectContaining({
+          username: expect.any(String),
+          name: expect.any(String),
+          avatar_url: expect.any(String)
+        }))
+      })
     })
   })
 })
