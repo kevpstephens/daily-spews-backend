@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById } = require("../models/topics.model")
+const { selectTopics, selectArticleById, selectAllArticles } = require("../models/topics.model")
 
 exports.getTopics = async (req, res, next) => {
     try {
@@ -18,3 +18,20 @@ exports.getArticlesById = async (req, res, next) => {
         next(err)
     }
 }
+
+exports.getAllArticles = async (req, res, next) => {
+    try {
+        const articles = await selectAllArticles()
+        res.status(200).send({articles})
+    } catch (err) {
+        next(err)
+    }
+}
+
+// exports.getCommentsByArticleId = async (req, res, next) => {
+//     try {
+
+//     } catch (err) {
+//         next(err)
+//     }
+// }
