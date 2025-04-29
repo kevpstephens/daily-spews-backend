@@ -324,3 +324,50 @@ describe("PATCH /api/articles/:article_id", () => {
     })
   })
 })
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: Deletes the comment, via comment_id, and returns no content in an empty object", () => {
+    // Arrange
+    return request(app)
+    .delete("/api/comments/1")
+    .expect(204)
+    .then((response) => {
+      expect(response.body).toEqual({})
+      })
+    })
+    
+  test("204: Deletes the comment, via comment_id, and then checks to ensure that comment no longer exists", () => {
+    // Arrange
+    return request(app)
+    .delete("/api/comments/1")
+    .expect(204)
+    .then(() => {
+      return request(app)
+      .delete("/api/comments/1")
+      .expect(404)
+      .then(({body}) => {
+        expect(body.msg).toBe("Comment not found!")
+      })
+    })
+  })
+
+  test("ERROR - 400: Responds with 'Bad request!' when comment_id inputted is not a number", () => {
+    // Arrange
+    return request(app)
+    .delete("/api/comments/not-a-number")
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toBe("Bad request!")
+    })
+  })
+
+  test("ERROR - 404: Responds with 'Comment not found!' when comment_id inputted does not exist", () => {
+    // Arrange
+    return request(app)
+    .delete("/api/comments/123456789")
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe("Comment not found!")
+    })
+  })
+})

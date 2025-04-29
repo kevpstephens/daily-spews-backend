@@ -1,4 +1,5 @@
-const { selectTopics, selectArticleById, selectAllArticles, selectCommentsByArticleId, insertCommentByArticleId, updateArticleById } = require("../models/topics.model")
+const { commentData, articleData } = require("../../db/data/test-data")
+const { selectTopics, selectArticleById, selectAllArticles, selectCommentsByArticleId, insertCommentByArticleId, updateArticleById, removeCommentById } = require("../models/topics.model")
 
 exports.getTopics = async (req, res, next) => {
     try {
@@ -45,10 +46,7 @@ exports.postCommentByArticleId = async (req, res, next) => {
     const {username, body} = req.body
 
     if (!body) {
-        throw {
-            status: 400,
-            msg: 'Bad request!'
-        }
+        return res.status(400).send({msg: "Bad request!"})
     }
 
     try {
@@ -60,15 +58,12 @@ exports.postCommentByArticleId = async (req, res, next) => {
     }
 }
 
-exports.patchArticlebyId = async (req, res, next) => {
+exports.patchArticleById = async (req, res, next) => {
     const {article_id} = req.params
     const {inc_votes} = req.body
 
     if (isNaN(inc_votes) || isNaN(article_id)) {
-        throw {
-            status: 400,
-            msg: 'Bad request!'
-        }
+        return res.status(400).send({msg: 'Bad request!'})
     }
 
     try {
@@ -78,5 +73,21 @@ exports.patchArticlebyId = async (req, res, next) => {
 
     } catch (err) {
         next(err)
+    }
+}
+
+exports.deleteCommentById = async (req, res, next) => {
+    const {comment_id} = req.params
+
+    if (isNaN(comment_id)) {
+        return res.status(400).send({msg: 'Bad request!'})
+    }
+    
+    try {
+        await removeCommentById(comment_id)
+        res.status(204).send()
+
+    } catch (err) {
+        next (err)
     }
 }
