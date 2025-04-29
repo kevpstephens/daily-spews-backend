@@ -119,5 +119,19 @@
     "description": "Deletes a comment, when given the appropriate comment_id. Responds with 204 and no content (an empty object).",
     "queries": [],
     "exampleResponse": {}
+  },
+
+  "GET /api/users": {
+    "description": "Serves an array containing all users, each user stored in an object.",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "butter_bridge",
+          "name": "jonny",
+          "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        }
+      ]
+    }
   }
 }
