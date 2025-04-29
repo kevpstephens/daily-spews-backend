@@ -43,6 +43,6 @@ exports.selectAllArticles = async () => {
   return result.rows
 }
 
-// exports.selectCommentsByArticleId = async() => {
-
-// }
+exports.selectCommentsByArticleId = async() => {
+    
+}

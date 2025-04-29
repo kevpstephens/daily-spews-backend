@@ -28,10 +28,10 @@ exports.getAllArticles = async (req, res, next) => {
     }
 }
 
-// exports.getCommentsByArticleId = async (req, res, next) => {
-//     try {
+exports.getCommentsByArticleId = async (req, res, next) => {
+    try {
 
-//     } catch (err) {
-//         next(err)
-//     }
-// }
+    } catch (err) {
+        next(err)
+    }
+}

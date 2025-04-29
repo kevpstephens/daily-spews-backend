@@ -61,8 +61,8 @@ describe("GET /api/articles/:article_id", () => {
     .get("/api/articles/1")
     .expect(200)
     .then(({body}) => {
+      expect(body.article.article_id).toBe(1)
       expect(body.article).toMatchObject({
-        article_id: expect.any(Number),
         title: expect.any(String),
         topic: expect.any(String),
         author: expect.any(String),
@@ -145,5 +145,11 @@ describe("GET /api/articles", () => {
       expect(articles).toEqual([]);
       })
     })
+  })
+})
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("test", () => {
+    // Arrange
   })
 })
