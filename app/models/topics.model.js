@@ -1,6 +1,6 @@
 const db = require("../../db/connection.js")
 
-exports.selectTopics = async () => {
+exports.selectTopics = async() => {
     const result = await db.query(`SELECT 
         slug, 
         description 
@@ -9,7 +9,7 @@ exports.selectTopics = async () => {
     return result.rows 
 }
 
-exports.selectArticleById = async (article_id) => {
+exports.selectArticleById = async(article_id) => {
     const result = await db.query(
         `SELECT * FROM articles
         WHERE article_id = $1`, 
@@ -25,7 +25,7 @@ exports.selectArticleById = async (article_id) => {
     return result.rows[0]
 }
 
-exports.selectAllArticles = async () => {
+exports.selectAllArticles = async() => {
     const result = await db.query(`SELECT 
             articles.author, 
             articles.title, 
@@ -65,4 +65,26 @@ exports.selectCommentsByArticleId = async(article_id) => {
         }
 
     return result.rows
+}
+
+exports.insertCommentByArticleId = async(article_id, {username, body}) => {
+
+    if (!body) {
+        throw {
+            status: 400,
+            msg: 'Bad request!'
+        }
+    }
+
+    const queryStr = `
+        INSERT INTO comments
+            (article_id, author, body)
+            VALUES 
+            ($1, $2, $3)
+        RETURNING comment_id, article_id, author, body, votes, created_at;
+        `
+
+    const result = await db.query(queryStr, [article_id, username, body])
+    
+    return result.rows[0]
 }
