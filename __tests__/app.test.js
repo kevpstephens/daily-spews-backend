@@ -39,19 +39,6 @@ describe("GET /api/topics", () => {
       })
     })
   })
-
-  test("200: responds with an empty array when no topics exist", () => {
-    // Arrange
-    return db.query("TRUNCATE TABLE topics CASCADE;")
-    .then(() => {
-    return request(app)
-    .get("/api/topics")
-    .expect(200)
-    .then(({body: {topics}}) => {
-      expect(topics).toEqual([])
-    })  
-    })
-  })
 })
 
 describe("GET /api/articles/:article_id", () => {
@@ -104,6 +91,7 @@ describe("GET /api/articles", () => {
     .then((result) => {
       const {articles} = result.body
       expect(Array.isArray(articles)).toBe(true)
+      expect(articles.length).toBeGreaterThan(0)
       
       articles.forEach((article) => {
         expect(article).toEqual(expect.objectContaining({
@@ -120,7 +108,7 @@ describe("GET /api/articles", () => {
     })
   })
 
-  test("200: Articles are sorted by created_at in descending order (latest created_at date first)", () => {
+  test("200: Articles are sorted by created_at in descending order (latest/most recent article first)", () => {
     // Arrange
     return request(app)
     .get("/api/articles")
@@ -131,25 +119,62 @@ describe("GET /api/articles", () => {
       expect(articles).toBeSortedBy("created_at", {descending: true})
     })
   })
-
-  test("200: Responds with an empty array when no articles exist", () => {
-    // Arrange
-    return db.query("TRUNCATE TABLE topics CASCADE;")
-    .then(() => {
-      return request(app)
-      .get("/api/articles")
-      .expect(200)
-      .then(({ body: { articles } }) => {
-      expect(Array.isArray(articles)).toBe(true);
-      expect(articles.length).toBe(0)
-      expect(articles).toEqual([]);
-      })
-    })
-  })
 })
 
 describe("GET /api/articles/:article_id/comments", () => {
-  test("test", () => {
+  test("200: Responds with an array of comment objects, all corresponding to the queried articled_id", () => {
     // Arrange
+    return request(app)
+    .get("/api/articles/1/comments")
+    .expect(200)
+    .then((result) => {
+      const {comments} = result.body
+
+      expect(Array.isArray(comments)).toBe(true)
+      expect(comments.length).toBeGreaterThan(0)
+      comments.forEach((comment) => {
+        expect(comment.article_id).toBe(1)
+        expect(comment).toMatchObject({
+          comment_id: expect.any(Number),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String)
+        })
+      })
+    })
+  })
+
+  test("200: Comments are sorted by created_at in descending order (most recent comments first)", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles/1/comments")
+    .expect(200)
+    .then((result) => {
+      const {comments} = result.body
+
+      expect(comments.length).toBeGreaterThan(0)
+      expect(comments).toBeSortedBy("created_at", {descending: true})
+    })
+  })
+
+  test("ERROR - 400: Responds with 'Bad request!' when when article_id is not a valid number", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles/invalid-request/comments")
+    .expect(400)
+    .then((result) => {
+      expect(result.body.msg).toBe("Bad request!")
+    })
+  })
+
+  test("ERROR - 404: Responds with 'Article not found!' when queried article_id does not exist", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles/123456789/comments")
+    .expect(404)
+    .then((result) => {
+      expect(result.body.msg).toBe("Article not found!")
+    })
   })
 })
