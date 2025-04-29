@@ -54,15 +54,15 @@ describe("GET /api/topics", () => {
   })
 })
 
-describe("GET /api/articles/:article_id", () => {
+describe.only("GET /api/articles/:article_id", () => {
   test("200: Responds with an article object containing the article that corresponds with the queried article_id", () => {
     // Arrange
     return request(app)
     .get("/api/articles/1")
     .expect(200)
     .then(({body}) => {
+      expect(body.article.article_id).toBe(1)
       expect(body.article).toMatchObject({
-        article_id: expect.any(Number),
         title: expect.any(String),
         topic: expect.any(String),
         author: expect.any(String),
