@@ -5,7 +5,6 @@ const seed = require("../db/seeds/seed.js")
 const data = require("../db/data/test-data")
 const app = require("../app.js")
 const request = require("supertest")
-require("jest-sorted")
 
 
 /* Set up your beforeEach & afterAll functions here */
@@ -121,7 +120,7 @@ describe("GET /api/articles", () => {
   })
 })
 
-describe.only("GET /api/articles/:article_id/comments", () => {
+describe("GET /api/articles/:article_id/comments", () => {
   test("200: Responds with an array of comment objects, all corresponding to the queried articled_id", () => {
     // Arrange
     return request(app)
@@ -129,7 +128,6 @@ describe.only("GET /api/articles/:article_id/comments", () => {
     .expect(200)
     .then((result) => {
       const {comments} = result.body
-      console.log(comments, '<<<<<<<<<<<<<<<<<<<<----------------------HERE')
 
       expect(Array.isArray(comments)).toBe(true)
       expect(comments.length).toBeGreaterThan(0)
