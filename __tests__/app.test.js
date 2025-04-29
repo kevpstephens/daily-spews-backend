@@ -121,7 +121,7 @@ describe("GET /api/articles", () => {
   })
 })
 
-describe("GET /api/articles/:article_id/comments", () => {
+describe.only("GET /api/articles/:article_id/comments", () => {
   test("200: Responds with an array of comment objects, all corresponding to the queried articled_id", () => {
     // Arrange
     return request(app)
@@ -129,6 +129,7 @@ describe("GET /api/articles/:article_id/comments", () => {
     .expect(200)
     .then((result) => {
       const {comments} = result.body
+      console.log(comments, '<<<<<<<<<<<<<<<<<<<<----------------------HERE')
 
       expect(Array.isArray(comments)).toBe(true)
       expect(comments.length).toBeGreaterThan(0)
