@@ -41,7 +41,7 @@ describe("GET /api/topics", () => {
 })
 
 describe("GET /api/articles/:article_id", () => {
-  test("200: Responds with an article object containing the article that corresponds with the queried article_id", () => {
+  test("200: Responds with an article object containing the article that corresponds with the requested article_id", () => {
     // Arrange
     return request(app)
     .get("/api/articles/1")
@@ -70,7 +70,7 @@ describe("GET /api/articles/:article_id", () => {
     })
   })
 
-  test("ERROR - 404: Responds with 'Article not found' when user queries non-existent article_id", () => {
+  test("ERROR - 404: Responds with 'Article not found' when user requests non-existent article_id", () => {
     // Arrange
     return request(app)
     .get("/api/articles/123456789")
@@ -121,7 +121,7 @@ describe("GET /api/articles", () => {
 })
 
 describe("GET /api/articles/:article_id/comments", () => {
-  test("200: Responds with an array of comment objects, all corresponding to the queried articled_id", () => {
+  test("200: Responds with an array of comment objects, all corresponding to the requested articled_id", () => {
     // Arrange
     return request(app)
     .get("/api/articles/1/comments")
@@ -167,7 +167,7 @@ describe("GET /api/articles/:article_id/comments", () => {
     })
   })
 
-  test("ERROR - 404: Responds with 'Article not found!' when queried article_id does not exist", () => {
+  test("ERROR - 404: Responds with 'Article not found!' when requested article_id does not exist", () => {
     // Arrange
     return request(app)
     .get("/api/articles/123456789/comments")
@@ -234,7 +234,7 @@ describe("POST /api/articles/:article_id/comments", () => {
     })
   })
 
-  test("ERROR - 404: Article queried does not exist", () => {
+  test("ERROR - 404: Responds with 'Article not found!' when article requested does not exist", () => {
     // Arrange
     const testComment = {
       username: "lurker",
@@ -244,6 +244,80 @@ describe("POST /api/articles/:article_id/comments", () => {
     return request(app)
     .post("/api/articles/123456789/comments")
     .send(testComment)
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe("Article not found!")
+    })
+  })
+})
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("200: Increments the vote count on a requested article by a specified amount and responds with updated article", () => {
+    // Arrange
+    const votes = {inc_votes: 50} 
+    return request(app)
+    .patch("/api/articles/1")
+    .send(votes)
+    .expect(200)
+    .then((result) => {
+      const {article} = result.body
+      
+      expect(article).toMatchObject({
+        article_id: 1,
+        votes: 150,
+        title: expect.any(String),
+        topic: expect.any(String),
+        author: expect.any(String),
+        body: expect.any(String),
+        created_at: expect.any(String),
+        article_img_url: expect.any(String)
+      })
+    })
+  })
+  
+  test("200: Decrements the vote count on a requested article by a specified amount", () => {
+    // Arrange
+    const votes = {inc_votes: -45} 
+    return request(app)
+    .patch("/api/articles/1")
+    .send(votes)
+    .expect(200)
+    .then((result) => {
+      const {article} = result.body
+      expect(article.votes).toBe(55)
+    })
+  })
+
+  test("ERROR - 400: Responds with 'Bad request!' when inc_votes inputted is not a number", () => {
+    // Arrange
+    const votes = {inc_votes: "This is not a number"} 
+    return request(app)
+    .patch("/api/articles/1")
+    .send(votes)
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe("Bad request!")
+    })
+  })
+
+  test("ERROR - 400: Responds with 'Bad request!' when article_id inputted is not a number", () => {
+    // Arrange
+    const votes = {inc_votes: "This is not a number"} 
+    return request(app)
+    .patch("/api/articles/not-a-number")
+    .send(votes)
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe("Bad request!")
+    })
+  })
+
+  test("ERROR - 404: Responds with 'Article not found!' when article_id requested does not exist", () => {
+    // Arrange
+    const votes = {inc_votes: 10} 
+    return request(app)
+    .patch("/api/articles/123456789")
+    .send(votes)
     .expect(404)
     .then(({body}) => {
       expect(body.msg).toBe("Article not found!")
