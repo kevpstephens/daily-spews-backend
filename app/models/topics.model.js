@@ -109,3 +109,20 @@ exports.updateArticleById = async(inc_votes, article_id) => {
     }
     return result.rows[0]
 }
+
+exports.removeCommentById = async (comment_id) => {
+    const queryStr = `
+        DELETE FROM comments
+        WHERE comment_id = $1
+        RETURNING *;
+        `
+    
+    const result = await db.query(queryStr, [comment_id])
+
+    if (!result.rows.length) {
+        throw {
+            status: 404,
+            msg: "Comment not found!"
+        }
+    }
+}
