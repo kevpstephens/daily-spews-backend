@@ -12,6 +12,18 @@ beforeEach(() => {return seed(data)})
 afterAll(() => {return db.end()})
 
 
+describe("ALL /*splat", () => {
+  test("ERROR - 404: When an undefined path is entered, responds with error message stating '404: Path Not Found!'", () => {
+    // Arrange
+    return request(app)
+    .get("/api/invalid-path")
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("404: Path Not Found!");
+    });
+  })
+})
+
 describe("GET /api", () => {
   test("200: Responds with an object detailing the documentation for each endpoint", () => {
     return request(app)
@@ -61,13 +73,13 @@ describe("GET /api/articles/:article_id", () => {
     })
   })
 
-  test("ERROR - 400: Responds with 'bad request' when user makes invalid article_id request", () => {
+  test("ERROR - 400: Responds with 'Bad request!' when user makes invalid article_id request", () => {
     // Arrange
     return request(app)
     .get("/api/articles/invalid-request")
     .expect(400)
     .then(({body}) => {
-      expect(body.msg).toBe("Bad request!")
+      expect(body.msg).toBe("400: Bad Request!")
     })
   })
 
@@ -164,7 +176,7 @@ describe("GET /api/articles/:article_id/comments", () => {
     .get("/api/articles/invalid-request/comments")
     .expect(400)
     .then((result) => {
-      expect(result.body.msg).toBe("Bad request!")
+      expect(result.body.msg).toBe("400: Bad Request!")
     })
   })
 
@@ -231,7 +243,7 @@ describe("POST /api/articles/:article_id/comments", () => {
     .send(testComment)
     .expect(404)
     .then(({body}) => {
-      expect(body.msg).toBe("User does not exist")
+      expect(body.msg).toBe("404: Not Found!")
     })
   })
 
@@ -391,6 +403,49 @@ describe("GET /api/users", () => {
           avatar_url: expect.any(String)
         }))
       })
+    })
+  })
+})
+
+describe("GET /api/articles (sorting queries)", () => {
+  test("200: Articles are sorted by an alternative valid column (default sort by is created_at column, descending) ", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles?sort_by=article_id&order=desc")
+    .expect(200)
+    .then(({body: {articles}}) => {
+      expect(articles).toBeSortedBy("article_id", {descending: true})
+    })
+  })
+
+  test("200: Articles are sorted in ascending order, overriding default order and sort_by values", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles?sort_by=votes&order=asc")
+    .expect(200)
+    .then(({body: {articles}}) => {
+      expect(articles).toBeSortedBy("votes", {descending: false})
+      expect(articles).toBeSortedBy("votes", {ascending: true})
+    })
+  })
+
+  test("ERROR - 400: Responds with 'Invalid sort_by column!' when invalid sort_by column is queried", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles?sort_by=invalid_sort_by")
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toBe("Invalid sort_by column!")
+    })
+  })
+
+  test("ERROR - 400: Responds with 'Invalid order_by value!' when invalid order_by order is queried", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles?sort_by=author&order=invalid_order")
+    .expect(400)
+    .then((response) => {
+        expect(response.body.msg).toBe("Invalid order_by value!")
     })
   })
 })
