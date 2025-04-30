@@ -16,9 +16,9 @@ exports.postCommentByArticleId = async (req, res, next) => {
     const {article_id} = req.params
     const {username, body} = req.body
 
-    if (!body) {
+    if (!body || isNaN(article_id)) {
         return res.status(400).send({msg: "Bad request!"})
-    }
+    } 
 
     try {
         await selectArticleById(article_id)

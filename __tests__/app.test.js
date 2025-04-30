@@ -231,7 +231,24 @@ describe("POST /api/articles/:article_id/comments", () => {
     })
   })
 
-  test("ERROR - 404: User attempting to post comment does not exist ", () => {
+  test("ERROR - 400: Responds with 'Bad request!' when user attempts to post a comment to an invalid article_id", () => {
+    // Arrange
+    const testComment = {
+      username: "lurker",
+      body: "test body of text"
+    }
+
+    return request(app)
+    .post("/api/articles/invalid-article-id/comments")
+    .send(testComment)
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe("Bad request!")
+
+    })
+  })
+
+  test("ERROR - 404: User attempting to post the comment does not exist", () => {
     // Arrange
     const testComment = {
       username: "non-existant-user",
