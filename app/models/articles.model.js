@@ -60,9 +60,21 @@ exports.selectAllArticles = async (sort_by = "created_at", order = "desc", topic
 
 exports.selectArticleById = async (article_id) => {
   const queryStr = `
-    SELECT * FROM articles 
-    WHERE article_id = $1
-    `;
+    SELECT 
+      articles.author,
+      articles.title,
+      articles.article_id,
+      articles.topic,
+      articles.created_at,
+      articles.votes,
+      articles.body,
+      articles.article_img_url,
+      COUNT(comments.comment_id)::INT AS comment_count
+    FROM articles
+    LEFT JOIN comments ON comments.article_id = articles.article_id
+    WHERE articles.article_id = $1
+    GROUP BY articles.article_id;
+  `;
 
   const result = await db.query(queryStr, [article_id]);
 
