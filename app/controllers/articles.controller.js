@@ -15,6 +15,13 @@ exports.getAllArticles = async (req, res, next) => {
 exports.getArticlesById = async (req, res, next) => {
     const {article_id} = req.params
 
+    if (isNaN(Number(article_id))) {
+        throw {
+            status: 400,
+            msg: "Bad request!"
+        }
+    }
+
     try {
         const article = await selectArticleById(article_id)
         res.status(200).send({article})

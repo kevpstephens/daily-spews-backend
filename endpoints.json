@@ -1,20 +1,34 @@
 {
   "GET /api": {
-    "description": "Returns a JSON object containing all of the available endpoints of the api, and their descriptions."
+    "description": "Returns a JSON object containing all of the available api endpoints, and their descriptions."
   },
 
   "GET /api/topics": {
-    "description": "Returns an array of topic object",
+    "description": "Returns an array of topic objects.",
     "queries": [],
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   },
 
+  "GET /api/users": {
+    "description": "Returns an array containing all users, each user stored in an object with a key of username, name, and avatar_url.",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "butter_bridge",
+          "name": "jonny",
+          "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        }
+      ]
+    }
+  },
+
   "GET /api/articles": {
-    "description": "Returns an array containing a list of all the articles. Each article object includes a comment_count, while also excluding the body field. This endpoint supports sorting and ordering via query parameters, as well as filtering by topic.",
+    "description": "Returns an array containing a list of all the articles. Each article object includes a comment_count, while also excluding the body field. This endpoint supports sorting, ordering, and topic filtering via query parameters.",
     "queries": ["sort_by", "order", "topic"],
-    "exampleRequest": "/api/articles?sort_by=created_at&order=asc",
+    "exampleRequest": "/api/articles?sort_by=created_at&order=asc&topic=mitch",
     "exampleResponse": {
       "articles": [
         {
@@ -32,27 +46,28 @@
   },
 
   "GET /api/articles/:article_id": {
-    "description": "Returns a single article object, specified by its corresponding article_id",
+    "description": "Returns a single article object, specified by its corresponding article_id. Response will also include the total number of comments (comment_count).",
     "queries": [],
+    "exampleRequest": "/api/articles/1",
     "exampleResponse": {
-      "article": [
-        {
-          "article_id": 1,
-          "title": "Running a Node App",
-          "topic": "coding",
-          "author": "jessjelly",
-          "body": "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
-          "created_at": "2020-11-07 06:03:00",
-          "votes": 0,
-          "article_img_url": "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700"
-        }
-      ]
+      "article": {
+        "article_id": 1,
+        "title": "Running a Node App",
+        "topic": "coding",
+        "author": "jessjelly",
+        "body": "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
+        "created_at": "2020-11-07 06:03:00",
+        "votes": 0,
+        "article_img_url": "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
+        "comment_count": 8
+      }
     }
   },
 
   "GET /api/articles/:article_id/comments": {
     "description": "Returns an array of comment objects, selected via article_id, and sorted by created_at in descending order.",
     "queries": [],
+    "exampleRequest": "/api/articles/1/comments",
     "exampleResponse": {
       "comments": [
         {
@@ -68,8 +83,13 @@
   },
 
   "POST /api/articles/:article_id/comments": {
-    "description": "Adds a comment to the specified article, via article_id. Post requires a username, and a comment body of text in order to post a comment. Responds with a newly created comment object",
+    "description": "Adds a new comment to the specified article, via article_id. Requires a username, and a comment body in order to post a comment. Responds with the newly created comment object.",
     "queries": [],
+    "exampleRequest": "/api/articles/1",
+    "exampleBody": {
+      "username": "lurker",
+      "body": "test body of text"
+    },
     "exampleResponse": {
       "comment": {
         "comment_id": 19,
@@ -83,8 +103,12 @@
   },
 
   "PATCH /api/articles/:article_id": {
-    "description": "Updates the vote count of the specified article, via article_id, by the provided amount.",
+    "description": "Updates the vote count of the specified article, via article_id, by the amount provided in inc_votes.",
     "queries": [],
+    "exampleRequest": "/api/articles/1",
+    "exampleBody": {
+      "inc_votes": 50
+    },
     "exampleResponse": {
       "article": {
         "article_id": 1,
@@ -102,20 +126,7 @@
   "DELETE /api/comments/:comment_id": {
     "description": "Deletes a comment, when given the appropriate comment_id. Responds with 204 and no content (an empty object).",
     "queries": [],
+    "exampleRequest": "/api/comments/1",
     "exampleResponse": {}
-  },
-
-  "GET /api/users": {
-    "description": "Returns an array containing all users, each user stored in an object.",
-    "queries": [],
-    "exampleResponse": {
-      "users": [
-        {
-          "username": "butter_bridge",
-          "name": "jonny",
-          "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
-        }
-      ]
-    }
   }
 }

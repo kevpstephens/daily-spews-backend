@@ -78,7 +78,7 @@ describe("GET /api/articles/:article_id", () => {
     .get("/api/articles/invalid-request")
     .expect(400)
     .then(({body}) => {
-      expect(body.msg).toBe("400: Bad Request!")
+      expect(body.msg).toBe("Bad request!")
     })
   })
   test("ERROR - 404: Responds with 'Article not found' when user requests non-existent article_id", () => {
@@ -481,6 +481,57 @@ describe("GET /api/articles (topic query)", () => {
     .expect(404)
     .then(({body}) => {
       expect(body.msg).toBe("Topic does not exist!")
+    })
+  })
+})
+
+describe("GET /api/articles/:article_id (comment_count)", () => {
+  test("200: Returns an article, corresponding to the inputted article_id, that contains a comment_count", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles/1")
+    .expect(200)
+    .then(({body}) => {
+      const {article} = body
+      expect(article).toEqual(expect.objectContaining({
+        author: expect.any(String),
+        title: expect.any(String),
+        article_id: expect.any(Number),
+        topic: expect.any(String),
+        created_at: expect.any(String),
+        votes: expect.any(Number),
+        body: expect.any(String),
+        article_img_url: expect.any(String),
+        comment_count: expect.any(Number),
+      }))
+    })
+  })
+  test("200: Returns the correct article, even when comment_count is 0", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles/2")
+    .expect(200)
+    .then(({body}) => {
+      const {article} = body
+      expect(article.comment_count).toBe(0)
+    })
+  })
+  test("ERROR - 400: When user inputs invalid article_id, should respond with 'Bad request!", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles/invalid-article-id")
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe("Bad request!")
+    })
+  })
+  test("ERROR - 404: When user inputs article_id that does not exist, should respond with 'Article not found!'", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles/123456789")
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe("Article not found!")
     })
   })
 })
