@@ -12,8 +12,8 @@
   },
 
   "GET /api/articles": {
-    "description": "Returns an array containing a list of all the articles. Each article object includes a comment_count, while also excluding the body field. This endpoint supports sorting and ordering via query parameters.",
-    "queries": ["sort_by", "order"],
+    "description": "Returns an array containing a list of all the articles. Each article object includes a comment_count, while also excluding the body field. This endpoint supports sorting and ordering via query parameters, as well as filtering by topic.",
+    "queries": ["sort_by", "order", "topic"],
     "exampleRequest": "/api/articles?sort_by=created_at&order=asc",
     "exampleResponse": {
       "articles": [

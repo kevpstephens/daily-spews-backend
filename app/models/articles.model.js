@@ -1,23 +1,6 @@
 const db = require("../../db/connection.js");
 
-exports.selectArticleById = async (article_id) => {
-  const queryStr = `
-    SELECT * FROM articles 
-    WHERE article_id = $1
-    `;
-
-  const result = await db.query(queryStr, [article_id]);
-
-  if (!result.rows.length) {
-    throw {
-      status: 404,
-      msg: `Article not found!`,
-    };
-  }
-  return result.rows[0];
-};
-
-exports.selectAllArticles = async (sort_by = "created_at", order = "desc") => {
+exports.selectAllArticles = async (sort_by = "created_at", order = "desc", topic) => {
   const validSortByColumns = ["author", "title", "article_id", "topic", "created_at", "votes", "article_img_url", "comment_count"]
   const validSortByOrders = ["asc", "desc"]
 
@@ -34,6 +17,23 @@ exports.selectAllArticles = async (sort_by = "created_at", order = "desc") => {
       msg: "Invalid order_by value!"
     }
   }
+
+  const queriedTopic = []
+  let whereClauseStr = ""
+
+  if (topic) {
+    const checkTopicExists = await db.query
+    (`SELECT * FROM topics WHERE slug = $1`, [topic])
+
+    if (checkTopicExists.rows.length === 0) {
+      throw {
+          status: 404,
+          msg: 'Topic does not exist!'
+        }
+    }
+    queriedTopic.push(topic)
+    whereClauseStr += `WHERE topic = $1`
+  }
   
   const queryStr = `
         SELECT 
@@ -48,12 +48,31 @@ exports.selectAllArticles = async (sort_by = "created_at", order = "desc") => {
         FROM articles
         LEFT JOIN comments
         ON articles.article_id = comments.article_id
+        ${whereClauseStr}
         GROUP BY articles.article_id
         ORDER BY ${sort_by} ${order.toUpperCase()};
         `;
 
-  const result = await db.query(queryStr);
+  const result = await db.query(queryStr, queriedTopic);
+
   return result.rows;
+};
+
+exports.selectArticleById = async (article_id) => {
+  const queryStr = `
+    SELECT * FROM articles 
+    WHERE article_id = $1
+    `;
+
+  const result = await db.query(queryStr, [article_id]);
+
+  if (!result.rows.length) {
+    throw {
+      status: 404,
+      msg: `Article not found!`,
+    };
+  }
+  return result.rows[0];
 };
 
 exports.updateArticleById = async (inc_votes, article_id) => {

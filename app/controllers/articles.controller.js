@@ -1,6 +1,16 @@
 const { sort } = require("../../db/data/test-data/articles.js")
 const { selectArticleById, selectAllArticles, updateArticleById } = require("../models/articles.model.js")
 
+exports.getAllArticles = async (req, res, next) => {
+    const {sort_by, order, topic} = req.query
+
+    try {
+        const articles = await selectAllArticles(sort_by, order, topic)
+        res.status(200).send({articles})
+    } catch (err) {
+        next(err)
+    }
+}
 
 exports.getArticlesById = async (req, res, next) => {
     const {article_id} = req.params
@@ -8,17 +18,6 @@ exports.getArticlesById = async (req, res, next) => {
     try {
         const article = await selectArticleById(article_id)
         res.status(200).send({article})
-    } catch (err) {
-        next(err)
-    }
-}
-
-exports.getAllArticles = async (req, res, next) => {
-    const {sort_by, order} = req.query
-
-    try {
-        const articles = await selectAllArticles(sort_by, order)
-        res.status(200).send({articles})
     } catch (err) {
         next(err)
     }
