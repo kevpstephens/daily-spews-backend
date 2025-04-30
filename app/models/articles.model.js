@@ -17,24 +17,7 @@ exports.selectArticleById = async (article_id) => {
     return result.rows[0];
   };
   
-  exports.selectAllArticles = async (sort_by = "created_at", order = "desc") => {
-    const validSortByColumns = ["author", "title", "article_id", "topic", "created_at", "votes", "article_img_url", "comment_count"]
-    const validSortByOrders = ["asc", "desc"]
-
-    if (!validSortByColumns.includes(sort_by)) {
-      throw {
-        status: 400,
-        msg: "Invalid sort_by column!"
-      }
-    }
-
-    if (!validSortByOrders.includes(order)) {
-      throw {
-        status: 400,
-        msg: "Invalid order_by value!"
-      }
-    }
-    
+  exports.selectAllArticles = async () => {
     const queryStr = `
           SELECT 
               articles.author, 
@@ -49,7 +32,7 @@ exports.selectArticleById = async (article_id) => {
           LEFT JOIN comments
           ON articles.article_id = comments.article_id
           GROUP BY articles.article_id
-          ORDER BY ${sort_by} ${order.toUpperCase()};
+          ORDER BY articles.created_at DESC;
           `;
   
     const result = await db.query(queryStr);
