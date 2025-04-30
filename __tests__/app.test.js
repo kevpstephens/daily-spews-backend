@@ -72,7 +72,6 @@ describe("GET /api/articles/:article_id", () => {
       })
     })
   })
-
   test("ERROR - 400: Responds with 'Bad request!' when user makes invalid article_id request", () => {
     // Arrange
     return request(app)
@@ -82,7 +81,6 @@ describe("GET /api/articles/:article_id", () => {
       expect(body.msg).toBe("400: Bad Request!")
     })
   })
-
   test("ERROR - 404: Responds with 'Article not found' when user requests non-existent article_id", () => {
     // Arrange
     return request(app)
@@ -119,7 +117,6 @@ describe("GET /api/articles", () => {
       })
     })
   })
-
   test("200: Articles are sorted by created_at in descending order (latest/most recent article first)", () => {
     // Arrange
     return request(app)
@@ -156,7 +153,6 @@ describe("GET /api/articles/:article_id/comments", () => {
       })
     })
   })
-
   test("200: Comments are sorted by created_at in descending order (most recent comments first)", () => {
     // Arrange
     return request(app)
@@ -169,7 +165,6 @@ describe("GET /api/articles/:article_id/comments", () => {
       expect(comments).toBeSortedBy("created_at", {descending: true})
     })
   })
-
   test("ERROR - 400: Responds with 'Bad request!' when when article_id is not a valid number", () => {
     // Arrange
     return request(app)
@@ -179,7 +174,6 @@ describe("GET /api/articles/:article_id/comments", () => {
       expect(result.body.msg).toBe("400: Bad Request!")
     })
   })
-
   test("ERROR - 404: Responds with 'Article not found!' when requested article_id does not exist", () => {
     // Arrange
     return request(app)
@@ -215,7 +209,6 @@ describe("POST /api/articles/:article_id/comments", () => {
       }))
     })
   })
-
   test("ERROR - 400: Post is missing a body of text", () => {
     // Arrange
     const testComment = {
@@ -230,7 +223,6 @@ describe("POST /api/articles/:article_id/comments", () => {
       expect(body.msg).toBe("Bad request!")
     })
   })
-
   test("ERROR - 400: Responds with 'Bad request!' when user attempts to post a comment to an invalid article_id", () => {
     // Arrange
     const testComment = {
@@ -247,7 +239,6 @@ describe("POST /api/articles/:article_id/comments", () => {
 
     })
   })
-
   test("ERROR - 404: User attempting to post the comment does not exist", () => {
     // Arrange
     const testComment = {
@@ -263,7 +254,6 @@ describe("POST /api/articles/:article_id/comments", () => {
       expect(body.msg).toBe("404: Not Found!")
     })
   })
-
   test("ERROR - 404: Responds with 'Article not found!' when article requested does not exist", () => {
     // Arrange
     const testComment = {
@@ -304,7 +294,6 @@ describe("PATCH /api/articles/:article_id", () => {
       })
     })
   })
-  
   test("200: Decrements the vote count on a requested article by a specified amount", () => {
     // Arrange
     const votes = {inc_votes: -45} 
@@ -317,7 +306,6 @@ describe("PATCH /api/articles/:article_id", () => {
       expect(article.votes).toBe(55)
     })
   })
-
   test("ERROR - 400: Responds with 'Bad request!' when inc_votes inputted is not a number", () => {
     // Arrange
     const votes = {inc_votes: "This is not a number"} 
@@ -329,7 +317,6 @@ describe("PATCH /api/articles/:article_id", () => {
       expect(body.msg).toBe("Bad request!")
     })
   })
-
   test("ERROR - 400: Responds with 'Bad request!' when article_id inputted is not a number", () => {
     // Arrange
     const votes = {inc_votes: "This is not a number"} 
@@ -341,7 +328,6 @@ describe("PATCH /api/articles/:article_id", () => {
       expect(body.msg).toBe("Bad request!")
     })
   })
-
   test("ERROR - 404: Responds with 'Article not found!' when article_id requested does not exist", () => {
     // Arrange
     const votes = {inc_votes: 10} 
@@ -363,9 +349,8 @@ describe("DELETE /api/comments/:comment_id", () => {
     .expect(204)
     .then((response) => {
       expect(response.body).toEqual({})
-      })
     })
-    
+  })
   test("204: Deletes the comment, via comment_id, and then checks to ensure that comment no longer exists", () => {
     // Arrange
     return request(app)
@@ -380,7 +365,6 @@ describe("DELETE /api/comments/:comment_id", () => {
       })
     })
   })
-
   test("ERROR - 400: Responds with 'Bad request!' when comment_id inputted is not a number", () => {
     // Arrange
     return request(app)
@@ -390,7 +374,6 @@ describe("DELETE /api/comments/:comment_id", () => {
       expect(response.body.msg).toBe("Bad request!")
     })
   })
-
   test("ERROR - 404: Responds with 'Comment not found!' when comment_id inputted does not exist", () => {
     // Arrange
     return request(app)
@@ -434,7 +417,6 @@ describe("GET /api/articles (sorting queries)", () => {
       expect(articles).toBeSortedBy("article_id", {descending: true})
     })
   })
-
   test("200: Articles are sorted in ascending order, overriding default order and sort_by values", () => {
     // Arrange
     return request(app)
@@ -445,7 +427,6 @@ describe("GET /api/articles (sorting queries)", () => {
       expect(articles).toBeSortedBy("votes", {ascending: true})
     })
   })
-
   test("ERROR - 400: Responds with 'Invalid sort_by column!' when invalid sort_by column is queried", () => {
     // Arrange
     return request(app)
@@ -455,7 +436,6 @@ describe("GET /api/articles (sorting queries)", () => {
       expect(response.body.msg).toBe("Invalid sort_by column!")
     })
   })
-
   test("ERROR - 400: Responds with 'Invalid order_by value!' when invalid order_by order is queried", () => {
     // Arrange
     return request(app)
@@ -463,6 +443,44 @@ describe("GET /api/articles (sorting queries)", () => {
     .expect(400)
     .then((response) => {
         expect(response.body.msg).toBe("Invalid order_by value!")
+    })
+  })
+})
+
+describe("GET /api/articles (topic query)", () => {
+  test("200: Articles are filtered by topic query", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles?topic=cats")
+    .expect(200)
+    .then(({body}) => {
+      const {articles} = body
+      expect(Array.isArray(articles)).toBe(true)
+      expect(articles.length).toBeGreaterThan(0)
+      articles.forEach((article) => {
+        expect(article.topic).toBe('cats')
+      })
+    })
+  })
+  test("200: Responds with an empty array if topic queried exists, but currently contains no articles'", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles?topic=paper")
+    .expect(200)
+    .then(({body}) => {
+      const {articles} = body
+      expect(Array.isArray(articles)).toBe(true)
+      expect(articles.length).toBe(0)
+      expect(articles).toEqual([])
+    })
+  })
+  test("ERROR - 404: When user inputs non-existent article topic, should respond with 'Topic does not exist!'", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles?topic=does-not-exist")
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe("Topic does not exist!")
     })
   })
 })
