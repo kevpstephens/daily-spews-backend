@@ -19,7 +19,7 @@ A RESTful API that provides the backend for a Reddit-style news app. <br>
 
 <br>
 
->🔗 **Live API, hosted on Render** - [https://nc-news-api-gtk7.onrender.com/api](https://nc-news-api-gtk7.onrender.com/api)   <br>
+🔗 **Live API, hosted on Render** - [https://nc-news-api-gtk7.onrender.com/api](https://nc-news-api-gtk7.onrender.com/api)   <br>
 
 ## <br><br>
 
