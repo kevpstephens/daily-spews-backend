@@ -81,7 +81,7 @@ describe("GET /api/articles/:article_id", () => {
       expect(body.msg).toBe("Bad request!")
     })
   })
-  test("ERROR - 404: Responds with 'Article not found' when user requests non-existent article_id", () => {
+  test("ERROR - 404: Responds with 'Article not found!' when user requests non-existent article_id", () => {
     // Arrange
     return request(app)
     .get("/api/articles/123456789")
@@ -394,7 +394,7 @@ describe("GET /api/users", () => {
     .then(({body}) => {
       const users = body.users
       expect(Array.isArray(users)).toBe(true)
-      expect(users.length).toBeGreaterThan(0)
+      expect(users.length).toBe(4)
       
       users.forEach((user) => {
         expect(user).toEqual(expect.objectContaining({
@@ -425,6 +425,26 @@ describe("GET /api/articles (sorting queries)", () => {
     .then(({body: {articles}}) => {
       expect(articles).toBeSortedBy("votes", {descending: false})
       expect(articles).toBeSortedBy("votes", {ascending: true})
+    })
+  })
+  test("200: Unrecognised query keys, or mispelled query keys, such as 'szzort_by' are ignored, and instead, all articles are returned in default order", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles?szzort_by=author")
+    .expect(200)
+    .then(({body: {articles}}) => {
+      expect(articles).toBeSortedBy("created_at", {descending: true}
+      )
+    })
+  })
+  test("200: Unrecognised query keys, or mispelled query keys, such as 'szzort_by' are ignored, but queried order is valid - should return all articles in ascending order (oldest first) by their default sort_by value (created_at)", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles?szzort_by=author&order=asc")
+    .expect(200)
+    .then(({body: {articles}}) => {
+      expect(articles).toBeSortedBy("created_at", {ascending: true})
+      expect(articles).toBeSortedBy("created_at", {descending: false})
     })
   })
   test("ERROR - 400: Responds with 'Invalid sort_by column!' when invalid sort_by column is queried", () => {
@@ -472,6 +492,16 @@ describe("GET /api/articles (topic query)", () => {
       expect(Array.isArray(articles)).toBe(true)
       expect(articles.length).toBe(0)
       expect(articles).toEqual([])
+    })
+  })
+  test("200: When 'topic' query is misspelled, such as 'tzzopic', should return ALL the articles sorted by their default value (created_at, descending)", () => {
+    // Arrange
+    return request(app)
+    .get("/api/articles?tzzopic=paper")
+    .expect(200)
+    .then(({body: {articles}}) => {
+      expect(articles.length).toBe(13)
+      expect(articles).toBeSortedBy("created_at", {descending: true})
     })
   })
   test("ERROR - 404: When user inputs non-existent article topic, should respond with 'Topic does not exist!'", () => {
