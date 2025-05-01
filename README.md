@@ -11,15 +11,15 @@
 
 A RESTful API that provides the backend for a Reddit-style news app. <br>
 
-> - Built with a stack that includes **Node.js**, **Express**, and **PostgreSQL**.
-> - This API permits access to articles, comments, topics, and users. <br>
-> - Features include the ability to retrieve data, sort, filter, add/remove votes, post and delete comments. <br>
-> - Thoroughly tested using **Jest** and **Supertest**. <br>
-> - Deployed online via **Render** with a hosted **Supabase** **PostgreSQL** database.
+ - Built with a stack that includes **Node.js**, **Express**, and **PostgreSQL**.
+ - This API permits access to articles, comments, topics, and users.
+ - Features include the ability to retrieve data, sort, filter, add/remove votes, post and delete comments.
+ - Thoroughly tested using **Jest** and **Supertest**.
+ - Deployed online via **Render** with a hosted **Supabase** **PostgreSQL** database.
 
 <br>
 
-🔗 **Live API, hosted on Render** - [https://nc-news-api-gtk7.onrender.com/api](https://nc-news-api-gtk7.onrender.com/api)
+>🔗 **Live API, hosted on Render** - [https://nc-news-api-gtk7.onrender.com/api](https://nc-news-api-gtk7.onrender.com/api)   <br>
 
 ## <br><br>
 
@@ -41,7 +41,7 @@ To run this project locally or in production, ensure you have the following inst
 
 <br>
 
-**Note:** Full **tech stack** listed <u>[below](#tech-stack)</u>.
+>💡 **Note:** Full **tech stack** listed <u>[below](#tech-stack)</u>.
 
 ## <br><br>
 
