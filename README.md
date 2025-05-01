@@ -85,12 +85,12 @@ npm run setup-dbs
 ```
 <br>
 
-### 5️⃣ - Seed databses:
-
-
+### 5️⃣ - Seed databases:
+>- Seed development database
 ```shell
 npm run seed-dev
 ```
+>- Seed test database
 ```shell
 npm run test-seed
 ```
