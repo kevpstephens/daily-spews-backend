@@ -49,12 +49,14 @@ To run this project locally or in production, ensure you have the following inst
 
 # Installation & Setup:
 ### 1️⃣ - Clone the repo:
+>- Clone the repo down to your local machine using Git
 ```bash
 git clone https://github.com/YOUR_GITHUB_USERNAME/northcoders-news-BE.git 
 ```
 <br>
 
 ### 2️⃣ - Install dependencies:
+>- Install all project dependencies listed in the package.json
 ```bash
 npm install
 ``` 
@@ -62,17 +64,17 @@ npm install
 
 ### 3️⃣ - Setup environmental dependencies:
 >- Create **two** .env files in your projects root directory:
-<br>
 
 ```shell
 # .env.development
 
 PGDATABASE=nc_news
 ```
-<br>
+><br>
 
 ```shell
 # .env.test
+
 PGDATABASE=nc_news_test
 ```
 <br>
@@ -97,6 +99,7 @@ npm run test-seed
 <br>
 
 ### 6️⃣ - Run tests:
+>- Run all tests using Jest to verify functionality
 ```shell
 npm test
 ```
