@@ -24,7 +24,7 @@ A RESTful API that provides the backend for a Reddit-style news app. <br>
 🔗 **Live API, hosted on Render** - [https://nc-news-api-gtk7.onrender.com/api](https://nc-news-api-gtk7.onrender.com/api) 
 
 <br><br>
-
+--
 # Index:
 
 - [Requirements](#requirements)
@@ -32,7 +32,7 @@ A RESTful API that provides the backend for a Reddit-style news app. <br>
 - [Tech Stack](#tech-stack)
 
 <br><br>
-
+--
 # Requirements: 
 
 To run this project locally or in production, ensure you have the following installed:
@@ -46,7 +46,7 @@ To run this project locally or in production, ensure you have the following inst
 
 
 <br><br>
-
+--
 # Installation & Setup:
 ### 1️⃣ - Clone the repo:
 >- Clone the repo down to your local machine using Git
@@ -105,7 +105,7 @@ npm test
 ```
 
 <br><br>
-
+--
 # Tech Stack: 
 <br>
 
