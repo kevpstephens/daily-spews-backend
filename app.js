@@ -36,7 +36,7 @@ app.get("/api/topics", getTopics)
 
 // Users
 app.get("/api/users", getUsers)
-
+ 
 // Catch-all
 app.all("/*splat", (req, res) => {
     res.status(404).send({msg: "404: Path Not Found!"})
