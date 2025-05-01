@@ -1,11 +1,14 @@
 {
   "GET /api": {
-    "description": "Returns a JSON object containing all of the available api endpoints, and their descriptions."
+    "description": "Returns a JSON object containing all of the available api endpoints, and their descriptions.",
+    "queries": [],
+    "exampleRequest": "/api"
   },
 
   "GET /api/topics": {
     "description": "Returns an array of topic objects.",
     "queries": [],
+    "exampleRequest": "/api/topics",
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
@@ -14,6 +17,7 @@
   "GET /api/users": {
     "description": "Returns an array containing all users, each user stored in an object with a key of username, name, and avatar_url.",
     "queries": [],
+    "exampleRequest": "/api/users",
     "exampleResponse": {
       "users": [
         {
