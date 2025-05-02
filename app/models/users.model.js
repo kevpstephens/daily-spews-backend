@@ -8,15 +8,15 @@ exports.selectAllUsers = async () => {
 };
 
 exports.selectUserByUsername = async (username) => {
-  const queryStr = `SELECT * FROM users WHERE username = $1`
-  const result = await db.query(queryStr, [username])
+  const queryStr = `SELECT * FROM users WHERE username = $1`;
+  const result = await db.query(queryStr, [username]);
 
   if (!result.rows.length) {
     throw {
       status: 404,
-      msg: "User does not exist!"
-    }
+      msg: "User does not exist!",
+    };
   }
 
-  return result.rows[0] 
-}
+  return result.rows[0];
+};

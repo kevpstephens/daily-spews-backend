@@ -1,5 +1,9 @@
 const express = require("express");
-const { getArticlesById, getAllArticles, patchArticleById } = require("../controllers/articles.controller");
+const {
+  getArticlesById,
+  getAllArticles,
+  patchArticleById,
+} = require("../controllers/articles.controller");
 
 const articlesRouter = express.Router();
 

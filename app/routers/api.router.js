@@ -7,11 +7,11 @@ const { getApi } = require("../controllers/api.controller");
 
 const apiRouter = express.Router();
 
-apiRouter.get("/", getApi)
+apiRouter.get("/", getApi);
 
 apiRouter.use("/topics", topicsRouter);
-apiRouter.use("/articles", articlesRouter)
-apiRouter.use("/", commentsRouter)
-apiRouter.use("/users", usersRouter)
+apiRouter.use("/articles", articlesRouter);
+apiRouter.use("/", commentsRouter);
+apiRouter.use("/users", usersRouter);
 
 module.exports = apiRouter;
