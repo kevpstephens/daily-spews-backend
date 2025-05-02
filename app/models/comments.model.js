@@ -56,3 +56,22 @@ exports.removeCommentById = async (comment_id) => {
     };
   }
 };
+
+exports.updateCommentVotesById = async (comment_id, inc_votes) => {
+  const queryStr = `
+    UPDATE comments
+    SET votes = votes + $1
+    WHERE comment_id = $2
+    RETURNING *;`;
+
+  const result = await db.query(queryStr, [inc_votes, comment_id]);
+
+  if (!result.rows.length) {
+    throw {
+      status: 404,
+      msg: "Comment does not exist!",
+    };
+  }
+
+  return result.rows[0];
+};
