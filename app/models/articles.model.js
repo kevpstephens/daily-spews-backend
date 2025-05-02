@@ -22,8 +22,8 @@ exports.selectAllArticles = async (sort_by = "created_at", order = "desc", topic
   let whereClauseStr = ""
 
   if (topic) {
-    const checkTopicExists = await db.query
-    (`SELECT * FROM topics WHERE slug = $1`, [topic])
+    const queryStr = `SELECT * FROM topics WHERE slug = $1`
+    const checkTopicExists = await db.query(queryStr, [topic])
 
     if (checkTopicExists.rows.length === 0) {
       throw {
