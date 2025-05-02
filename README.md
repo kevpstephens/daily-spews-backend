@@ -1,4 +1,5 @@
-# Northcoders News API <br> [![Hosted on Render](https://img.shields.io/badge/Hosted-Render-purple)](https://nc-news-api-gtk7.onrender.com/api) [![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue)](https://www.postgresql.org/) [![Node.js](https://img.shields.io/badge/Runtime-Node.js-green)](https://nodejs.org/) ![Jest](https://img.shields.io/badge/Tested_with-Jest-%23C21325?logo=jest&logoColor=white)
+# Northcoders News API <br> [![Hosted on Render](https://img.shields.io/badge/Hosted-Render-purple)](https://nc-news-api-gtk7.onrender.com/api) [![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue)](https://www.postgresql.org/) [![Node.js](https://img.shields.io/badge/Runtime-Node.js-green)](https://nodejs.org/) ![Jest](https://img.shields.io/badge/Tested_with-Jest-%23C21325?logo=jest&logoColor=white) [![CI & CD](https://github.com/kevpstephens/NC-news/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/kevpstephens/NC-news/actions/workflows/ci-cd.yml)
+
 
 <br>
 <p align="center">
