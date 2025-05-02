@@ -132,5 +132,7 @@
     "queries": [],
     "exampleRequest": "/api/comments/1",
     "exampleResponse": {}
-  }
+  },
+  
+  "for testing purposes": {}
 }
