@@ -5,6 +5,8 @@ const usersRouter = express.Router();
 
 // GET all users
 usersRouter.get("/", getUsers);
+
+// GET user by username
 usersRouter.get("/:username", getUserByUsername)
 
 module.exports = usersRouter;
