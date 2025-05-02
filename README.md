@@ -1,5 +1,7 @@
-# Northcoders News API <br> [![Hosted on Render](https://img.shields.io/badge/Hosted-Render-purple)](https://nc-news-api-gtk7.onrender.com/api) [![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue)](https://www.postgresql.org/) [![Node.js](https://img.shields.io/badge/Runtime-Node.js-green)](https://nodejs.org/) ![Jest](https://img.shields.io/badge/Tested_with-Jest-%23C21325?logo=jest&logoColor=white) [![CI & CD](https://github.com/kevpstephens/NC-news/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/kevpstephens/NC-news/actions/workflows/ci-cd.yml)
+# Northcoders News API <br> [![Hosted on Render](https://img.shields.io/badge/Hosted-Render-purple)](https://nc-news-api-gtk7.onrender.com/api) <space> [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v15+-blue)](https://www.postgresql.org/) <space> [![Node.js](https://img.shields.io/badge/Node.js-v18+-green)](https://nodejs.org/) <space> ![Jest](https://img.shields.io/badge/Tested_with-Jest-%23C21325?logo=jest&logoColor=white) <space> [![CI & CD](https://github.com/kevpstephens/NC-news/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/kevpstephens/NC-news/actions/workflows/ci-cd.yml)
 
+<!-- [![version](https://img.shields.io/npm/v/express)](https://nodejs.org/) -->
+<!-- ![Express](https://img.shields.io/badge/Express.js-404D59?logo=express) -->
 
 <br>
 <p align="center">
@@ -7,20 +9,17 @@
 </p>
 <br>
 
-<!-- [![version](https://img.shields.io/npm/v/express)](https://nodejs.org/) -->
-<!-- ![Express](https://img.shields.io/badge/Express.js-404D59?logo=express) -->
-
 A RESTful API that provides the backend for a Reddit-style news app. <br>
 
- - Built with a stack that includes **Node.js**, **Express**, and **PostgreSQL**.
- - This API permits access to articles, comments, topics, and users.
- - Features include the ability to retrieve data, sort, filter, add/remove votes, post and delete comments.
- - Thoroughly tested using **Jest** and **Supertest**.
- - Deployed online via **Render** with a hosted **Supabase** **PostgreSQL** database.
+- Built with a stack that includes **Node.js**, **Express**, and **PostgreSQL**.
+- This API permits access to articles, comments, topics, and users.
+- Features include the ability to retrieve data, sort, filter, add/remove votes, post and delete comments.
+- Thoroughly tested using **Jest** and **Supertest**.
+- Deployed online via **Render** with a hosted **Supabase** **PostgreSQL** database.
 
 <br>
 
-🔗 **Live API, hosted on Render** - [https://nc-news-api-gtk7.onrender.com/api](https://nc-news-api-gtk7.onrender.com/api)   <br>
+🔗 **Live API, hosted on Render** - [https://nc-news-api-gtk7.onrender.com/api](https://nc-news-api-gtk7.onrender.com/api) <br>
 
 ## <br><br>
 
@@ -42,7 +41,7 @@ To run this project locally or in production, ensure you have the following inst
 
 <br>
 
->💡 **Note:** Full **tech stack** listed <u>[below](#tech-stack)</u>.
+> 💡 **Note:** Full **tech stack** listed <u>[below](#tech-stack)</u>.
 
 ## <br><br>
 
