@@ -1,37 +1,12 @@
-name: Run Tests
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: nc_news_test
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    env:
-      PGDATABASE: nc_news_test
-      PGUSER: postgres
-      PGPASSWORD: password
-      PGHOST: localhost
-      PGPORT: 5432
-      NODE_ENV: test
 
     steps:
       - name: Checkout repository
@@ -45,11 +20,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Set up database
-        run: npm run setup-dbs
-
-      - name: Seed test database
-        run: npm run seed-dev
-
       - name: Run tests
         run: npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: success()
+
+    steps:
+      - name: Trigger Render Deploy Hook
+        run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
