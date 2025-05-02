@@ -6,6 +6,7 @@ on:
 
 jobs:
   test:
+    name: Test - (CI)
     runs-on: ubuntu-latest
 
     services:
@@ -53,8 +54,10 @@ jobs:
         run: npm test
 
   deploy:
+    name: Deploy - (CD)
     needs: test
     runs-on: ubuntu-latest
+    
     steps:
       - name: Trigger Render Deploy Hook
         run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
