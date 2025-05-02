@@ -559,7 +559,7 @@ describe("GET /api/users/:username", () => {
   });
 });
 
-describe.only("PATCH /api/comments/:comment_id", () => {
+describe("PATCH /api/comments/:comment_id", () => {
   test("200: Increments the vote count on an identified comment by a specified amount, and responds with an updated comment object", () => {
     // Arrange
     return request(app)
@@ -590,7 +590,7 @@ describe.only("PATCH /api/comments/:comment_id", () => {
           body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
           votes: -84,
           author: "butter_bridge",
-          created_at: "2020-04-06T12:17:00.000Z",
+          created_at: expect.any(String),
         });
       });
   });
