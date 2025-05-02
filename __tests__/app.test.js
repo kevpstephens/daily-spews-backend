@@ -514,3 +514,38 @@ describe("GET /api/articles (topic query)", () => {
     })
   })
 })
+
+describe("GET /api/users/:username", () => {
+  test("200: Responds with a user object with a username, avatar_url, and name property, that corresponds with the requested username", () => {
+    // Arrange
+    return request(app)
+    .get("/api/users/lurker")
+    .expect(200)
+    .then(({body}) => {
+      const user = body.user
+      expect(user).toEqual(expect.objectContaining({
+        username: "lurker",
+        name: "do_nothing",
+        avatar_url: "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+      }))
+    })
+  })
+  test("ERROR 404: Responds with 'User not found!' if username inputted does not exist", () => {
+    // Arrange
+    return request(app)
+    .get("/api/users/user-does-not-exist")
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe("User does not exist!")
+    })
+  })
+  test("ERROR 404: Responds with 'User not found!' when using incorrect casing for username", () => {
+    // Arrange
+    return request(app)
+    .get("/api/users/LuRkEr")
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe("User does not exist!")
+    })
+  })
+})
