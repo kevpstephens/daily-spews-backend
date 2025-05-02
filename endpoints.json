@@ -29,6 +29,19 @@
     }
   },
 
+  "GET /api/users/:username": {
+    "description": "Returns a single user object, that corresopnds to the inputted username. The object will contain properties of username, name, and avatar_url.",
+    "queries": [],
+    "exampleRequest": "/api/users/lurker",
+    "exampleResponse": {
+      "user": {
+        "username": "lurker",
+        "name": "Jane Doe",
+        "avatar_url": "https://some-image.com/avatar.png"
+      }
+    }
+  },
+
   "GET /api/articles": {
     "description": "Returns an array containing a list of all the articles. Each article object includes a comment_count, while also excluding the body field. This endpoint supports sorting, ordering, and topic filtering via query parameters.",
     "queries": ["sort_by", "order", "topic"],
