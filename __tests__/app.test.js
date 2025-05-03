@@ -636,7 +636,7 @@ describe("PATCH /api/comments/:comment_id", () => {
   });
 });
 
-describe.only("POST /api/articles", () => {
+describe("POST /api/articles", () => {
   test("201: Responds with the newly created article", () => {
     // Arrange
     const newArticle = {
@@ -701,26 +701,22 @@ describe.only("POST /api/articles", () => {
         expect(body.msg).toBe("User does not exist!");
       });
   });
-  // test("ERROR - 404: When user inputs invalid data types, responds with 'Bad request!'", () => {
-  //   // Arrange
-  //   const invalidDataEntry = {
-  //     author: "butter_bridge",
-  //     title: 123456789,
-  //     body: false,
-  //     topic: "cats",
-  //     article_img_url: "https://example.com/cat.jpg",
-  //   }
-
-  //   return request(app)
-  //   .post("/api/articles")
-  //   .send(invalidDataEntry)
-  //   .expect(400)
-  //   .then(({body}) => {
-  //   })
-  // })
 });
 
-describe.only("POST /api/articles - Missing required fields", () => {
+describe("POST /api/articles - Missing required fields", () => {
+  test("ERROR - 400: Responds with 'Missing rqeuired fields!' when any of the required fields in order to post an article are missing ", () => {
+    // Arrange
+    const invalidArticlePost = { title: "Insufficient fields deployed" };
+
+    return request(app)
+      .post("/api/articles")
+      .send(invalidArticlePost)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Missing required fields!");
+      });
+  });
+  
   const baseArticle = {
     author: "lurker",
     title: "Valid Title",
@@ -745,16 +741,4 @@ describe.only("POST /api/articles - Missing required fields", () => {
         });
     }
   );
-  test("ERROR - 400: Responds with 'Missing rqeuired fields!' when any of the required fields in order to post an article are missing ", () => {
-    // Arrange
-    const invalidArticlePost = { title: "Insufficient fields deployed" };
-
-    return request(app)
-      .post("/api/articles")
-      .send(invalidArticlePost)
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe("Missing required fields!");
-      });
-  });
 });
