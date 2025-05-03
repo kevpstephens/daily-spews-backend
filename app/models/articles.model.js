@@ -1,40 +1,53 @@
 const db = require("../../db/connection.js");
 
-exports.selectAllArticles = async (sort_by = "created_at", order = "desc", topic) => {
-  const validSortByColumns = ["author", "title", "article_id", "topic", "created_at", "votes", "article_img_url", "comment_count"]
-  const validSortByOrders = ["asc", "desc"]
+exports.selectAllArticles = async (
+  sort_by = "created_at",
+  order = "desc",
+  topic
+) => {
+  const validSortByColumns = [
+    "author",
+    "title",
+    "article_id",
+    "topic",
+    "created_at",
+    "votes",
+    "article_img_url",
+    "comment_count",
+  ];
+  const validSortByOrders = ["asc", "desc"];
 
   if (!validSortByColumns.includes(sort_by)) {
     throw {
       status: 400,
-      msg: "Invalid sort_by column!"
-    }
+      msg: "Invalid sort_by column!",
+    };
   }
 
   if (!validSortByOrders.includes(order)) {
     throw {
       status: 400,
-      msg: "Invalid order_by value!"
-    }
+      msg: "Invalid order_by value!",
+    };
   }
 
-  const queriedTopic = []
-  let whereClauseStr = ""
+  const queriedTopic = [];
+  let whereClauseStr = "";
 
   if (topic) {
-    const queryStr = `SELECT * FROM topics WHERE slug = $1`
-    const checkTopicExists = await db.query(queryStr, [topic])
+    const queryStr = `SELECT * FROM topics WHERE slug = $1`;
+    const checkTopicExists = await db.query(queryStr, [topic]);
 
     if (checkTopicExists.rows.length === 0) {
       throw {
-          status: 404,
-          msg: 'Topic does not exist!'
-        }
+        status: 404,
+        msg: "Topic does not exist!",
+      };
     }
-    queriedTopic.push(topic)
-    whereClauseStr += `WHERE topic = $1`
+    queriedTopic.push(topic);
+    whereClauseStr += `WHERE topic = $1`;
   }
-  
+
   const queryStr = `
         SELECT 
             articles.author, 
@@ -104,4 +117,26 @@ exports.updateArticleById = async (inc_votes, article_id) => {
     };
   }
   return result.rows[0];
+};
+
+exports.insertArticle = async ({
+  author,
+  title,
+  body,
+  topic,
+  article_img_url = "/images/default-profile.png",
+}) => {
+  
+  
+  const values = [author, title, body, topic, article_img_url];
+  const queryStr = `INSERT INTO articles 
+    (author, title, body, topic, article_img_url)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *;`;
+
+  const result = await db.query(queryStr, values);
+  const newArticle = result.rows[0];
+  newArticle.comment_count = 0;
+
+  return newArticle;
 };
