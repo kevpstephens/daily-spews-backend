@@ -99,6 +99,31 @@
     }
   },
 
+  "POST /api/articles": {
+    "description": "Creates a new article. Accepts an object with 'author', 'title', 'body', 'topic', and optionally 'article_img_url' (default image provided if field left unaddressed). Responds with the full newly created article including a comment_count of 0.",
+    "queries": [],
+    "exampleRequest": "/api/articles",
+    "exampleBody": {
+      "author": "lurker",
+      "title": "New Article Title",
+      "body": "Article content goes here...",
+      "topic": "cats"
+    },
+    "exampleResponse": {
+      "newArticle": {
+        "article_id": 13,
+        "author": "lurker",
+        "title": "New Article Title",
+        "body": "Article content goes here...",
+        "topic": "cats",
+        "article_img_url": "https://default.image.url/here.png",
+        "votes": 0,
+        "created_at": "2025-05-02T15:00:00.000Z",
+        "comment_count": 0
+      }
+    }
+  },
+
   "POST /api/articles/:article_id/comments": {
     "description": "Adds a new comment to the specified article, via article_id. Requires a username, and a comment body in order to post a comment. Responds with the newly created comment object.",
     "queries": [],

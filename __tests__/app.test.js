@@ -635,3 +635,126 @@ describe("PATCH /api/comments/:comment_id", () => {
       });
   });
 });
+
+describe.only("POST /api/articles", () => {
+  test("201: Responds with the newly created article", () => {
+    // Arrange
+    const newArticle = {
+      author: "butter_bridge",
+      title: "Why cats are the best",
+      body: "They're fluffy and independent, and they look you in the eye when they knock stuff over.",
+      topic: "cats",
+      article_img_url: "https://example.com/cat.jpg",
+    };
+
+    return request(app)
+      .post("/api/articles")
+      .send(newArticle)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.newArticle).toMatchObject({
+          author: "butter_bridge",
+          title: "Why cats are the best",
+          topic: "cats",
+          body: "They're fluffy and independent, and they look you in the eye when they knock stuff over.",
+          article_img_url: "https://example.com/cat.jpg",
+          votes: 0,
+          comment_count: 0,
+          article_id: expect.any(Number),
+          created_at: expect.any(String),
+        });
+      });
+  });
+  test("201: Sets article_image_url to default if not provided by user ", () => {
+    // Arrange
+    const defaultImageCheckArticle = {
+      author: "lurker",
+      title: "Default Image Checker",
+      body: "Checking if default image works.",
+      topic: "cats",
+    };
+
+    return request(app)
+      .post("/api/articles")
+      .send(defaultImageCheckArticle)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.newArticle.article_img_url).toBe(
+          "/images/default-profile.png"
+        );
+      });
+  });
+  test("ERROR - 404: When user creating post does not exist, responds with 'User does not exist", () => {
+    // Arrange
+    const invalidArticle = {
+      author: "user-does-not-exist",
+      title: "test title",
+      body: "test body.",
+      topic: "test topic",
+    };
+
+    return request(app)
+      .post("/api/articles")
+      .send(invalidArticle)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("User does not exist!");
+      });
+  });
+  // test("ERROR - 404: When user inputs invalid data types, responds with 'Bad request!'", () => {
+  //   // Arrange
+  //   const invalidDataEntry = {
+  //     author: "butter_bridge",
+  //     title: 123456789,
+  //     body: false,
+  //     topic: "cats",
+  //     article_img_url: "https://example.com/cat.jpg",
+  //   }
+
+  //   return request(app)
+  //   .post("/api/articles")
+  //   .send(invalidDataEntry)
+  //   .expect(400)
+  //   .then(({body}) => {
+  //   })
+  // })
+});
+
+describe.only("POST /api/articles - Missing required fields", () => {
+  const baseArticle = {
+    author: "lurker",
+    title: "Valid Title",
+    body: "This is the body.",
+    topic: "cats",
+  };
+
+  const missingFields = ["author", "title", "body", "topic"];
+
+  test.each(missingFields)(
+    "ERROR - 400: Responds with 'Missing required fields!' when '%s' is missing",
+    (missingField) => {
+      const invalidArticle = { ...baseArticle };
+      delete invalidArticle[missingField];
+
+      return request(app)
+        .post("/api/articles")
+        .send(invalidArticle)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Missing required fields!");
+        });
+    }
+  );
+  test("ERROR - 400: Responds with 'Missing rqeuired fields!' when any of the required fields in order to post an article are missing ", () => {
+    // Arrange
+    const invalidArticlePost = { title: "Insufficient fields deployed" };
+
+    return request(app)
+      .post("/api/articles")
+      .send(invalidArticlePost)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Missing required fields!");
+      });
+  });
+});
