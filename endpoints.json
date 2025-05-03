@@ -116,7 +116,7 @@
         "title": "New Article Title",
         "body": "Article content goes here...",
         "topic": "cats",
-        "article_img_url": "/public/images/default-profile.png",
+        "article_img_url": "/images/default-profile.png",
         "votes": 0,
         "created_at": "2025-05-02T15:00:00.000Z",
         "comment_count": 0
