@@ -1,31 +1,32 @@
 // ~~~~~~~~~~~~~~~ CORE MODULES ~~~~~~~~~~~~~~~
-const express = require("express")
-const app = express()
-
+const express = require("express");
+const app = express();
+const cors = requite("cors");
 
 // ~~~~~~~~~~~~~~~ ERROR HANDLERS ~~~~~~~~~~~~~~~
-const { handleCustomErrors, handleServerErrors, handlePSQLErrors } = require("./errors/errorHandlers.js");
-
+const {
+  handleCustomErrors,
+  handleServerErrors,
+  handlePSQLErrors,
+} = require("./errors/errorHandlers.js");
 
 // ~~~~~~~~~~~~~~~ CONTROLLERS ~~~~~~~~~~~~~~~
 const apiRouter = require("./app/routers/api.router");
 
-
 // ~~~~~~~~~~~~~~~ MIDDLEWARE ~~~~~~~~~~~~~~~
+app.use(cors())
 app.use(express.json());
-app.use(express.static("public")) // Serve static files from the 'public' directory
+app.use(express.static("public")); // Serve static files from the 'public' directory
 app.use("/api", apiRouter);
-
 
 // ~~~~~~~~~~~~~~~ CATCH-ALL ~~~~~~~~~~~~~~~
 app.all("/*splat", (req, res) => {
-    res.status(404).send({msg: "404: Path Not Found!"})
-})
-
+  res.status(404).send({ msg: "404: Path Not Found!" });
+});
 
 // ~~~~~~~~~~~~~~~ ERROR HANDLING ~~~~~~~~~~~~~~~
-app.use(handleCustomErrors) 
-app.use(handlePSQLErrors)
-app.use(handleServerErrors)
+app.use(handleCustomErrors);
+app.use(handlePSQLErrors);
+app.use(handleServerErrors);
 
-module.exports = app
+module.exports = app;
