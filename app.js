@@ -1,7 +1,7 @@
 // ~~~~~~~~~~~~~~~ CORE MODULES ~~~~~~~~~~~~~~~
 const express = require("express");
 const app = express();
-const cors = requite("cors");
+const cors = require("cors");
 
 // ~~~~~~~~~~~~~~~ ERROR HANDLERS ~~~~~~~~~~~~~~~
 const {
@@ -14,7 +14,7 @@ const {
 const apiRouter = require("./app/routers/api.router");
 
 // ~~~~~~~~~~~~~~~ MIDDLEWARE ~~~~~~~~~~~~~~~
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 app.use(express.static("public")); // Serve static files from the 'public' directory
 app.use("/api", apiRouter);
