@@ -5,6 +5,7 @@ exports.selectTopics = async () => {
         SELECT 
             topics.slug, 
             topics.description 
+            topics.img_url
         FROM topics;
         `;
 
