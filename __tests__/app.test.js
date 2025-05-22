@@ -716,7 +716,7 @@ describe("POST /api/articles - Missing required fields", () => {
         expect(body.msg).toBe("Missing required fields!");
       });
   });
-  
+
   const baseArticle = {
     author: "lurker",
     title: "Valid Title",
