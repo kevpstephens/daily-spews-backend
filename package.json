@@ -1,16 +1,16 @@
 {
-  "name": "be-nc-news",
+  "name": "daily-spews-backend",
   "version": "1.0.0",
-  "description": "bc-nc-news",
-  "main": "listen.js",
+  "description": "Backend API for Daily Spews site",
+  "main": "src/index.js",
   "scripts": {
+    "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky install; fi",
     "setup-dbs": "psql -f ./src/db/setup-dbs.sql",
     "seed-dev": "node ./src/db/seeds/run-seed.js",
-    "test": "jest",
-    "prepare": "husky install",
+    "seed-prod": "NODE_ENV=production npm run seed-dev",
     "start": "node src/index.js",
-    "test-seed": "jest seed.test.js",
-    "seed-prod": "NODE_ENV=production npm run seed-dev"
+    "test": "jest",
+    "test-seed": "jest seed.test.js"
   },
   "repository": {
     "type": "git",
