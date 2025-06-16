@@ -1,10 +1,9 @@
-const db = require("../../db/connection");
+const db = require("../connection");
 
 exports.convertTimestampToDate = ({ created_at, ...otherProperties }) => {
   if (!created_at) return { ...otherProperties };
   return { created_at: new Date(created_at), ...otherProperties };
 };
-
 
 // Correcting issue where articles.js data does not store article_id
 // Reference Object aka Lookup Table
@@ -14,12 +13,12 @@ exports.convertTimestampToDate = ({ created_at, ...otherProperties }) => {
 
 exports.createRef = (articlesData) => {
   if (articlesData.length === 0) {
-    return {}
+    return {};
   }
-  const result = {}
+  const result = {};
   articlesData.forEach((article) => {
-    result[article.title] = article.article_id
-  })
-  
-  return result
+    result[article.title] = article.article_id;
+  });
+
+  return result;
 };

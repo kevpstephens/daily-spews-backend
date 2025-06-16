@@ -8,7 +8,7 @@ const {
   handleCustomErrors,
   handleServerErrors,
   handlePSQLErrors,
-} = require("./errors/errorHandlers.js");
+} = require("./errors/errorHandlers");
 
 // ~~~~~~~~~~~~~~~ CONTROLLERS ~~~~~~~~~~~~~~~
 const apiRouter = require("./app/routers/api.router");
