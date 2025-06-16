@@ -732,3 +732,33 @@ describe("GET /api/articles (pagination)", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id/comments (pagination)", () => {
+  test("200: Returns paginated comments with default limit of 10 and includes total_count", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(Array.isArray(body.comments)).toBe(true);
+        expect(body.comments.length).toBeLessThanOrEqual(10);
+        expect(typeof body.total_count).toBe("number");
+      });
+  });
+  test("200: Returns correct number of comments when limit and page are provided", () => {
+    return request(app)
+      .get("/api/articles/1/comments?limit=5&p=2")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments.length).toBeLessThanOrEqual(5);
+        expect(typeof body.total_count).toBe("number");
+      });
+  });
+  test("400: Responds with 'Invalid pagination query!' for invalid limit or page", () => {
+    return request(app)
+      .get("/api/articles/1/comments?limit=banana&p=-2")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid pagination query!");
+      });
+  });
+});

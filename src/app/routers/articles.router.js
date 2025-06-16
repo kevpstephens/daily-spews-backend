@@ -11,7 +11,7 @@ const articlesRouter = express.Router();
 //! GET /api/articles
 articlesRouter.get("/", getAllArticles);
 
-//! GET /api/article/:article_id
+//! GET /api/articles/:article_id
 articlesRouter.get("/:article_id", getArticlesById);
 
 //! POST api/articles
