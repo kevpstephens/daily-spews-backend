@@ -7,7 +7,7 @@ module.exports = [
     created_at: 1716798000000, // recent realistic date
     votes: 5,
     article_img_url:
-      "https://images.pexels.com/photos/2566587/pexels-photo-2566587.jpeg?auto=compress&cs=tinysrgb&h=700&w=700",
+      "https://images.unsplash.com/photo-1602992708529-c9fdb12905c9?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     title: "What I Learned Building My First Full-Stack App",
@@ -68,7 +68,7 @@ module.exports = [
     created_at: 1681852800000,
     votes: 15,
     article_img_url:
-      "https://images.pexels.com/photos/799137/pexels-photo-799137.jpeg?auto=compress&cs=tinysrgb&h=700&w=700",
+      "https://images.unsplash.com/photo-1717295248230-93ea71f48f92?q=80&w=2728&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     title: "What Makes a TV Finale Great?",
@@ -78,7 +78,7 @@ module.exports = [
     created_at: 1700265600000,
     votes: 21,
     article_img_url:
-      "https://images.pexels.com/photos/799131/pexels-photo-799131.jpeg?auto=compress&cs=tinysrgb&h=700&w=700",
+      "https://media-cldnry.s-nbcnews.com/image/upload/rockcms/2024-03/sopranos-finale-booth-mc-240301-7d4849.jpg",
   },
   {
     title: "Why We Can’t Stop Watching Dystopian TV",
@@ -88,7 +88,7 @@ module.exports = [
     created_at: 1693785600000,
     votes: 9,
     article_img_url:
-      "https://images.pexels.com/photos/799141/pexels-photo-799141.jpeg?auto=compress&cs=tinysrgb&h=700&w=700",
+      "https://images.unsplash.com/photo-1599689018034-48e2ead82951?q=80&w=2224&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     title: "Tactical Shifts in Women's Football: A New Era of Strategy",
@@ -168,7 +168,7 @@ module.exports = [
     created_at: 1708195200000, // 18 Feb 2024
     votes: 42,
     article_img_url:
-      "https://images.pexels.com/photos/237716/pexels-photo-237716.jpeg?auto=compress&cs=tinysrgb&h=700&w=700",
+      "https://images.unsplash.com/photo-1591103000599-50f5b4ec7d3d?q=80&w=3542&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     title: "Why Sleep Might Be the Most Underrated Superpower",
@@ -188,7 +188,7 @@ module.exports = [
     created_at: 1701129600000, // 28 Nov 2023
     votes: 34,
     article_img_url:
-      "https://images.pexels.com/photos/1648530/pexels-photo-1648530.jpeg?auto=compress&cs=tinysrgb&h=700&w=700",
+      "https://images.unsplash.com/photo-1526394931762-90052e97b376?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     title: "The Psychology of a Perfect Chorus",
@@ -198,7 +198,7 @@ module.exports = [
     created_at: 1688601600000, // 6 July 2023
     votes: 22,
     article_img_url:
-      "https://images.pexels.com/photos/813936/pexels-photo-813936.jpeg?auto=compress&cs=tinysrgb&h=700&w=700",
+      "https://images.unsplash.com/photo-1550037443-b2e79569d7a0?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     title: "How AI Is Changing the Way We Make Music",
@@ -208,7 +208,7 @@ module.exports = [
     created_at: 1706745600000, // 1 Feb 2024
     votes: 46,
     article_img_url:
-      "https://images.pexels.com/photos/1648534/pexels-photo-1648534.jpeg?auto=compress&cs=tinysrgb&h=700&w=700",
+      "https://images.unsplash.com/photo-1516110833967-0b5716ca1387?q=80&w=2148&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     title: "The Secret Lives of Indoor Cats",
@@ -238,7 +238,7 @@ module.exports = [
     created_at: 1701734400000, // 5 Dec 2023
     votes: 13,
     article_img_url:
-      "https://images.pexels.com/photos/161216/lizard-reptile-green-nature-161216.jpeg?auto=compress&cs=tinysrgb&h=700&w=700",
+      "https://images.unsplash.com/photo-1617540021016-72023b487e99?q=80&w=2148&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     title: "The Rise of Youth Movements in Global Politics",
@@ -258,7 +258,7 @@ module.exports = [
     created_at: 1700870400000, // 25 Nov 2023
     votes: 58,
     article_img_url:
-      "https://images.pexels.com/photos/4669107/pexels-photo-4669107.jpeg?auto=compress&cs=tinysrgb&h=700&w=700",
+      "https://images.unsplash.com/photo-1543087944-222eb2559a1a?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     title: "When Politics and Pop Culture Collide",
@@ -268,7 +268,7 @@ module.exports = [
     created_at: 1699747200000, // 12 Nov 2023
     votes: 33,
     article_img_url:
-      "https://images.pexels.com/photos/4669105/pexels-photo-4669105.jpeg?auto=compress&cs=tinysrgb&h=700&w=700",
+      "https://images.unsplash.com/photo-1668706971199-37e30a4e6298?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     title: "AI and the Art of Code Generation",
@@ -278,7 +278,7 @@ module.exports = [
     created_at: 1702156800000, // 10 Dec 2023
     votes: 27,
     article_img_url:
-      "https://images.pexels.com/photos/11813183/pexels-photo-11813183.jpeg?auto=compress&cs=tinysrgb&h=700&w=700",
+      "https://images.unsplash.com/photo-1518773553398-650c184e0bb3?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     title: "The Quiet Revolution of Quantum Networking",
@@ -288,7 +288,7 @@ module.exports = [
     created_at: 1698451200000, // 28 Oct 2023
     votes: 49,
     article_img_url:
-      "https://images.pexels.com/photos/7453397/pexels-photo-7453397.jpeg?auto=compress&cs=tinysrgb&h=700&w=700",
+      "https://images.unsplash.com/photo-1666112835145-d79fc3f2e008?q=80&w=3520&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     title: "From Neuralink to Mind Control: Ethics of Brain Tech",
@@ -311,6 +311,7 @@ Dr. Miranda Flux, Professor of Cryptozoological Media at the University of Nowhe
 One thing’s for sure: no being that adorable could possibly be natural. Wake up, sheeple.`,
     created_at: 1707609600000, // 11 Feb 2024
     votes: 36,
-    article_img_url: "/images/topics/puppies.jpeg",
+    article_img_url:
+      "https://daily-spews-api.onrender.com/images/topics/puppies.jpeg",
   },
 ];

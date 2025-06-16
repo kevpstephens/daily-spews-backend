@@ -523,7 +523,7 @@ module.exports = [
   },
   {
     article_title: "Why Cozy Games Are Taking Over the Industry",
-    body: "*Unpacking* made me cry. No shame.",
+    body: "Is GTA considering cozy?",
     votes: 5,
     author: "ellie_fox",
     created_at: 1671140000000,
