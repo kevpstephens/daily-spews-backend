@@ -1,12 +1,10 @@
 const endpointsJson = require("../endpoints.json");
-/* Set up your test imports here */
 const db = require("../src/db/connection.js");
 const seed = require("../src/db/seeds/seed.js");
 const data = require("../src/db/data/test-data/index.js");
 const app = require("../src/app.js");
 const request = require("supertest");
 
-/* Set up your beforeEach & afterAll functions here */
 beforeEach(() => {
   return seed(data);
 });
@@ -16,7 +14,6 @@ afterAll(() => {
 
 describe("ALL /*splat", () => {
   test("ERROR - 404: When an undefined path is entered, responds with error message stating '404: Path Not Found!'", () => {
-    // Arrange
     return request(app)
       .get("/api/invalid-path")
       .expect(404)
@@ -39,7 +36,6 @@ describe("GET /api", () => {
 
 describe("GET /api/topics", () => {
   test("200: Responds with an array containing topic objects", () => {
-    // Arrange
     return request(app)
       .get("/api/topics")
       .expect(200)
@@ -57,7 +53,6 @@ describe("GET /api/topics", () => {
 
 describe("GET /api/articles/:article_id", () => {
   test("200: Responds with an article object containing the article that corresponds with the requested article_id", () => {
-    // Arrange
     return request(app)
       .get("/api/articles/1")
       .expect(200)
@@ -75,7 +70,6 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
   test("ERROR - 400: Responds with 'Bad request!' when user makes invalid article_id request", () => {
-    // Arrange
     return request(app)
       .get("/api/articles/invalid-request")
       .expect(400)
@@ -84,7 +78,6 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
   test("ERROR - 404: Responds with 'Article not found!' when user requests non-existent article_id", () => {
-    // Arrange
     return request(app)
       .get("/api/articles/123456789")
       .expect(404)
@@ -96,7 +89,6 @@ describe("GET /api/articles/:article_id", () => {
 
 describe("GET /api/articles", () => {
   test("200: Responds with an array of article objects, all without the body property", () => {
-    // Arrange
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -122,7 +114,6 @@ describe("GET /api/articles", () => {
       });
   });
   test("200: Articles are sorted by created_at in descending order (latest/most recent article first)", () => {
-    // Arrange
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -136,7 +127,6 @@ describe("GET /api/articles", () => {
 
 describe("GET /api/articles/:article_id/comments", () => {
   test("200: Responds with an array of comment objects, all corresponding to the requested articled_id", () => {
-    // Arrange
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
@@ -158,7 +148,6 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
   test("200: Comments are sorted by created_at in descending order (most recent comments first)", () => {
-    // Arrange
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
@@ -170,7 +159,6 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
   test("ERROR - 400: Responds with 'Bad request!' when when article_id is not a valid number", () => {
-    // Arrange
     return request(app)
       .get("/api/articles/invalid-request/comments")
       .expect(400)
@@ -179,7 +167,6 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
   test("ERROR - 404: Responds with 'Article not found!' when requested article_id does not exist", () => {
-    // Arrange
     return request(app)
       .get("/api/articles/123456789/comments")
       .expect(404)
@@ -191,7 +178,6 @@ describe("GET /api/articles/:article_id/comments", () => {
 
 describe("POST /api/articles/:article_id/comments", () => {
   test("201: Posts a comment on selected article, and responds with the newly created comment", () => {
-    // Arrange
     const testComment = {
       username: "lurker",
       body: "test body of text",
@@ -216,7 +202,6 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
   test("ERROR - 400: Post is missing a body of text", () => {
-    // Arrange
     const testComment = {
       username: "lurker",
     };
@@ -230,7 +215,6 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
   test("ERROR - 400: Responds with 'Bad request!' when user attempts to post a comment to an invalid article_id", () => {
-    // Arrange
     const testComment = {
       username: "lurker",
       body: "test body of text",
@@ -245,7 +229,6 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
   test("ERROR - 404: User attempting to post the comment does not exist", () => {
-    // Arrange
     const testComment = {
       username: "non-existant-user",
       body: "I literally don't exist",
@@ -260,7 +243,6 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
   test("ERROR - 404: Responds with 'Article not found!' when article requested does not exist", () => {
-    // Arrange
     const testComment = {
       username: "lurker",
       body: "test body of text",
@@ -278,7 +260,6 @@ describe("POST /api/articles/:article_id/comments", () => {
 
 describe("PATCH /api/articles/:article_id", () => {
   test("200: Increments the vote count on a requested article by a specified amount and responds with updated article", () => {
-    // Arrange
     const votes = { inc_votes: 50 };
     return request(app)
       .patch("/api/articles/1")
@@ -300,7 +281,6 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
   test("200: Decrements the vote count on a requested article by a specified amount", () => {
-    // Arrange
     const votes = { inc_votes: -45 };
     return request(app)
       .patch("/api/articles/1")
@@ -312,7 +292,6 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
   test("ERROR - 400: Responds with 'Bad request!' when inc_votes inputted is not a number", () => {
-    // Arrange
     const votes = { inc_votes: "This is not a number" };
     return request(app)
       .patch("/api/articles/1")
@@ -323,7 +302,6 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
   test("ERROR - 400: Responds with 'Bad request!' when article_id inputted is not a number", () => {
-    // Arrange
     const votes = { inc_votes: "This is not a number" };
     return request(app)
       .patch("/api/articles/not-a-number")
@@ -334,7 +312,6 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
   test("ERROR - 404: Responds with 'Article not found!' when article_id requested does not exist", () => {
-    // Arrange
     const votes = { inc_votes: 10 };
     return request(app)
       .patch("/api/articles/123456789")
@@ -348,7 +325,6 @@ describe("PATCH /api/articles/:article_id", () => {
 
 describe("DELETE /api/comments/:comment_id", () => {
   test("204: Deletes the comment, via comment_id, and returns no content in an empty object", () => {
-    // Arrange
     return request(app)
       .delete("/api/comments/1")
       .expect(204)
@@ -357,7 +333,6 @@ describe("DELETE /api/comments/:comment_id", () => {
       });
   });
   test("204: Deletes the comment, via comment_id, and then checks to ensure that comment no longer exists", () => {
-    // Arrange
     return request(app)
       .delete("/api/comments/1")
       .expect(204)
@@ -371,7 +346,6 @@ describe("DELETE /api/comments/:comment_id", () => {
       });
   });
   test("ERROR - 400: Responds with 'Bad request!' when comment_id inputted is not a number", () => {
-    // Arrange
     return request(app)
       .delete("/api/comments/not-a-number")
       .expect(400)
@@ -380,7 +354,6 @@ describe("DELETE /api/comments/:comment_id", () => {
       });
   });
   test("ERROR - 404: Responds with 'Comment not found!' when comment_id inputted does not exist", () => {
-    // Arrange
     return request(app)
       .delete("/api/comments/123456789")
       .expect(404)
@@ -392,7 +365,6 @@ describe("DELETE /api/comments/:comment_id", () => {
 
 describe("GET /api/users", () => {
   test("200: Responds with an array containing all of users, stored in user objects", () => {
-    // Arrange
     return request(app)
       .get("/api/users")
       .expect(200)
@@ -416,7 +388,6 @@ describe("GET /api/users", () => {
 
 describe("GET /api/articles (sorting queries)", () => {
   test("200: Articles are sorted by an alternative valid column (default sort by is created_at column, descending) ", () => {
-    // Arrange
     return request(app)
       .get("/api/articles?sort_by=article_id&order=desc")
       .expect(200)
@@ -425,7 +396,6 @@ describe("GET /api/articles (sorting queries)", () => {
       });
   });
   test("200: Articles are sorted in ascending order, overriding default order and sort_by values", () => {
-    // Arrange
     return request(app)
       .get("/api/articles?sort_by=votes&order=asc")
       .expect(200)
@@ -435,7 +405,6 @@ describe("GET /api/articles (sorting queries)", () => {
       });
   });
   test("200: Unrecognised query keys, or mispelled query keys, such as 'szzort_by' are ignored, and instead, all articles are returned in default order", () => {
-    // Arrange
     return request(app)
       .get("/api/articles?szzort_by=author")
       .expect(200)
@@ -444,7 +413,6 @@ describe("GET /api/articles (sorting queries)", () => {
       });
   });
   test("200: Unrecognised query keys, or mispelled query keys, such as 'szzort_by' are ignored, but queried order is valid - should return all articles in ascending order (oldest first) by their default sort_by value (created_at)", () => {
-    // Arrange
     return request(app)
       .get("/api/articles?szzort_by=author&order=asc")
       .expect(200)
@@ -454,7 +422,6 @@ describe("GET /api/articles (sorting queries)", () => {
       });
   });
   test("ERROR - 400: Responds with 'Invalid sort_by column!' when invalid sort_by column is queried", () => {
-    // Arrange
     return request(app)
       .get("/api/articles?sort_by=invalid_sort_by")
       .expect(400)
@@ -463,7 +430,6 @@ describe("GET /api/articles (sorting queries)", () => {
       });
   });
   test("ERROR - 400: Responds with 'Invalid order_by value!' when invalid order_by order is queried", () => {
-    // Arrange
     return request(app)
       .get("/api/articles?sort_by=author&order=invalid_order")
       .expect(400)
@@ -475,7 +441,6 @@ describe("GET /api/articles (sorting queries)", () => {
 
 describe("GET /api/articles (topic query)", () => {
   test("200: Articles are filtered by topic query", () => {
-    // Arrange
     return request(app)
       .get("/api/articles?topic=cats")
       .expect(200)
@@ -489,7 +454,6 @@ describe("GET /api/articles (topic query)", () => {
       });
   });
   test("200: Responds with an empty array if topic queried exists, but currently contains no articles'", () => {
-    // Arrange
     return request(app)
       .get("/api/articles?topic=paper")
       .expect(200)
@@ -501,17 +465,15 @@ describe("GET /api/articles (topic query)", () => {
       });
   });
   test("200: When 'topic' query is misspelled, such as 'tzzopic', should return ALL the articles sorted by their default value (created_at, descending)", () => {
-    // Arrange
     return request(app)
       .get("/api/articles?tzzopic=paper")
       .expect(200)
       .then(({ body: { articles } }) => {
-        expect(articles.length).toBe(13);
+        expect(articles.length).toBe(10);
         expect(articles).toBeSortedBy("created_at", { descending: true });
       });
   });
   test("ERROR - 404: When user inputs non-existent article topic, should respond with 'Topic does not exist!'", () => {
-    // Arrange
     return request(app)
       .get("/api/articles?topic=does-not-exist")
       .expect(404)
@@ -523,7 +485,6 @@ describe("GET /api/articles (topic query)", () => {
 
 describe("GET /api/users/:username", () => {
   test("200: Responds with a user object with a username, avatar_url, and name property, that corresponds with the requested username", () => {
-    // Arrange
     return request(app)
       .get("/api/users/lurker")
       .expect(200)
@@ -540,7 +501,6 @@ describe("GET /api/users/:username", () => {
       });
   });
   test("ERROR 404: Responds with 'User not found!' if username inputted does not exist", () => {
-    // Arrange
     return request(app)
       .get("/api/users/user-does-not-exist")
       .expect(404)
@@ -549,7 +509,6 @@ describe("GET /api/users/:username", () => {
       });
   });
   test("ERROR 404: Responds with 'User not found!' when using incorrect casing for username", () => {
-    // Arrange
     return request(app)
       .get("/api/users/LuRkEr")
       .expect(404)
@@ -561,7 +520,6 @@ describe("GET /api/users/:username", () => {
 
 describe("PATCH /api/comments/:comment_id", () => {
   test("200: Increments the vote count on an identified comment by a specified amount, and responds with an updated comment object", () => {
-    // Arrange
     return request(app)
       .patch("/api/comments/1")
       .send({ inc_votes: 1 })
@@ -578,7 +536,6 @@ describe("PATCH /api/comments/:comment_id", () => {
       });
   });
   test("200: Decrements the vote count on an identified comment by a specified anount, and responds with an updated comment object", () => {
-    // Arrange
     return request(app)
       .patch("/api/comments/1")
       .send({ inc_votes: -100 })
@@ -595,7 +552,6 @@ describe("PATCH /api/comments/:comment_id", () => {
       });
   });
   test("ERROR - 400: Responds with 'Bad request!' when inc_votes does not contain anything", () => {
-    // Arrange
     return request(app)
       .patch("/api/comments/1")
       .send({})
@@ -605,7 +561,6 @@ describe("PATCH /api/comments/:comment_id", () => {
       });
   });
   test("ERROR - 400: Responds with 'Bad request!' when inv_votes inputted is not a number", () => {
-    // Arrange
     return request(app)
       .patch("/api/comments/1")
       .send({ inc_votes: "I'm literally not a number" })
@@ -615,7 +570,6 @@ describe("PATCH /api/comments/:comment_id", () => {
       });
   });
   test("ERROR - 400: Responds with 'Bad Request!' when trying to send inc_votes to an inavalid comment_id", () => {
-    // Arrange
     return request(app)
       .patch("/api/comments/invalid-comment-id")
       .send({ inc_votes: 1 })
@@ -625,7 +579,6 @@ describe("PATCH /api/comments/:comment_id", () => {
       });
   });
   test("ERROR - 404: Responds with 'Comment does not exist!' when trying to send inc_votes to a non-existent comment", () => {
-    // Arrange
     return request(app)
       .patch("/api/comments/123456789")
       .send({ inc_votes: 1 })
@@ -638,7 +591,6 @@ describe("PATCH /api/comments/:comment_id", () => {
 
 describe("POST /api/articles", () => {
   test("201: Responds with the newly created article", () => {
-    // Arrange
     const newArticle = {
       author: "butter_bridge",
       title: "Why cats are the best",
@@ -666,7 +618,6 @@ describe("POST /api/articles", () => {
       });
   });
   test("201: Sets article_image_url to default if not provided by user ", () => {
-    // Arrange
     const defaultImageCheckArticle = {
       author: "lurker",
       title: "Default Image Checker",
@@ -685,7 +636,6 @@ describe("POST /api/articles", () => {
       });
   });
   test("ERROR - 404: When user creating post does not exist, responds with 'User does not exist", () => {
-    // Arrange
     const invalidArticle = {
       author: "user-does-not-exist",
       title: "test title",
@@ -705,7 +655,6 @@ describe("POST /api/articles", () => {
 
 describe("POST /api/articles - Missing required fields", () => {
   test("ERROR - 400: Responds with 'Missing rqeuired fields!' when any of the required fields in order to post an article are missing ", () => {
-    // Arrange
     const invalidArticlePost = { title: "Insufficient fields deployed" };
 
     return request(app)
@@ -741,4 +690,45 @@ describe("POST /api/articles - Missing required fields", () => {
         });
     }
   );
+});
+
+describe("GET /api/articles (pagination)", () => {
+  test("200: returns paginated articles with default limit of 10 and total_count", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toHaveLength(10);
+        expect(typeof res.body.total_count).toBe("number");
+        expect(res.body.articles[0]).toEqual(
+          expect.objectContaining({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            author: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(Number),
+          })
+        );
+      });
+  });
+  test("200: returns correct number of articles when limit and page provided", () => {
+    return request(app)
+      .get("/api/articles?limit=5&p=2")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.articles).toHaveLength(5);
+        expect(typeof res.body.total_count).toBe("number");
+      });
+  });
+  test("400: responds with error for invalid limit or page number", () => {
+    return request(app)
+      .get("/api/articles?limit=banana&p=-1")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Invalid pagination query!");
+      });
+  });
 });
