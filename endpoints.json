@@ -83,9 +83,9 @@
   },
 
   "GET /api/articles/:article_id/comments": {
-    "description": "Returns an array of comment objects, selected via article_id, and sorted by created_at in descending order.",
-    "queries": [],
-    "exampleRequest": "/api/articles/1/comments",
+    "description": "Returns a paginated array of comment objects, selected via article_id, and sorted by created_at in descending order. Supports pagination via limit and p query parameters.",
+    "queries": ["limit", "p"],
+    "exampleRequest": "/api/articles/1/comments?limit=10&p=2",
     "exampleResponse": {
       "comments": [
         {
@@ -96,7 +96,8 @@
           "body": "I hate streaming noses",
           "article_id": 1
         }
-      ]
+      ],
+      "total_count": 12
     }
   },
 

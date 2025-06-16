@@ -8,16 +8,16 @@ const {
 
 const commentsRouter = express.Router();
 
-// GET comments for specified article
+//! GET /api/articles/:article_id/comments
 commentsRouter.get("/articles/:article_id/comments", getCommentsByArticleId);
 
-// POST comment to a specified article
+//! POST /api/articles/:article_id/comments
 commentsRouter.post("/articles/:article_id/comments", postCommentByArticleId);
 
-// PATCH comment to update votes
+//! PATCH /api/comments/:comment_id
 commentsRouter.patch("/comments/:comment_id", patchCommentById);
 
-// DELETE comment via comment_id
+//! DELETE /api/comments/:comment_id
 commentsRouter.delete("/comments/:comment_id", deleteCommentById);
 
 module.exports = commentsRouter;
