@@ -8,16 +8,16 @@ const {
 
 const articlesRouter = express.Router();
 
-// GET all articles
+//! GET /api/articles
 articlesRouter.get("/", getAllArticles);
 
-// GET article via article_id
+//! GET /api/article/:article_id
 articlesRouter.get("/:article_id", getArticlesById);
 
-// POST new article
-articlesRouter.post("/", postArticle)
+//! POST api/articles
+articlesRouter.post("/", postArticle);
 
-// PATCH article votes
+//! PATCH /api/articles/:article_id
 articlesRouter.patch("/:article_id", patchArticleById);
 
 module.exports = articlesRouter;

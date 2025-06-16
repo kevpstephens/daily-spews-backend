@@ -43,20 +43,21 @@
   },
 
   "GET /api/articles": {
-    "description": "Returns an array containing a list of all the articles. Each article object includes a comment_count, while also excluding the body field. This endpoint supports sorting, ordering, and topic filtering via query parameters.",
-    "queries": ["sort_by", "order", "topic"],
-    "exampleRequest": "/api/articles?sort_by=created_at&order=asc&topic=mitch",
+    "description": "Returns a paginated array of article objects. Each object includes a comment_count and excludes the body field. Supports sorting, ordering, topic filtering, and pagination via query parameters.",
+    "queries": ["sort_by", "order", "topic", "limit", "p"],
+    "exampleRequest": "/api/articles?sort_by=created_at&order=asc&topic=mitch&limit=5&p=2",
     "exampleResponse": {
+      "total_count": 25,
       "articles": [
         {
-          "article_id": 1,
-          "title": "Living in the shadow of a great man",
-          "author": "butter_bridge",
+          "article_id": 6,
+          "title": "Exploring the woods",
+          "author": "grumpy19",
           "topic": "mitch",
-          "created_at": "2020-07-09T20:11:00.000Z",
-          "votes": 100,
+          "created_at": "2020-09-17T14:11:00.000Z",
+          "votes": 50,
           "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-          "comment_count": 11
+          "comment_count": 3
         }
       ]
     }
