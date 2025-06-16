@@ -6,8 +6,8 @@
   "scripts": {
     "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky install; fi",
     "setup-dbs": "psql -f ./src/db/setup-dbs.sql",
-    "seed-dev": "node ./src/db/seeds/run-seed.js",
-    "seed-prod": "NODE_ENV=production npm run seed-dev",
+    "seed-dev": "NODE_ENV=development node ./src/db/seeds/run-seed.js",
+    "seed-prod": "NODE_ENV=production node ./src/db/seeds/run-seed.js",
     "start": "node src/index.js",
     "dev": "NODE_ENV=development nodemon src/index.js",
     "test": "jest",
