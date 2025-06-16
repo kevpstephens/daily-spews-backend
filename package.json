@@ -9,6 +9,7 @@
     "seed-dev": "node ./src/db/seeds/run-seed.js",
     "seed-prod": "NODE_ENV=production npm run seed-dev",
     "start": "node src/index.js",
+    "dev": "NODE_ENV=development nodemon src/index.js",
     "test": "jest",
     "test-seed": "jest seed.test.js"
   },
@@ -34,6 +35,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "nodemon": "^3.1.10",
     "pg": "^8.15.6",
     "pg-format": "^1.0.4"
   },
