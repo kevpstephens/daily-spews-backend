@@ -38,7 +38,6 @@ exports.selectCommentsByArticleId = async (
     db.query(articleCheckQuery, [article_id]),
   ]);
 
-  // If the article doesn't exist, throw a 404 error
   if (!articleResult.rows.length) {
     throw {
       status: 404,

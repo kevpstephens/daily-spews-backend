@@ -1,5 +1,6 @@
 const db = require("../../db/connection.js");
 
+//! GET /api/users
 exports.selectAllUsers = async () => {
   const queryStr = `SELECT * FROM users;`;
   const result = await db.query(queryStr);
@@ -7,6 +8,7 @@ exports.selectAllUsers = async () => {
   return result.rows;
 };
 
+//! GET /api/users/:username
 exports.selectUserByUsername = async (username) => {
   const queryStr = `SELECT * FROM users WHERE username = $1`;
   const result = await db.query(queryStr, [username]);
