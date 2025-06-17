@@ -762,3 +762,30 @@ describe("GET /api/articles/:article_id/comments (pagination)", () => {
       });
   });
 });
+
+describe("POST /api/topics", () => {
+  test("201: Adds a new topic and returns it", () => {
+    const newTopic = {
+      slug: "philosophy",
+      description: "Deep and meaningful discussion",
+    };
+
+    return request(app)
+      .post("/api/topics")
+      .send(newTopic)
+      .expect(201)
+      .then((res) => {
+        expect(res.body.topic).toMatchObject(newTopic);
+      });
+  });
+
+  test("400: Missing fields", () => {
+    return request(app)
+      .post("/api/topics")
+      .send({ slug: "half-baked" })
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Missing required fields!");
+      });
+  });
+});

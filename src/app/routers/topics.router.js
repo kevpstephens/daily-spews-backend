@@ -1,9 +1,12 @@
 const express = require("express");
-const { getTopics } = require("../controllers/topics.controller");
+const { getTopics, postTopic } = require("../controllers/topics.controller");
 
 const topicsRouter = express.Router();
 
-// GET all topics
+//! GET /api/topics
 topicsRouter.get("/", getTopics);
+
+//! POST /api/topics
+topicsRouter.post("/", postTopic);
 
 module.exports = topicsRouter;
