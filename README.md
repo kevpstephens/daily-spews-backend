@@ -35,6 +35,7 @@ A RESTful API that provides the backend for a Reddit-style news app, named Daily
 <br>
 
 🔗 **Live API, hosted on Render** - [https://daily-spews-api.onrender.com/api](https://daily-spews-api.onrender.com/api) <br>
+🖥️ **Frontend Repo:** [daily-spews-frontend](https://github.com/kevpstephens/daily-spews-frontend)
 
 ## <br><br>
 
