@@ -3,6 +3,7 @@ const {
   selectUserByUsername,
 } = require("../models/users.model");
 
+//! GET /api/users
 exports.getUsers = async (req, res, next) => {
   try {
     const users = await selectAllUsers();
@@ -12,6 +13,7 @@ exports.getUsers = async (req, res, next) => {
   }
 };
 
+//! GET /api/users/:username
 exports.getUserByUsername = async (req, res, next) => {
   const { username } = req.params;
 

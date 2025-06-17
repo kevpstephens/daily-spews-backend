@@ -33,12 +33,11 @@ exports.getAllArticles = async (req, res, next) => {
 exports.getArticlesById = async (req, res, next) => {
   // Extract article ID from route parameters
   const { article_id } = req.params;
-  // Validate that article_id is a valid number
+
   if (isNaN(Number(article_id))) {
     return res.status(400).send({ msg: "Bad request!" });
   }
 
-  // Attempt to fetch the article by its ID
   try {
     const article = await selectArticleById(article_id);
     res.status(200).send({ article });
@@ -52,13 +51,11 @@ exports.postArticle = async (req, res, next) => {
   // Extract required fields from request body for new article creation
   const { author, title, body, topic, article_img_url } = req.body;
 
-  // Ensure required fields are present
   if (!author || !title || !body || !topic) {
     return res.status(400).send({ msg: "Missing required fields!" });
   }
 
   try {
-    // Ensure the provided author exists in the users table
     // Validate author exists before creating article
     await selectUserByUsername(author);
     // Insert new article and respond with the created object
@@ -81,7 +78,6 @@ exports.patchArticleById = async (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
 
-  // Validate inputs: both article_id and inc_votes must be numbers
   if (isNaN(inc_votes) || isNaN(article_id)) {
     return res.status(400).send({ msg: "Bad request!" });
   }
@@ -101,7 +97,6 @@ exports.patchArticleById = async (req, res, next) => {
 exports.deleteArticleById = async (req, res, next) => {
   const { article_id } = req.params;
 
-  // Validate article_id format before attempting deletion
   if (isNaN(Number(article_id))) {
     return res.status(400).send({ msg: "Bad request!" });
   }

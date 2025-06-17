@@ -29,10 +29,12 @@ describe("GET /api/topics", () => {
 });
 
 describe("POST /api/topics", () => {
-  test("201: Adds a new topic and returns it", () => {
+  test("201: Adds a new topic and returns that new topic as an object", () => {
     const newTopic = {
       slug: "philosophy",
       description: "Deep and meaningful discussion",
+      img_url:
+        "https://www.templeton.org/wp-content/uploads/2024/05/Armchair-Philosophy-1.jpg",
     };
 
     return request(app)
@@ -44,7 +46,7 @@ describe("POST /api/topics", () => {
       });
   });
 
-  test("400: Missing fields", () => {
+  test("ERROR 400: Should response with message'Missing required fields!'", () => {
     return request(app)
       .post("/api/topics")
       .send({ slug: "half-baked" })

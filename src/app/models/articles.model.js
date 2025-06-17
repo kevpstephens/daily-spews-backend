@@ -1,7 +1,6 @@
 const db = require("../../db/connection.js");
 
 //! GET /api/articles
-// Import article model functions and user lookup helper
 exports.selectAllArticles = async ({
   sort_by = "created_at",
   order = "desc",
@@ -129,7 +128,6 @@ exports.selectArticleById = async (article_id) => {
 
   const result = await db.query(queryStr, [article_id]);
 
-  // Throw 404 error if no article found with given ID
   if (!result.rows.length) {
     throw {
       status: 404,
@@ -175,7 +173,6 @@ exports.updateArticleById = async (inc_votes, article_id) => {
 
   const result = await db.query(queryStr, [inc_votes, article_id]);
 
-  // Throw 404 if article to update does not exist
   if (!result.rows.length) {
     throw {
       status: 404,
@@ -196,4 +193,3 @@ exports.removeArticleById = async (article_id) => {
     throw { status: 404, msg: "Article not found!" };
   }
 };
-

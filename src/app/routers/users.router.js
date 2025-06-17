@@ -6,10 +6,10 @@ const {
 
 const usersRouter = express.Router();
 
-// GET all users
+//! GET /api/users
 usersRouter.get("/", getUsers);
 
-// GET user by username
+//! GET /api/users/:username
 usersRouter.get("/:username", getUserByUsername);
 
 module.exports = usersRouter;
