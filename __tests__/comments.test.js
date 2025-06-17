@@ -125,7 +125,9 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(testComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("404: Not Found!");
+        expect(body.msg).toBe(
+          "404: Foreign key violation - Resource not found!"
+        );
       });
   });
   test("ERROR - 404: Responds with 'Article not found!' when article requested does not exist", () => {

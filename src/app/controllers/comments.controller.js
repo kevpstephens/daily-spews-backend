@@ -1,4 +1,3 @@
-// Destructure relevant model functions
 const { selectArticleById } = require("../models/articles.model");
 const {
   selectCommentsByArticleId,

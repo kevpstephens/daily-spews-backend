@@ -16,10 +16,23 @@ const config = {};
 if (ENV === "production") {
   if (process.env.DATABASE_URL) {
     config.connectionString = process.env.DATABASE_URL;
-    config.max = 2;
+    config.max = 2; // Limit max number of clients in the pool to prevent overloading Render
   } else {
     console.warn("⚠️ No DATABASE_URL set. Falling back to PGDATABASE...");
   }
 }
 
-module.exports = new Pool(config);
+const pool = new Pool(config);
+
+// Log pool stats every 5 seconds (only outside of test environment)
+if (ENV !== "test") {
+  setInterval(() => {
+    console.log("📊 PG Pool Stats:", {
+      "Total clients": pool.totalCount,
+      "Idle clients": pool.idleCount,
+      "Pending requests": pool.waitingCount,
+    });
+  }, 5000);
+}
+
+module.exports = pool;

@@ -12,7 +12,7 @@ afterAll(() => {
   return db.end();
 });
 
-describe("ALL /*splat", () => {
+describe("Undefined Routes", () => {
   test("ERROR - 404: When an undefined path is entered, responds with error message stating '404: Path Not Found!'", () => {
     return request(app)
       .get("/api/invalid-path")
@@ -33,4 +33,3 @@ describe("GET /api", () => {
       });
   });
 });
-
