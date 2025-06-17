@@ -147,17 +147,19 @@
   },
 
   "POST /api/topics": {
-    "description": "Creates a new topic. Accepts an object with slug and description. Returns the created topic object.",
+    "description": "Creates a new topic. Accepts an object with slug, description, and img_url. Returns the created topic object.",
     "queries": [],
     "exampleRequest": "/api/topics",
     "exampleBody": {
       "slug": "philosophy",
-      "description": "Deep and meaningful discussion"
+      "description": "Deep and meaningful discussion",
+      "img_url": "https://www.templeton.org/wp-content/uploads/2024/05/Armchair-Philosophy-1.jpg"
     },
     "exampleResponse": {
       "topic": {
         "slug": "philosophy",
-        "description": "Deep and meaningful discussion"
+        "description": "Deep and meaningful discussion",
+        "img_url": "https://www.templeton.org/wp-content/uploads/2024/05/Armchair-Philosophy-1.jpg"
       }
     }
   },
