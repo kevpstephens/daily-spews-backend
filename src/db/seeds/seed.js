@@ -108,7 +108,7 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
     formattedComments
   );
   await db.query(insertCommentsData);
-  console.log("Seed complete!");
+  console.log("🌱 Seed complete! 🌱");
 };
 
 module.exports = seed;
