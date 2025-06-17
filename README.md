@@ -92,6 +92,7 @@ npm install
 
 NODE_ENV=development
 PGDATABASE=daily_spews_development
+JWT_SECRET=your_dev_secret_key
 ```
 
 ```shell
@@ -99,6 +100,7 @@ PGDATABASE=daily_spews_development
 
 NODE_ENV=test
 PGDATABASE=daily_spews_test
+JWT_SECRET=your_test_secret_key
 ```
 
 <br>

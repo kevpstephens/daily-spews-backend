@@ -2,9 +2,9 @@ name: CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
@@ -33,6 +33,7 @@ jobs:
       PGHOST: localhost
       PGPORT: 5432
       NODE_ENV: test
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
     steps:
       - name: Checkout code
@@ -54,12 +55,3 @@ jobs:
 
       - name: Run tests
         run: npm test
-
-  deploy:
-    name: Deploy - (CD)
-    needs: test
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Trigger Render Deploy Hook
-        run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
