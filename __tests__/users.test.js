@@ -3,6 +3,7 @@ const seed = require("../src/db/seeds/seed.js");
 const data = require("../src/db/data/test-data/index.js");
 const app = require("../src/app.js");
 const request = require("supertest");
+const jwt = require("jsonwebtoken");
 
 beforeEach(() => {
   return seed(data);
@@ -65,6 +66,47 @@ describe("GET /api/users/:username", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("User does not exist!");
+      });
+  });
+});
+
+describe("GET /api/users/me", () => {
+  test("200: responds with user object when provided valid token", () => {
+    const token = jwt.sign(
+      { username: "butter_bridge" },
+      process.env.JWT_SECRET
+    );
+
+    return request(app)
+      .get("/api/users/me")
+      .set("Authorization", `Bearer ${token}`)
+      .expect(200)
+      .then((res) => {
+        expect(res.body.user).toMatchObject({
+          username: "butter_bridge",
+          name: "jonny",
+          email: expect.any(String),
+          avatar_url: expect.any(String),
+        });
+      });
+  });
+
+  test("ERROR - 401: responds with error when token is missing", () => {
+    return request(app)
+      .get("/api/users/me")
+      .expect(401)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Missing or malformed token!");
+      });
+  });
+
+  test("ERROR - 401: responds with error when token is invalid", () => {
+    return request(app)
+      .get("/api/users/me")
+      .set("Authorization", "Bearer invalidtoken")
+      .expect(401)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Invalid or expired token!");
       });
   });
 });
