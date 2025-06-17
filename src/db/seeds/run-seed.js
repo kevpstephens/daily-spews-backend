@@ -19,6 +19,7 @@ console.log(
 const runSeed = () => {
   return seed(data).then(() => {
     console.log("🚫 Now closing DB connection...");
+    db.closeLogger();
     db.end();
   });
 };
