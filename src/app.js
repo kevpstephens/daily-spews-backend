@@ -11,7 +11,7 @@ const {
 } = require("./errors/errorHandlers");
 
 // ~~~~~~~~~~~~~~~ ROUTERS ~~~~~~~~~~~~~~~
-const apiRouter = require("./app/routers/api.router");
+const apiRouter = require("./app/routes/api.routes");
 
 // ~~~~~~~~~~~~~~~ STATIC FILES ~~~~~~~~~~~~~~~
 app.use(express.static("public")); // Serve static files from the 'public' directory
