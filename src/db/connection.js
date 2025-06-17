@@ -26,7 +26,7 @@ const pool = new Pool(config);
 
 // Log pool stats every 5 seconds (only outside of test environment)
 if (ENV !== "test") {
-  setInterval(() => {
+  poolLogger = setInterval(() => {
     console.log("📊 PG Pool Stats:", {
       "Total clients": pool.totalCount,
       "Idle clients": pool.idleCount,
@@ -34,5 +34,9 @@ if (ENV !== "test") {
     });
   }, 5000);
 }
+
+pool.closeLogger = () => {
+  if (poolLogger) clearInterval(poolLogger);
+};
 
 module.exports = pool;

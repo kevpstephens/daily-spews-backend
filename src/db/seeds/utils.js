@@ -1,16 +1,10 @@
-const db = require("../connection");
-
+// Converts created_at timestamps into Date objects (for seed data)
 exports.convertTimestampToDate = ({ created_at, ...otherProperties }) => {
   if (!created_at) return { ...otherProperties };
   return { created_at: new Date(created_at), ...otherProperties };
 };
 
-// Correcting issue where articles.js data does not store article_id
-// Reference Object aka Lookup Table
-// article_title = KEY, article_id = VALUE
-// Function should take an array of articles, and output an object containing article_title and article_id
-// Example: { "They're not exactly dogs, are they?" : 1 }
-
+// Builds reference object: { article_title: article_id }
 exports.createRef = (articlesData) => {
   if (articlesData.length === 0) {
     return {};
