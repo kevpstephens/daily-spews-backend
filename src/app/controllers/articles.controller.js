@@ -1,4 +1,3 @@
-// Import article model functions and user lookup helper
 const {
   selectArticleById,
   selectAllArticles,
@@ -34,7 +33,7 @@ exports.getAllArticles = async (req, res, next) => {
 exports.getArticlesById = async (req, res, next) => {
   // Extract article ID from route parameters
   const { article_id } = req.params;
-  // Validate that article_id is a number
+  // Validate that article_id is a valid number
   if (isNaN(Number(article_id))) {
     return res.status(400).send({ msg: "Bad request!" });
   }
@@ -59,6 +58,7 @@ exports.postArticle = async (req, res, next) => {
   }
 
   try {
+    // Ensure the provided author exists in the users table
     // Validate author exists before creating article
     await selectUserByUsername(author);
     // Insert new article and respond with the created object
@@ -81,7 +81,7 @@ exports.patchArticleById = async (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
 
-  // Validate that both are numbers
+  // Validate inputs: both article_id and inc_votes must be numbers
   if (isNaN(inc_votes) || isNaN(article_id)) {
     return res.status(400).send({ msg: "Bad request!" });
   }
@@ -101,6 +101,7 @@ exports.patchArticleById = async (req, res, next) => {
 exports.deleteArticleById = async (req, res, next) => {
   const { article_id } = req.params;
 
+  // Validate article_id format before attempting deletion
   if (isNaN(Number(article_id))) {
     return res.status(400).send({ msg: "Bad request!" });
   }

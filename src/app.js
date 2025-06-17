@@ -10,17 +10,21 @@ const {
   handlePSQLErrors,
 } = require("./errors/errorHandlers");
 
-// ~~~~~~~~~~~~~~~ CONTROLLERS ~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~ ROUTERS ~~~~~~~~~~~~~~~
 const apiRouter = require("./app/routers/api.router");
 
-// ~~~~~~~~~~~~~~~ MIDDLEWARE ~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~ STATIC FILES ~~~~~~~~~~~~~~~
+app.use(express.static("public")); // Serve static files from the 'public' directory
+
+// ~~~~~~~~~~~~~~~ GLOBAL MIDDLEWARE ~~~~~~~~~~~~~~~
 app.use(cors());
 app.use(express.json());
-app.use(express.static("public")); // Serve static files from the 'public' directory
+
+// ~~~~~~~~~~~~~~~ API ROUTER ~~~~~~~~~~~~~~~
 app.use("/api", apiRouter);
 
 // ~~~~~~~~~~~~~~~ CATCH-ALL ~~~~~~~~~~~~~~~
-app.all("/*splat", (req, res) => {
+app.use((req, res) => {
   res.status(404).send({ msg: "404: Path Not Found!" });
 });
 
