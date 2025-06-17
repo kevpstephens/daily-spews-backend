@@ -10,7 +10,7 @@
     "seed-prod": "NODE_ENV=production node ./src/db/seeds/run-seed.js",
     "start": "node src/index.js",
     "dev": "NODE_ENV=development nodemon src/index.js",
-    "test": "jest --runInBand",
+    "test": "NODE_ENV=test jest --runInBand",
     "test-seed": "jest seed.test.js"
   },
   "repository": {

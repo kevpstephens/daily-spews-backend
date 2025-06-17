@@ -4,6 +4,7 @@ const {
   selectAllArticles,
   updateArticleById,
   insertArticle,
+  removeArticleById,
 } = require("../models/articles.model.js");
 const { selectUserByUsername } = require("../models/users.model.js");
 
@@ -91,6 +92,22 @@ exports.patchArticleById = async (req, res, next) => {
     // Apply vote increment and respond with updated article
     const updatedArticle = await updateArticleById(inc_votes, article_id);
     res.status(200).send({ article: updatedArticle });
+  } catch (err) {
+    next(err);
+  }
+};
+
+//! DELETE /api/articles/:article_id
+exports.deleteArticleById = async (req, res, next) => {
+  const { article_id } = req.params;
+
+  if (isNaN(Number(article_id))) {
+    return res.status(400).send({ msg: "Bad request!" });
+  }
+
+  try {
+    await removeArticleById(article_id);
+    res.status(204).send();
   } catch (err) {
     next(err);
   }

@@ -381,12 +381,41 @@ describe("GET /api/articles (pagination)", () => {
         expect(typeof res.body.total_count).toBe("number");
       });
   });
-  test("400: responds with error for invalid limit or page number", () => {
+  test("ERROR - 400: responds with error for invalid limit or page number", () => {
     return request(app)
       .get("/api/articles?limit=banana&p=-1")
       .expect(400)
       .then((res) => {
         expect(res.body.msg).toBe("Invalid pagination query!");
+      });
+  });
+});
+
+describe("DELETE /api/articles/:article_id", () => {
+  test("204: deletes article and associated comments", () => {
+    return request(app)
+      .delete("/api/articles/1")
+      .expect(204)
+      .then(() => {
+        return request(app).get("/api/articles/1").expect(404);
+      });
+  });
+
+  test("ERROR - 400: invalid article_id", () => {
+    return request(app)
+      .delete("/api/articles/not-a-number")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request!");
+      });
+  });
+
+  test("ERROR - 404: non-existent article", () => {
+    return request(app)
+      .delete("/api/articles/9999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article not found!");
       });
   });
 });

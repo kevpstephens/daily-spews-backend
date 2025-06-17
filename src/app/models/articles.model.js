@@ -184,3 +184,16 @@ exports.updateArticleById = async (inc_votes, article_id) => {
   }
   return result.rows[0];
 };
+
+//! DELETE /api/articles/:article_id
+exports.removeArticleById = async (article_id) => {
+  const result = await db.query(
+    `DELETE FROM articles WHERE article_id = $1 RETURNING *;`,
+    [article_id]
+  );
+
+  if (result.rows.length === 0) {
+    throw { status: 404, msg: "Article not found!" };
+  }
+};
+

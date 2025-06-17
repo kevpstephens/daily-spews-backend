@@ -207,5 +207,12 @@
     "queries": [],
     "exampleRequest": "/api/comments/1",
     "exampleResponse": {}
+  },
+
+  "DELETE /api/articles/:article_id": {
+    "description": "Deletes an article specified by article_id, along with all its associated comments.",
+    "queries": [],
+    "exampleRequest": "/api/articles/1",
+    "exampleResponse": {}
   }
 }

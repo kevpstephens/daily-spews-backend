@@ -4,6 +4,7 @@ const {
   getAllArticles,
   patchArticleById,
   postArticle,
+  deleteArticleById,
 } = require("../controllers/articles.controller");
 
 const articlesRouter = express.Router();
@@ -19,5 +20,8 @@ articlesRouter.post("/", postArticle);
 
 //! PATCH /api/articles/:article_id
 articlesRouter.patch("/:article_id", patchArticleById);
+
+//! DELETE /api/articles/:article_id
+articlesRouter.delete("/:article_id", deleteArticleById);
 
 module.exports = articlesRouter;
