@@ -11,14 +11,14 @@ const data =
     : require("../data/development-data/index.js");
 
 console.log(
-  `🌱 Seeding ${ENV} database with ${
+  `🫘 Seeding ${ENV} database with ${
     ENV === "production" ? "production" : "development"
   } data...`
 );
 
 const runSeed = () => {
   return seed(data).then(() => {
-    console.log("✅ Seeding complete. Closing DB connection...");
+    console.log("🚫 Now closing DB connection...");
     db.end();
   });
 };
