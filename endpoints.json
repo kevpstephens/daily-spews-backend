@@ -146,6 +146,22 @@
     }
   },
 
+  "POST /api/topics": {
+    "description": "Creates a new topic. Accepts an object with 'slug' and 'description'. Responds with the newly added topic object.",
+    "queries": [],
+    "exampleRequest": "/api/topics",
+    "exampleBody": {
+      "slug": "philosophy",
+      "description": "Deep and meaningful discussion"
+    },
+    "exampleResponse": {
+      "topic": {
+        "slug": "philosophy",
+        "description": "Deep and meaningful discussion"
+      }
+    }
+  },
+
   "PATCH /api/articles/:article_id": {
     "description": "Updates the vote count of the specified article, via article_id, by the amount provided in inc_votes.",
     "queries": [],
