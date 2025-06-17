@@ -1,6 +1,6 @@
 {
   "GET /api": {
-    "description": "Returns a JSON object containing all of the available api endpoints, and their descriptions.",
+    "description": "Returns a JSON object listing all available API endpoints with their descriptions.",
     "queries": [],
     "exampleRequest": "/api"
   },
@@ -15,7 +15,7 @@
   },
 
   "GET /api/users": {
-    "description": "Returns an array containing all users, each user stored in an object with a key of username, name, and avatar_url.",
+    "description": "Returns an array of user objects, each containing the properties: username, name, and avatar_url.",
     "queries": [],
     "exampleRequest": "/api/users",
     "exampleResponse": {
@@ -30,7 +30,7 @@
   },
 
   "GET /api/users/:username": {
-    "description": "Returns a single user object, that corresopnds to the inputted username. The object will contain properties of username, name, and avatar_url.",
+    "description": "Returns a user object corresponding to the specified username.",
     "queries": [],
     "exampleRequest": "/api/users/lurker",
     "exampleResponse": {
@@ -43,7 +43,7 @@
   },
 
   "GET /api/articles": {
-    "description": "Returns a paginated array of article objects. Each object includes a comment_count and excludes the body field. Supports sorting, ordering, topic filtering, and pagination via query parameters.",
+    "description": "Returns a paginated array of article objects. Each object includes comment_count and excludes the body field. Supports sorting, ordering, topic filtering, and pagination via query parameters.",
     "queries": ["sort_by", "order", "topic", "limit", "p"],
     "exampleRequest": "/api/articles?sort_by=created_at&order=asc&topic=mitch&limit=5&p=2",
     "exampleResponse": {
@@ -64,7 +64,7 @@
   },
 
   "GET /api/articles/:article_id": {
-    "description": "Returns a single article object, specified by its corresponding article_id. Response will also include the total number of comments (comment_count).",
+    "description": "Returns a single article object, specified by article_id. Includes a comment_count property.",
     "queries": [],
     "exampleRequest": "/api/articles/1",
     "exampleResponse": {
@@ -83,7 +83,7 @@
   },
 
   "GET /api/articles/:article_id/comments": {
-    "description": "Returns a paginated array of comment objects, selected via article_id, and sorted by created_at in descending order. Supports pagination via limit and p query parameters.",
+    "description": "Returns a paginated array of comment objects for the specified article_id, sorted by created_at in descending order. Supports pagination via limit and p query parameters.",
     "queries": ["limit", "p"],
     "exampleRequest": "/api/articles/1/comments?limit=10&p=2",
     "exampleResponse": {
@@ -102,7 +102,7 @@
   },
 
   "POST /api/articles": {
-    "description": "Creates a new article. Accepts an object with 'author', 'title', 'body', 'topic', and optionally 'article_img_url' (default image provided if field left unaddressed). Responds with the full newly created article including a comment_count of 0.",
+    "description": "Creates a new article. Accepts an object with author, title, body, topic, and optionally article_img_url. Returns the created article including comment_count set to 0.",
     "queries": [],
     "exampleRequest": "/api/articles",
     "exampleBody": {
@@ -127,7 +127,7 @@
   },
 
   "POST /api/articles/:article_id/comments": {
-    "description": "Adds a new comment to the specified article, via article_id. Requires a username, and a comment body in order to post a comment. Responds with the newly created comment object.",
+    "description": "Creates a new comment on the specified article. Requires username and body. Returns the created comment object.",
     "queries": [],
     "exampleRequest": "/api/articles/1",
     "exampleBody": {
@@ -147,7 +147,7 @@
   },
 
   "POST /api/topics": {
-    "description": "Creates a new topic. Accepts an object with 'slug' and 'description'. Responds with the newly added topic object.",
+    "description": "Creates a new topic. Accepts an object with slug and description. Returns the created topic object.",
     "queries": [],
     "exampleRequest": "/api/topics",
     "exampleBody": {
@@ -163,7 +163,7 @@
   },
 
   "PATCH /api/articles/:article_id": {
-    "description": "Updates the vote count of the specified article, via article_id, by the amount provided in inc_votes.",
+    "description": "Updates the vote count of the specified article by the value provided in inc_votes. Returns the updated article.",
     "queries": [],
     "exampleRequest": "/api/articles/1",
     "exampleBody": {
@@ -184,7 +184,7 @@
   },
 
   "PATCH /api/comments/:comment_id": {
-    "description": "Updates the vote count of a specific comment via comment_id. Accepts an object with an inc_votes key representing the amount to increment or decrement the comment's current vote count.",
+    "description": "Updates the vote count of the specified comment by the value provided in inc_votes. Returns the updated comment.",
     "queries": [],
     "exampleRequest": "/api/comments/1",
     "exampleBody": {
@@ -202,17 +202,17 @@
     }
   },
 
-  "DELETE /api/comments/:comment_id": {
-    "description": "Deletes a comment, when given the appropriate comment_id. Responds with 204 and no content (an empty object).",
+  "DELETE /api/articles/:article_id": {
+    "description": "Deletes the specified article and its associated comments. Returns 204 with no content.",
     "queries": [],
-    "exampleRequest": "/api/comments/1",
+    "exampleRequest": "/api/articles/1",
     "exampleResponse": {}
   },
 
-  "DELETE /api/articles/:article_id": {
-    "description": "Deletes an article specified by article_id, along with all its associated comments.",
+  "DELETE /api/comments/:comment_id": {
+    "description": "Deletes the specified comment. Returns 204 with no content.",
     "queries": [],
-    "exampleRequest": "/api/articles/1",
+    "exampleRequest": "/api/comments/1",
     "exampleResponse": {}
   }
 }
