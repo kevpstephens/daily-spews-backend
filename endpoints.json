@@ -164,6 +164,53 @@
     }
   },
 
+  "POST /api/auth/register": {
+    "description": "Registers a new user. Accepts a username, name, email, password, and optional avatar_url. If avatar_url is not provided, a default profile image is used.",
+    "queries": [],
+    "exampleRequest": "/api/auth/register",
+    "exampleBody": {
+      "username": "lurker",
+      "name": "Jane Doe",
+      "email": "lurker@example.com",
+      "password": "securepassword123"
+    },
+    "exampleResponse": {
+      "user": {
+        "username": "lurker",
+        "name": "Jane Doe",
+        "email": "lurker@example.com",
+        "avatar_url": "https://daily-spews-api.onrender.com/images/default-profile.png"
+      }
+    }
+  },
+
+  "POST /api/auth/login": {
+    "description": "Logs a user in using their email and password. Sets a token cookie and returns the user object (excluding password hash).",
+    "queries": [],
+    "exampleRequest": "/api/auth/login",
+    "exampleBody": {
+      "email": "lurker@example.com",
+      "password": "securepassword123"
+    },
+    "exampleResponse": {
+      "user": {
+        "username": "lurker",
+        "name": "Jane Doe",
+        "email": "lurker@example.com",
+        "avatar_url": "https://daily-spews-api.onrender.com/images/default-profile.png"
+      }
+    }
+  },
+
+  "POST /api/auth/logout": {
+    "description": "Logs a user out by clearing the authentication token cookie.",
+    "queries": [],
+    "exampleRequest": "/api/auth/logout",
+    "exampleResponse": {
+      "msg": "Logged out successfully!"
+    }
+  },
+
   "PATCH /api/articles/:article_id": {
     "description": "Updates the vote count of the specified article by the value provided in inc_votes. Returns the updated article.",
     "queries": [],
