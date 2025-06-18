@@ -61,4 +61,11 @@ module.exports = [
     password: "kevpstephenson123",
     avatar_url: "https://daily-spews-api.onrender.com/images/users/kevin.jpeg",
   },
+  {
+    username: "guest_user",
+    name: "Guest User",
+    email: "guest_user@example.com",
+    password: "guest_user123",
+    avatar_url: "https://daily-spews-api.onrender.com/images/users/guest.jpeg",
+  },
 ];
