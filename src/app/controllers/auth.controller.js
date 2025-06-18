@@ -17,7 +17,7 @@ exports.registerUser = async (req, res, next) => {
     const user = await insertUser({
       username,
       name,
-      email,
+      email: email.toLowerCase(),
       password_hash,
       avatar_url,
     });
@@ -35,9 +35,13 @@ exports.loginUser = async (req, res, next) => {
     return res.status(400).send({ msg: "Missing email or password!" });
   }
 
+  if (typeof email !== "string" || typeof password !== "string") {
+    return res.status(400).send({ msg: "Invalid email or password format!" });
+  }
+
   try {
     // Check if the user exists
-    const user = await selectUserByEmail(email);
+    const user = await selectUserByEmail(email.toLowerCase());
     if (!user)
       return res.status(401).send({ msg: "Invalid email or password!" });
 
@@ -57,12 +61,30 @@ exports.loginUser = async (req, res, next) => {
     const { password_hash, ...rest } = user;
     const safeUser = {
       ...rest,
-      email: user.email,
+      email: user.email.toLowerCase(),
     };
 
-    // Send the token and user data
-    res.send({ token, user: safeUser });
+    // Set the token as a secure httpOnly cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Lax",
+      maxAge: 3600000, // 1 hour
+    });
+
+    // Respond with user data only
+    res.send({ user: safeUser });
   } catch (err) {
     next(err);
   }
+};
+
+//! POST /api/auth/logout
+exports.logoutUser = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Lax",
+  });
+  res.status(200).send({ msg: "Logged out successfully!" });
 };

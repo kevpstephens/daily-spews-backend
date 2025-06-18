@@ -53,7 +53,7 @@ describe("POST /api/auth/register", () => {
 });
 
 describe("POST /api/auth/login", () => {
-  test("200: responds with token and user object for valid credentials", () => {
+  test("200: responds with user object and sets token cookie for valid credentials", () => {
     return request(app)
       .post("/api/auth/login")
       .send({
@@ -62,15 +62,20 @@ describe("POST /api/auth/login", () => {
       })
       .expect(200)
       .then((response) => {
-        expect(response.body).toHaveProperty("token");
+        // Assert the user object is present
         expect(response.body.user).toMatchObject({
           username: "butter_bridge",
           email: "butter_bridge@example.com",
         });
+
+        // Assert the token cookie is set
+        const setCookieHeader = response.headers["set-cookie"];
+        expect(setCookieHeader).toBeDefined();
+        expect(setCookieHeader[0]).toMatch(/token=.*HttpOnly/);
       });
   });
 
-  test("400: error if email or password is missing", () => {
+  test("ERROR - 400: Responds with errorif email or password is missing", () => {
     return request(app)
       .post("/api/auth/login")
       .send({ email: "some@example.com" }) // missing password
@@ -93,7 +98,7 @@ describe("POST /api/auth/login", () => {
       });
   });
 
-  test("401: Responds with error for nonexistent email", () => {
+  test("ERROR - 401: Responds with error for nonexistent email", () => {
     return request(app)
       .post("/api/auth/login")
       .send({
@@ -103,6 +108,20 @@ describe("POST /api/auth/login", () => {
       .expect(401)
       .then(({ body }) => {
         expect(body.msg).toBe("Invalid email or password!");
+      });
+  });
+});
+
+describe("POST /api/auth/logout", () => {
+  test("200: Responds with success message and clears the token cookie on logout", () => {
+    return request(app)
+      .post("/api/auth/logout")
+      .expect(200)
+      .then((response) => {
+        expect(response.body).toEqual({ msg: "Logged out successfully!" });
+        const setCookieHeader = response.headers["set-cookie"];
+        expect(setCookieHeader).toBeDefined();
+        expect(setCookieHeader[0]).toMatch(/token=;/); // cookie cleared
       });
   });
 });
