@@ -5,6 +5,12 @@ const { insertUser, selectUserByEmail } = require("../models/users.model");
 //! POST /api/auth/register
 exports.registerUser = async (req, res, next) => {
   const { username, name, email, password, avatar_url } = req.body;
+
+  if (!avatar_url) {
+    avatar_url =
+      "https://daily-spews-api.onrender.com/images/default-profile.png";
+  }
+
   try {
     // Hash the password
     const password_hash = await bcrypt.hash(password, 10);
