@@ -17,6 +17,7 @@ const apiRouter = require("./app/routes/api.routes");
 const allowedOrigins = [
   "http://localhost:5173",
   "https://daily-spews-client.onrender.com",
+  "https://daily-spews.onrender.com",
 ];
 
 // ~~~~~~~~~~~~~~~ STATIC FILES ~~~~~~~~~~~~~~~
