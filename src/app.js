@@ -18,21 +18,27 @@ const apiRouter = require("./app/routes/api.routes");
 app.use(express.static("public")); // Serve static files from the 'public' directory
 
 // ~~~~~~~~~~~~~~~ GLOBAL MIDDLEWARE ~~~~~~~~~~~~~~~
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       const allowlist = [
+//         "http://localhost:5173",
+//         "https://daily-spews.onrender.com",
+//       ];
+//       if (!origin || allowlist.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         console.error("❌ Blocked by CORS:", origin);
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//     credentials: true, // allow cookies
+//   })
+// );
 app.use(
   cors({
-    origin: (origin, callback) => {
-      const allowlist = [
-        "http://localhost:5173",
-        "https://daily-spews.onrender.com",
-      ];
-      if (!origin || allowlist.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.error("❌ Blocked by CORS:", origin);
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true, // allow cookies
+    origin: true, // ← TEMP: Accepts any origin dynamically
+    credentials: true,
   })
 );
 app.use(express.json());
