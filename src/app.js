@@ -2,6 +2,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 // ~~~~~~~~~~~~~~~ ERROR HANDLERS ~~~~~~~~~~~~~~~
 const {
@@ -16,7 +17,6 @@ const apiRouter = require("./app/routes/api.routes");
 // ~~~~~~~~~~~~~~~ CORS ~~~~~~~~~~~~~~~
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://daily-spews-client.onrender.com",
   "https://daily-spews.onrender.com",
 ];
 
@@ -37,6 +37,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(cookieParser());
 
 // ~~~~~~~~~~~~~~~ API ROUTER ~~~~~~~~~~~~~~~
 app.use("/api", apiRouter);
