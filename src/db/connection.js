@@ -25,15 +25,15 @@ if (ENV === "production") {
 const pool = new Pool(config);
 
 // Log pool stats every 5 seconds (only outside of test environment)
-if (ENV !== "test") {
-  poolLogger = setInterval(() => {
-    console.log("📊 PG Pool Stats:", {
-      "Total clients": pool.totalCount,
-      "Idle clients": pool.idleCount,
-      "Pending requests": pool.waitingCount,
-    });
-  }, 5000);
-}
+// if (ENV !== "test") {
+//   poolLogger = setInterval(() => {
+//     console.log("📊 PG Pool Stats:", {
+//       "Total clients": pool.totalCount,
+//       "Idle clients": pool.idleCount,
+//       "Pending requests": pool.waitingCount,
+//     });
+//   }, 5000);
+// }
 
 pool.closeLogger = () => {
   if (poolLogger) clearInterval(poolLogger);
