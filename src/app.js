@@ -14,12 +14,6 @@ const {
 // ~~~~~~~~~~~~~~~ ROUTERS ~~~~~~~~~~~~~~~
 const apiRouter = require("./app/routes/api.routes");
 
-// ~~~~~~~~~~~~~~~ CORS ~~~~~~~~~~~~~~~
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://daily-spews.onrender.com",
-];
-
 // ~~~~~~~~~~~~~~~ STATIC FILES ~~~~~~~~~~~~~~~
 app.use(express.static("public")); // Serve static files from the 'public' directory
 
@@ -27,11 +21,16 @@ app.use(express.static("public")); // Serve static files from the 'public' direc
 app.use(
   cors({
     origin: (origin, callback) => {
-      // allow requests with no origin (like mobile apps or curl)
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
+      const allowlist = [
+        "http://localhost:5173",
+        "https://daily-spews.onrender.com",
+      ];
+      if (!origin || allowlist.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.error("❌ Blocked by CORS:", origin);
+        callback(new Error("Not allowed by CORS"));
       }
-      return callback(new Error(`Not allowed by CORS: ${origin}`));
     },
     credentials: true, // allow cookies
   })
