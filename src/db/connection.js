@@ -35,8 +35,8 @@ const pool = new Pool(config);
 //   }, 5000);
 // }
 
-pool.closeLogger = () => {
-  if (poolLogger) clearInterval(poolLogger);
-};
+// pool.closeLogger = () => {
+//   if (poolLogger) clearInterval(poolLogger);
+// };
 
 module.exports = pool;
