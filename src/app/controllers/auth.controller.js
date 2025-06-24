@@ -29,6 +29,7 @@ exports.registerUser = async (req, res, next) => {
 
 //! POST /api/auth/login
 exports.loginUser = async (req, res, next) => {
+  console.log("🔐 Login route hit");
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -40,13 +41,17 @@ exports.loginUser = async (req, res, next) => {
   }
 
   try {
+    console.log("Email received:", email);
     // Check if the user exists
     const user = await selectUserByEmail(email.toLowerCase());
+    console.log("User found:", user);
     if (!user)
       return res.status(401).send({ msg: "Invalid email or password!" });
 
+    console.log("Checking password...");
     // Check if the password is correct
     const valid = await bcrypt.compare(password, user.password_hash);
+    console.log("Password valid:", valid);
     if (!valid)
       return res.status(401).send({ msg: "Invalid email or password!" });
 
@@ -72,9 +77,11 @@ exports.loginUser = async (req, res, next) => {
       maxAge: 3600000, // 1 hour
     });
 
+    console.log("Login successful, sending response...");
     // Respond with user data only
     res.send({ user: safeUser });
   } catch (err) {
+    console.error("❌ Login error:", err);
     next(err);
   }
 };
