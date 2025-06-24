@@ -6,9 +6,9 @@ const { insertUser, selectUserByEmail } = require("../models/users.model");
 exports.registerUser = async (req, res, next) => {
   const { username, name, email, password, avatar_url } = req.body;
 
-  if (!avatar_url) {
-    avatar_url =
-      "https://daily-spews-api.onrender.com/images/default-profile.png";
+  let avatar = avatar_url;
+  if (!avatar_url || avatar_url.trim() === "") {
+    avatar = "https://daily-spews-api.onrender.com/images/default-profile.png";
   }
 
   try {
@@ -19,7 +19,7 @@ exports.registerUser = async (req, res, next) => {
       name,
       email: email.toLowerCase(),
       password_hash,
-      avatar_url,
+      avatar_url: avatar,
     });
     res.status(201).send({ user });
   } catch (err) {
