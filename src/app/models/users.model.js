@@ -49,3 +49,25 @@ exports.selectUserByEmail = async (email) => {
   ]);
   return result.rows[0];
 };
+
+//! PATCH /api/users/:username/avatar
+exports.updateUserAvatar = async (username, avatar_url) => {
+  const result = await db.query(
+    `
+    UPDATE users
+    SET avatar_url = $1
+    WHERE username = $2
+    RETURNING username, name, email, avatar_url;
+    `,
+    [avatar_url, username]
+  );
+
+  if (!result.rows.length) {
+    throw {
+      status: 404,
+      msg: "User does not exist!",
+    };
+  }
+
+  return result.rows[0];
+};

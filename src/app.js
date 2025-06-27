@@ -24,6 +24,7 @@ app.use(
       const allowlist = [
         "http://localhost:5173",
         "https://daily-spews.onrender.com",
+        "https://daily-spews-preview.onrender.com",
       ];
       if (!origin || allowlist.includes(origin)) {
         callback(null, true);
