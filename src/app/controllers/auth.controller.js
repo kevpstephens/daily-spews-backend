@@ -1,17 +1,25 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { insertUser, selectUserByEmail } = require("../models/users.model");
+const uploadAvatar = require("../../utils/uploadToSupabase");
 
 //! POST /api/auth/register
 exports.registerUser = async (req, res, next) => {
   const { username, name, email, password, avatar_url } = req.body;
-
   let avatar = avatar_url;
-  if (!avatar_url || avatar_url.trim() === "") {
-    avatar = "https://daily-spews-api.onrender.com/images/default-profile.png";
-  }
 
   try {
+    // Upload avatar if a file is provided
+    if (req.file) {
+      avatar = await uploadAvatar(req.file.buffer, req.file.mimetype);
+    }
+
+    // Fallback to default image if neither file nor valid string provided
+    if (!avatar || avatar.trim() === "") {
+      avatar =
+        "https://daily-spews-api.onrender.com/images/default-profile.png";
+    }
+
     // Hash the password
     const password_hash = await bcrypt.hash(password, 10);
     const user = await insertUser({
@@ -21,6 +29,7 @@ exports.registerUser = async (req, res, next) => {
       password_hash,
       avatar_url: avatar,
     });
+
     res.status(201).send({ user });
   } catch (err) {
     next(err);

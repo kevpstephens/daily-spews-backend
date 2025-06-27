@@ -1,6 +1,8 @@
+const { uploadUserAvatar } = require("../../utils/supabaseClient");
 const {
   selectAllUsers,
   selectUserByUsername,
+  updateUserAvatar,
 } = require("../models/users.model");
 
 //! GET /api/users
@@ -47,6 +49,33 @@ exports.getUserByUsername = async (req, res, next) => {
     const user = await selectUserByUsername(username);
     res.status(200).send({ user });
   } catch (err) {
+    next(err);
+  }
+};
+
+//! POST /api/users/:username/avatar
+exports.updateAvatar = async (req, res, next) => {
+  const { username } = req.params;
+
+  if (!req.file) {
+    return res.status(400).send({ msg: "No file uploaded." });
+  }
+
+  try {
+    const file = req.file;
+    const uploadPath = `avatars/${username}/${Date.now()}-${file.originalname}`;
+
+    const { publicUrl, error } = await uploadUserAvatar(uploadPath, file);
+
+    if (error) {
+      throw error;
+    }
+
+    const updatedUser = await updateUserAvatar(username, publicUrl);
+
+    res.status(200).send({ user: updatedUser });
+  } catch (err) {
+    console.error("❌ Avatar upload failed:", err);
     next(err);
   }
 };
