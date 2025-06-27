@@ -70,11 +70,14 @@ exports.loginUser = async (req, res, next) => {
     };
 
     // Set the token as a secure httpOnly cookie
+    // 🔧 FIXED: Remove domain restriction for localhost development
     res.cookie("token", token, {
+      path: "/",
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "None",
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // 🔧 FIXED: Use Lax for localhost
       maxAge: 3600000, // 1 hour
+      // 🔧 REMOVED: Don't set domain for localhost
     });
 
     console.log("Login successful, sending response...");
@@ -87,11 +90,20 @@ exports.loginUser = async (req, res, next) => {
 };
 
 //! POST /api/auth/logout
-exports.logoutUser = (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "None",
-  });
-  res.status(200).send({ msg: "Logged out successfully!" });
+exports.logoutUser = (req, res, next) => {
+  console.log("🔓 Logging out, clearing token cookie...");
+  try {
+    res.clearCookie("token", {
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // 🔧 FIXED: Use Lax for localhost
+      // 🔧 REMOVED: Don't set domain for localhost
+    });
+
+    res.status(200).send({ msg: "Logged out successfully!" });
+  } catch (err) {
+    console.error("❌ Logout error:", err);
+    next(err);
+  }
 };
