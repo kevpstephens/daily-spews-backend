@@ -159,3 +159,11 @@ npm test
 | **Supertest**  | HTTP assertions for testing API    | 🔶 Only for testing    |
 | **Supabase**   | Hosting platform for PostgreSQL DB | ❌ Only for deployment |
 | **Render**     | Hosting platform for Node API      | ❌ Only for deployment |
+
+## <br><br>
+
+# Endpoints:
+
+## <br><br>
+
+# Future Considerations:
