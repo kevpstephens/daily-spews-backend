@@ -6,6 +6,7 @@ const {
   postArticle,
   deleteArticleById,
 } = require("../controllers/articles.controller");
+const upload = require("../middleware/multer");
 
 const articlesRouter = express.Router();
 
@@ -16,7 +17,7 @@ articlesRouter.get("/", getAllArticles);
 articlesRouter.get("/:article_id", getArticlesById);
 
 //! POST api/articles
-articlesRouter.post("/", postArticle);
+articlesRouter.post("/", upload.single("article_img"), postArticle);
 
 //! PATCH /api/articles/:article_id
 articlesRouter.patch("/:article_id", patchArticleById);
