@@ -9,7 +9,8 @@ const upload = require("../middleware/multer");
 const authRouter = express.Router();
 
 //! POST /api/auth/register
-authRouter.post("/register", upload.single("avatar"), registerUser);
+// Use upload.any() to handle optional file uploads and parse all fields
+authRouter.post("/register", upload.any(), registerUser);
 
 //! POST /api/auth/login
 authRouter.post("/login", loginUser);
