@@ -1,22 +1,24 @@
-const supabase = require("./supabaseClient");
+const { supabase } = require("./supabaseClient");
 const { v4: uuid } = require("uuid");
 
-async function uploadAvatar(buffer, mimetype) {
-  const filename = `${uuid()}`; // unique name
-  const { data, error } = await supabase.storage
-    .from("avatars")
+async function uploadToSupabase(file, bucket = "article-images") {
+  const filename = `${uuid()}`;
+  const { buffer, mimetype } = file;
+
+  const { error: uploadError } = await supabase.storage
+    .from(bucket)
     .upload(filename, buffer, {
       contentType: mimetype,
       upsert: false,
     });
 
-  if (error) throw error;
+  if (uploadError) throw uploadError;
 
   const { data: publicUrl } = supabase.storage
-    .from("avatars")
+    .from(bucket)
     .getPublicUrl(filename);
 
   return publicUrl.publicUrl;
 }
 
-module.exports = uploadAvatar;
+module.exports = uploadToSupabase;

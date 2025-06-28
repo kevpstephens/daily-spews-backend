@@ -6,6 +6,7 @@ const {
   removeArticleById,
 } = require("../models/articles.model.js");
 const { selectUserByUsername } = require("../models/users.model.js");
+const uploadToSupabase = require("../../utils/uploadToSupabase");
 
 //! GET /api/articles
 exports.getAllArticles = async (req, res, next) => {
@@ -48,17 +49,26 @@ exports.getArticlesById = async (req, res, next) => {
 
 //! POST api/articles
 exports.postArticle = async (req, res, next) => {
-  // Extract required fields from request body for new article creation
-  const { author, title, body, topic, article_img_url } = req.body;
+  const { author, title, body, topic } = req.body;
+  let article_img_url = req.body.article_img_url;
 
   if (!author || !title || !body || !topic) {
     return res.status(400).send({ msg: "Missing required fields!" });
   }
 
   try {
-    // Validate author exists before creating article
     await selectUserByUsername(author);
-    // Insert new article and respond with the created object
+
+    // If a file was uploaded, try uploading to Supabase
+    if (req.file) {
+      try {
+        article_img_url = await uploadToSupabase(req.file, "article-images");
+      } catch (uploadErr) {
+        console.error("❌ Failed to upload image to Supabase:", uploadErr);
+        return res.status(500).send({ msg: "Image upload failed." });
+      }
+    }
+
     const newArticle = await insertArticle({
       author,
       title,
@@ -66,8 +76,10 @@ exports.postArticle = async (req, res, next) => {
       topic,
       article_img_url,
     });
+
     res.status(201).send({ newArticle });
   } catch (err) {
+    console.error("❌ Server error in postArticle:", err);
     next(err);
   }
 };

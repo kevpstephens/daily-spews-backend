@@ -10,7 +10,7 @@
     "queries": [],
     "exampleRequest": "/api/topics",
     "exampleResponse": {
-      "topics": [{ "slug": "football", "description": "Footie!" }]
+      "topics": [{ "slug": "football", "description": "FOOTIE!" }]
     }
   },
 
@@ -21,9 +21,9 @@
     "exampleResponse": {
       "users": [
         {
-          "username": "butter_bridge",
-          "name": "jonny",
-          "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+          "username": "tickle122",
+          "name": "Tom Tickle",
+          "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
         }
       ]
     }
@@ -32,12 +32,12 @@
   "GET /api/users/:username": {
     "description": "Returns a user object corresponding to the specified username.",
     "queries": [],
-    "exampleRequest": "/api/users/lurker",
+    "exampleRequest": "/api/users/jessjelly",
     "exampleResponse": {
       "user": {
-        "username": "lurker",
-        "name": "Jane Doe",
-        "avatar_url": "https://some-image.com/avatar.png"
+        "username": "jessjelly",
+        "name": "Jess Jelly",
+        "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141"
       }
     }
   },
@@ -45,7 +45,7 @@
   "GET /api/articles": {
     "description": "Returns a paginated array of article objects. Each object includes comment_count and excludes the body field. Supports sorting, ordering, topic filtering, and pagination via query parameters.",
     "queries": ["sort_by", "order", "topic", "limit", "p"],
-    "exampleRequest": "/api/articles?sort_by=created_at&order=asc&topic=mitch&limit=5&p=2",
+    "exampleRequest": "/api/articles?sort_by=created_at&order=asc&topic=football&limit=5&p=2",
     "exampleResponse": {
       "total_count": 25,
       "articles": [
@@ -53,7 +53,7 @@
           "article_id": 6,
           "title": "Exploring the woods",
           "author": "grumpy19",
-          "topic": "mitch",
+          "topic": "football",
           "created_at": "2020-09-17T14:11:00.000Z",
           "votes": 50,
           "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
@@ -71,12 +71,12 @@
       "article": {
         "article_id": 1,
         "title": "Running a Node App",
-        "topic": "coding",
-        "author": "jessjelly",
+        "topic": "football",
+        "author": "grumpy19",
         "body": "This is part two of a series on how to get up and running with Systemd and Node.js. This part dives deeper into how to successfully run your app with systemd long-term, and how to set it up in a production environment.",
         "created_at": "2020-11-07 06:03:00",
         "votes": 0,
-        "article_img_url": "https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700",
+        "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
         "comment_count": 8
       }
     }
@@ -169,17 +169,17 @@
     "queries": [],
     "exampleRequest": "/api/auth/register",
     "exampleBody": {
-      "username": "lurker",
-      "name": "Jane Doe",
-      "email": "lurker@example.com",
+      "username": "grumpy19",
+      "name": "Paul Grump",
+      "email": "grumpy19@example.com",
       "password": "securepassword123"
     },
     "exampleResponse": {
       "user": {
-        "username": "lurker",
-        "name": "Jane Doe",
-        "email": "lurker@example.com",
-        "avatar_url": "https://daily-spews-api.onrender.com/images/default-profile.png"
+        "username": "grumpy19",
+        "name": "Paul Grump",
+        "email": "grumpy19@example.com",
+        "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/7/78/Mr-Grumpy-3A.PNG/revision/latest?cb=20170707233013"
       }
     }
   },
@@ -189,15 +189,15 @@
     "queries": [],
     "exampleRequest": "/api/auth/login",
     "exampleBody": {
-      "email": "lurker@example.com",
+      "email": "grumpy19@example.com",
       "password": "securepassword123"
     },
     "exampleResponse": {
       "user": {
-        "username": "lurker",
-        "name": "Jane Doe",
-        "email": "lurker@example.com",
-        "avatar_url": "https://daily-spews-api.onrender.com/images/default-profile.png"
+        "username": "grumpy19",
+        "name": "Paul Grump",
+        "email": "grumpy19@example.com",
+        "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/7/78/Mr-Grumpy-3A.PNG/revision/latest?cb=20170707233013"
       }
     }
   },
@@ -263,5 +263,15 @@
     "queries": [],
     "exampleRequest": "/api/comments/1",
     "exampleResponse": {}
+  },
+
+  "POST /api/users/:username/avatar": {
+    "description": "Uploads a new avatar image for the specified user. Accepts multipart/form-data with a single 'avatar' file field. Returns the updated avatar_url.",
+    "queries": [],
+    "exampleRequest": "/api/users/jessjelly/avatar",
+    "exampleBody": "FormData: { avatar: [File] }",
+    "exampleResponse": {
+      "avatar_url": "https://daily-spews-api.onrender.com/avatars/jessjelly.jpg"
+    }
   }
 }

@@ -6,7 +6,7 @@ const supabase = createClient(
 );
 
 // Upload function
-exports.uploadUserAvatar = async (path, file) => {
+const uploadUserAvatar = async (path, file) => {
   try {
     const { data, error } = await supabase.storage
       .from("avatars")
@@ -28,4 +28,9 @@ exports.uploadUserAvatar = async (path, file) => {
     console.error("❌ Supabase upload error:", err);
     return { error: err };
   }
+};
+
+module.exports = {
+  supabase,
+  uploadUserAvatar,
 };
