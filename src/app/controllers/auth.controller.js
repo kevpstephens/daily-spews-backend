@@ -1,27 +1,85 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { insertUser, selectUserByEmail } = require("../models/users.model");
-const uploadAvatar = require("../../utils/uploadToSupabase");
+const uploadToSupabase = require("../../utils/uploadToSupabase");
 
 //! POST /api/auth/register
 exports.registerUser = async (req, res, next) => {
+  console.log("🔍 Registration attempt started");
+  console.log("🔍 req.files:", req.files);
+  console.log("🔍 req.file:", req.file);
+  console.log("🔍 req.body:", req.body);
+  console.log("🔍 req.body keys:", Object.keys(req.body));
+
   const { username, name, email, password, avatar_url } = req.body;
   let avatar = avatar_url;
 
   try {
+    // Find avatar file from req.files array (when using upload.any())
+    const avatarFile =
+      req.files && req.files.find((file) => file.fieldname === "avatar");
+
+    // Also check req.file for backward compatibility
+    const fileToUpload = avatarFile || req.file;
+
     // Upload avatar if a file is provided
-    if (req.file) {
-      avatar = await uploadAvatar(req.file.buffer, req.file.mimetype);
+    if (fileToUpload) {
+      console.log("🔍 Attempting to upload file to Supabase...");
+      console.log("🔍 File details:", {
+        fieldname: fileToUpload.fieldname,
+        originalname: fileToUpload.originalname,
+        mimetype: fileToUpload.mimetype,
+        size: fileToUpload.size,
+      });
+
+      try {
+        // Create the correct object structure for uploadToSupabase
+        const fileData = {
+          buffer: fileToUpload.buffer,
+          mimetype: fileToUpload.mimetype,
+        };
+
+        // Upload to avatars bucket
+        avatar = await uploadToSupabase(fileData, "avatars");
+        console.log("✅ File uploaded successfully:", avatar);
+      } catch (uploadErr) {
+        console.error("❌ Error uploading avatar to Supabase:", uploadErr);
+        console.error("❌ Upload error details:", {
+          message: uploadErr.message,
+          stack: uploadErr.stack,
+        });
+
+        // Continue with default avatar instead of failing registration
+        console.log("🔄 Continuing with default avatar due to upload failure");
+        avatar =
+          "https://daily-spews-api.onrender.com/images/default-profile.png";
+      }
     }
 
     // Fallback to default image if neither file nor valid string provided
     if (!avatar || avatar.trim() === "") {
+      console.log("🔄 Using default avatar");
       avatar =
         "https://daily-spews-api.onrender.com/images/default-profile.png";
     }
 
+    console.log("🔍 Final avatar URL:", avatar);
+
+    // Validate required fields
+    if (!username || !name || !email || !password) {
+      console.log("❌ Missing required fields");
+      console.log("🔍 username:", username);
+      console.log("🔍 name:", name);
+      console.log("🔍 email:", email);
+      console.log("🔍 password:", password ? "Present" : "Missing");
+      return res.status(400).send({ msg: "Missing required fields!" });
+    }
+
     // Hash the password
+    console.log("🔍 Hashing password...");
     const password_hash = await bcrypt.hash(password, 10);
+
+    console.log("🔍 Attempting to insert user into database...");
     const user = await insertUser({
       username,
       name,
@@ -30,8 +88,22 @@ exports.registerUser = async (req, res, next) => {
       avatar_url: avatar,
     });
 
+    console.log("✅ User created successfully:", user.username);
     res.status(201).send({ user });
   } catch (err) {
+    console.error("❌ Registration error:", err);
+
+    // Handle specific database errors
+    if (err.code === "23505") {
+      // PostgreSQL unique constraint violation
+      if (err.constraint === "users_username_key") {
+        return res.status(409).send({ msg: "Username already exists!" });
+      }
+      if (err.constraint === "users_email_key") {
+        return res.status(409).send({ msg: "Email already exists!" });
+      }
+    }
+
     next(err);
   }
 };
@@ -79,14 +151,12 @@ exports.loginUser = async (req, res, next) => {
     };
 
     // Set the token as a secure httpOnly cookie
-    // 🔧 FIXED: Remove domain restriction for localhost development
     res.cookie("token", token, {
       path: "/",
       httpOnly: true,
       secure: process.env.NODE_ENV === "production" ? true : false,
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // 🔧 FIXED: Use Lax for localhost
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 3600000, // 1 hour
-      // 🔧 REMOVED: Don't set domain for localhost
     });
 
     console.log("Login successful, sending response...");
@@ -106,8 +176,7 @@ exports.logoutUser = (req, res, next) => {
       path: "/",
       httpOnly: true,
       secure: process.env.NODE_ENV === "production" ? true : false,
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // 🔧 FIXED: Use Lax for localhost
-      // 🔧 REMOVED: Don't set domain for localhost
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
     });
 
     res.status(200).send({ msg: "Logged out successfully!" });
