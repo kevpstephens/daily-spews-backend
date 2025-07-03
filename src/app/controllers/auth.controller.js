@@ -1,6 +1,10 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { insertUser, selectUserByEmail } = require("../models/users.model");
+const {
+  insertUser,
+  selectUserByEmail,
+  updateUserPassword,
+} = require("../models/users.model");
 const uploadToSupabase = require("../../utils/uploadToSupabase");
 
 //! POST /api/auth/register
@@ -199,17 +203,11 @@ exports.updateUserPassword = async (req, res, next) => {
 
   try {
     const hashed = await bcrypt.hash(newPassword, 10);
+    const updatedUser = await updateUserPasswordByUsername(username, hashed);
 
-    const result = await db.query(
-      "UPDATE users SET password = $1 WHERE username = $2 RETURNING username",
-      [hashed, username]
-    );
-
-    if (result.rowCount === 0) {
-      return res.status(404).send({ msg: "User not found" });
-    }
-
-    res.status(200).send({ msg: `Password updated for ${username}` });
+    res
+      .status(200)
+      .send({ msg: `Password updated for ${updatedUser.username}` });
   } catch (err) {
     console.error("❌ Password update error:", err);
     next(err);
