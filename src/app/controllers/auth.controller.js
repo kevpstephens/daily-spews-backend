@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const {
   insertUser,
   selectUserByEmail,
-  updateUserPassword,
+  updateUserPasswordByUsername,
 } = require("../models/users.model");
 const uploadToSupabase = require("../../utils/uploadToSupabase");
 
