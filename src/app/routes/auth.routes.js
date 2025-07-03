@@ -3,6 +3,7 @@ const {
   registerUser,
   loginUser,
   logoutUser,
+  updateUserPassword,
 } = require("../controllers/auth.controller");
 const upload = require("../middleware/multer");
 
@@ -17,5 +18,8 @@ authRouter.post("/login", loginUser);
 
 //! POST /api/auth/logout
 authRouter.post("/logout", logoutUser);
+
+//! PATCH /api/auth/:username/password
+authRouter.patch("/:username/password", updateUserPassword);
 
 module.exports = authRouter;

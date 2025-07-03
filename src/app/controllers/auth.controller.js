@@ -185,3 +185,33 @@ exports.logoutUser = (req, res, next) => {
     next(err);
   }
 };
+
+//! PATCH /api/auth/:username/password
+exports.updateUserPassword = async (req, res, next) => {
+  const { username } = req.params;
+  const { newPassword } = req.body;
+
+  if (!newPassword || typeof newPassword !== "string") {
+    return res
+      .status(400)
+      .send({ msg: "New password is required and must be a string" });
+  }
+
+  try {
+    const hashed = await bcrypt.hash(newPassword, 10);
+
+    const result = await db.query(
+      "UPDATE users SET password = $1 WHERE username = $2 RETURNING username",
+      [hashed, username]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).send({ msg: "User not found" });
+    }
+
+    res.status(200).send({ msg: `Password updated for ${username}` });
+  } catch (err) {
+    console.error("❌ Password update error:", err);
+    next(err);
+  }
+};
