@@ -4,8 +4,8 @@ const {
   updateArticleById,
   insertArticle,
   removeArticleById,
-} = require("../models/articles.model.js");
-const { selectUserByUsername } = require("../models/users.model.js");
+} = require("../models/articles.model");
+const { selectUserByUsername } = require("../models/users.model");
 const uploadToSupabase = require("../../utils/uploadToSupabase");
 
 //! GET /api/articles

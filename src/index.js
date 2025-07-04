@@ -1,4 +1,6 @@
-const app = require("./app.js");
+const app = require("./app");
+const logger = require("./utils/logger");
+
 const { PORT = 9090 } = process.env;
 
 // Set default NODE_ENV if not set
@@ -13,7 +15,7 @@ const envEmojiMap = {
 const emoji = envEmojiMap[process.env.NODE_ENV] || "🛠️";
 
 app.listen(PORT, () => {
-  console.log(
-    `👂 Listening on port ${PORT} (${emoji} ${process.env.NODE_ENV.toUpperCase()})...`
+  logger.info(
+    `👂 Listening on port ${PORT} (${emoji} ${process.env.NODE_ENV.toUpperCase()})...`,
   );
 });

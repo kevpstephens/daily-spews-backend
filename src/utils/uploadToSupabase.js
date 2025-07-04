@@ -1,9 +1,9 @@
-const { supabase } = require("./supabaseClient");
 const { v4: uuid } = require("uuid");
+const { supabase } = require("./supabaseClient");
 
 async function uploadToSupabase(
   { buffer, mimetype },
-  bucket = "article-images"
+  bucket = "article-images",
 ) {
   const filename = `${uuid()}`;
 

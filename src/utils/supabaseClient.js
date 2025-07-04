@@ -1,14 +1,15 @@
 const { createClient } = require("@supabase/supabase-js");
+const logger = require("./logger");
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY,
 );
 
 // Upload function
 const uploadUserAvatar = async (path, file) => {
   try {
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from("avatars")
       .upload(path, file.buffer, {
         contentType: file.mimetype,
@@ -25,7 +26,7 @@ const uploadUserAvatar = async (path, file) => {
 
     return { publicUrl: publicUrlData.publicUrl };
   } catch (err) {
-    console.error("❌ Supabase upload error:", err);
+    logger.error("Supabase upload error:", err);
     return { error: err };
   }
 };

@@ -3,6 +3,7 @@ const db = require("../connection");
 const format = require("pg-format");
 const { convertTimestampToDate, createRef } = require("./utils");
 const createTables = require("../schemas/createTables");
+const logger = require("../../utils/logger");
 
 const seed = async ({ topicData, userData, articleData, commentData }) => {
   try {
@@ -17,7 +18,7 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
     const insertTopicsData = format(
       `INSERT INTO topics (slug, description, img_url)
     VALUES %L;`,
-      formattedTopics
+      formattedTopics,
     );
     await db.query(insertTopicsData);
 
@@ -27,17 +28,17 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
         // Hash the password with 10 salt rounds
         const password_hash = await bcrypt.hash(password, 10);
         return [username, name, email, password_hash, avatar_url];
-      })
+      }),
     );
     const insertUsersData = format(
       `INSERT INTO users (username, name, email, password_hash, avatar_url) VALUES %L;`,
-      hashedUsers
+      hashedUsers,
     );
     await db.query(insertUsersData);
 
     //! Insert Aricles Data
     const createdAtErrorCorrectedArticlesData = articleData.map(
-      convertTimestampToDate
+      convertTimestampToDate,
     );
     const formattedArticles = createdAtErrorCorrectedArticlesData.map(
       ({ title, topic, author, body, created_at, votes, article_img_url }) => [
@@ -48,11 +49,11 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
         created_at,
         votes,
         article_img_url,
-      ]
+      ],
     );
     const insertArticlesData = format(
       `INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url) VALUES %L RETURNING *;`,
-      formattedArticles
+      formattedArticles,
     );
 
     const insertedArticles = await db.query(insertArticlesData);
@@ -60,7 +61,7 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
     //! Insert Comments Data
     const articlesRefObject = createRef(insertedArticles.rows);
     const createdAtErrorCorrectedCommentsData = commentData.map(
-      convertTimestampToDate
+      convertTimestampToDate,
     );
     const formattedComments = createdAtErrorCorrectedCommentsData.map(
       (comment) => {
@@ -71,16 +72,16 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
           comment.author,
           comment.created_at,
         ];
-      }
+      },
     );
     const insertCommentsData = format(
       `INSERT INTO comments (article_id, body, votes, author, created_at) VALUES %L;`,
-      formattedComments
+      formattedComments,
     );
     await db.query(insertCommentsData);
-    console.log("🌱 Seed complete! 🌱");
+    logger.info("Seed complete!");
   } catch (err) {
-    console.error("❌ Error seeding database:", err.message);
+    logger.error("Error seeding database:", err.message);
     throw err;
   }
 };
