@@ -30,7 +30,7 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
       })
     );
     const insertUsersData = format(
-      `INSERT INTO users (username, name, email, password_hash, avatar_url) VALUES %L;`,
+      "INSERT INTO users (username, name, email, password_hash, avatar_url) VALUES %L;",
       hashedUsers
     );
     await db.query(insertUsersData);
@@ -51,7 +51,7 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
       ]
     );
     const insertArticlesData = format(
-      `INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url) VALUES %L RETURNING *;`,
+      "INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url) VALUES %L RETURNING *;",
       formattedArticles
     );
 
@@ -63,7 +63,7 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
       convertTimestampToDate
     );
     const formattedComments = createdAtErrorCorrectedCommentsData.map(
-      (comment) => {
+      comment => {
         return [
           articlesRefObject[comment.article_title],
           comment.body,
@@ -74,7 +74,7 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
       }
     );
     const insertCommentsData = format(
-      `INSERT INTO comments (article_id, body, votes, author, created_at) VALUES %L;`,
+      "INSERT INTO comments (article_id, body, votes, author, created_at) VALUES %L;",
       formattedComments
     );
     await db.query(insertCommentsData);

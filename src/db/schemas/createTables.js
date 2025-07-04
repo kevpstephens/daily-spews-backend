@@ -1,10 +1,10 @@
 const db = require("../connection");
 
 const createTables = async () => {
-  await db.query(`DROP TABLE IF EXISTS comments CASCADE;`);
-  await db.query(`DROP TABLE IF EXISTS articles CASCADE;`);
-  await db.query(`DROP TABLE IF EXISTS users CASCADE;`);
-  await db.query(`DROP TABLE IF EXISTS topics CASCADE;`);
+  await db.query("DROP TABLE IF EXISTS comments CASCADE;");
+  await db.query("DROP TABLE IF EXISTS articles CASCADE;");
+  await db.query("DROP TABLE IF EXISTS users CASCADE;");
+  await db.query("DROP TABLE IF EXISTS topics CASCADE;");
 
   //! Create Topics Table
   await db.query(`CREATE TABLE topics (

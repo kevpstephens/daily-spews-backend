@@ -1,17 +1,19 @@
+const crypto = require("crypto");
+
+// Generate secure random passwords for production users
+const generateSecurePassword = () => {
+  return crypto.randomBytes(16).toString("hex");
+};
+
+// Production users with secure password generation
+// In production, these should be set via environment variables or admin interface
 module.exports = [
   {
     username: "admin",
     name: "Site Admin",
-    email: "kevpsteps@gmail.com",
-    password: "admin123",
+    email: "admin@example.com",
+    password: process.env.ADMIN_PASSWORD,
     avatar_url: "https://daily-spews-api.onrender.com/images/users/admin.jpeg",
-  },
-  {
-    username: "kevpstephenson",
-    name: "Kevin Stephenson",
-    email: "kevpstephenson@gmail.com",
-    password: "kevpstephenson123",
-    avatar_url: "https://daily-spews-api.onrender.com/images/users/kevin.jpeg",
   },
   {
     username: "guest_user",

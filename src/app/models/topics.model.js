@@ -2,7 +2,7 @@ const db = require("../../db/connection.js");
 
 //! GET /api/topics
 exports.selectTopics = async () => {
-  const queryStr = `SELECT * FROM topics;`;
+  const queryStr = "SELECT * FROM topics;";
 
   const result = await db.query(queryStr);
   return result.rows;

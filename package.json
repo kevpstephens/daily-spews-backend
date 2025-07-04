@@ -12,7 +12,12 @@
     "dev": "NODE_ENV=development nodemon src/index.js",
     "test": "NODE_ENV=test jest --runInBand",
     "test-seed": "jest seed.test.js",
-    "spam": "node scripts/spamScript.js"
+    "spam": "node scripts/spamScript.js",
+    "lint": "eslint src/ --ext .js",
+    "lint:fix": "eslint src/ --ext .js --fix",
+    "format": "prettier --write \"src/**/*.js\"",
+    "format:check": "prettier --check \"src/**/*.js\"",
+    "validate": "npm run lint && npm run format:check && npm test"
   },
   "repository": {
     "type": "git",
@@ -26,10 +31,12 @@
   },
   "homepage": "https://github.com/northcoders/be-nc-news#readme",
   "devDependencies": {
+    "eslint": "^8.57.0",
     "husky": "^8.0.3",
     "jest": "^27.5.1",
     "jest-extended": "^2.0.0",
     "jest-sorted": "^1.0.15",
+    "prettier": "^3.2.5",
     "supertest": "^7.1.0"
   },
   "dependencies": {

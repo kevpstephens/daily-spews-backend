@@ -2,15 +2,15 @@ const db = require("../../db/connection.js");
 
 //! GET /api/users
 exports.selectAllUsers = async () => {
-  const queryStr = `SELECT * FROM users;`;
+  const queryStr = "SELECT * FROM users;";
   const result = await db.query(queryStr);
 
   return result.rows;
 };
 
 //! GET /api/users/:username
-exports.selectUserByUsername = async (username) => {
-  const queryStr = `SELECT * FROM users WHERE username = $1`;
+exports.selectUserByUsername = async username => {
+  const queryStr = "SELECT * FROM users WHERE username = $1";
   const result = await db.query(queryStr, [username]);
 
   if (!result.rows.length) {
@@ -42,9 +42,9 @@ exports.insertUser = async ({
 };
 
 //! POST /api/auth/login
-exports.selectUserByEmail = async (email) => {
+exports.selectUserByEmail = async email => {
   // Select the user by email
-  const result = await db.query(`SELECT * FROM users WHERE email = $1;`, [
+  const result = await db.query("SELECT * FROM users WHERE email = $1;", [
     email,
   ]);
   return result.rows[0];
@@ -52,15 +52,12 @@ exports.selectUserByEmail = async (email) => {
 
 //! PATCH /api/users/:username/avatar
 exports.updateUserAvatar = async (username, avatar_url) => {
-  const result = await db.query(
-    `
-    UPDATE users
+  const queryStr = `UPDATE users
     SET avatar_url = $1
     WHERE username = $2
-    RETURNING username, name, email, avatar_url;
-    `,
-    [avatar_url, username]
-  );
+    RETURNING username, name, email, avatar_url;`;
+
+  const result = await db.query(queryStr, [avatar_url, username]);
 
   if (!result.rows.length) {
     throw {

@@ -51,7 +51,7 @@ exports.selectAllArticles = async ({
 
   if (topic) {
     // Check if the provided topic exists in the topics table
-    const queryStr = `SELECT * FROM topics WHERE slug = $1`;
+    const queryStr = "SELECT * FROM topics WHERE slug = $1";
     const checkTopicExists = await db.query(queryStr, [topic]);
 
     if (checkTopicExists.rows.length === 0) {
@@ -62,7 +62,7 @@ exports.selectAllArticles = async ({
     }
     // Add topic filter to query parameters and SQL WHERE clause
     queriedTopic.push(topic);
-    whereClauseStr += `WHERE topic = $1`;
+    whereClauseStr += "WHERE topic = $1";
   }
 
   // Query to get total count of articles matching the filter (for pagination info)
@@ -107,7 +107,7 @@ exports.selectAllArticles = async ({
 };
 
 //! GET /api/article/:article_id
-exports.selectArticleById = async (article_id) => {
+exports.selectArticleById = async article_id => {
   // Query to fetch a single article by ID with a LEFT JOIN to count comments
   const queryStr = `
     SELECT 
@@ -131,7 +131,7 @@ exports.selectArticleById = async (article_id) => {
   if (!result.rows.length) {
     throw {
       status: 404,
-      msg: `Article not found!`,
+      msg: "Article not found!",
     };
   }
   return result.rows[0];
@@ -176,16 +176,16 @@ exports.updateArticleById = async (inc_votes, article_id) => {
   if (!result.rows.length) {
     throw {
       status: 404,
-      msg: `Article not found!`,
+      msg: "Article not found!",
     };
   }
   return result.rows[0];
 };
 
 //! DELETE /api/articles/:article_id
-exports.removeArticleById = async (article_id) => {
+exports.removeArticleById = async article_id => {
   const result = await db.query(
-    `DELETE FROM articles WHERE article_id = $1 RETURNING *;`,
+    "DELETE FROM articles WHERE article_id = $1 RETURNING *;",
     [article_id]
   );
 

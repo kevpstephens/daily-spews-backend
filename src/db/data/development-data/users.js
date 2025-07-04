@@ -1,5 +1,19 @@
 module.exports = [
   {
+    username: "admin",
+    name: "Site Admin",
+    email: "admin@example.com",
+    password: "admin123",
+    avatar_url: "https://daily-spews-api.onrender.com/images/users/admin.jpeg",
+  },
+  {
+    username: "guest_user",
+    name: "Guest User",
+    email: "guest_user@example.com",
+    password: "guest_user123",
+    avatar_url: "https://daily-spews-api.onrender.com/images/users/guest.jpeg",
+  },
+  {
     username: "tickle122",
     name: "Tom Tickle",
     email: "tickle122@example.com",
@@ -47,25 +61,5 @@ module.exports = [
     avatar_url:
       "https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141",
   },
-  {
-    username: "admin",
-    name: "Site Admin",
-    email: "kevpsteps@gmail.com",
-    password: "admin123",
-    avatar_url: "https://daily-spews-api.onrender.com/images/users/admin.jpeg",
-  },
-  {
-    username: "kevpstephenson",
-    name: "Kevin Stephenson",
-    email: "kevpstephenson@gmail.com",
-    password: "kevpstephenson123",
-    avatar_url: "https://daily-spews-api.onrender.com/images/users/kevin.jpeg",
-  },
-  {
-    username: "guest_user",
-    name: "Guest User",
-    email: "guest_user@example.com",
-    password: "guest_user123",
-    avatar_url: "https://daily-spews-api.onrender.com/images/users/guest.jpeg",
-  },
+
 ];
