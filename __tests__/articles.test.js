@@ -1,8 +1,8 @@
-const db = require("../src/db/connection.js");
-const seed = require("../src/db/seeds/seed.js");
-const data = require("../src/db/data/test-data/index.js");
-const app = require("../src/app.js");
 const request = require("supertest");
+const db = require("../src/db/connection");
+const seed = require("../src/db/seeds/seed");
+const data = require("../src/db/data/test-data/index");
+const app = require("../src/app");
 
 beforeEach(() => {
   return seed(data);
@@ -16,8 +16,8 @@ describe("GET /api/articles", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
-      .then((result) => {
-        const { articles } = result.body;
+      .then(({ body }) => {
+        const { articles } = body;
         expect(Array.isArray(articles)).toBe(true);
         expect(articles.length).toBeGreaterThan(0);
 
@@ -32,7 +32,7 @@ describe("GET /api/articles", () => {
               votes: expect.any(Number),
               article_img_url: expect.any(String),
               comment_count: expect.any(Number),
-            })
+            }),
           );
         });
       });
@@ -41,8 +41,8 @@ describe("GET /api/articles", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
-      .then((result) => {
-        const { articles } = result.body;
+      .then(({ body }) => {
+        const { articles } = body;
         expect(articles.length).toBeGreaterThan(0);
         expect(articles).toBeSortedBy("created_at", { descending: true });
       });
@@ -92,8 +92,8 @@ describe("PATCH /api/articles/:article_id", () => {
       .patch("/api/articles/1")
       .send(votes)
       .expect(200)
-      .then((result) => {
-        const { article } = result.body;
+      .then(({ body }) => {
+        const { article } = body;
 
         expect(article).toMatchObject({
           article_id: 1,
@@ -113,8 +113,8 @@ describe("PATCH /api/articles/:article_id", () => {
       .patch("/api/articles/1")
       .send(votes)
       .expect(200)
-      .then((result) => {
-        const { article } = result.body;
+      .then(({ body }) => {
+        const { article } = body;
         expect(article.votes).toBe(55);
       });
   });
@@ -289,7 +289,7 @@ describe("POST /api/articles", () => {
       .expect(201)
       .then(({ body }) => {
         expect(body.newArticle.article_img_url).toBe(
-          "/images/default-profile.png"
+          "/images/default-profile.png",
         );
       });
   });
@@ -312,7 +312,7 @@ describe("POST /api/articles", () => {
 });
 
 describe("POST /api/articles - Missing required fields", () => {
-  test("ERROR - 400: Responds with 'Missing rqeuired fields!' when any of the required fields in order to post an article are missing ", () => {
+  test("ERROR - 400: Responds with 'Missing required fields!' when any of the required fields in order to post an article are missing", () => {
     const invalidArticlePost = { title: "Insufficient fields deployed" };
 
     return request(app)
@@ -346,7 +346,7 @@ describe("POST /api/articles - Missing required fields", () => {
         .then(({ body }) => {
           expect(body.msg).toBe("Missing required fields!");
         });
-    }
+    },
   );
 });
 
@@ -368,7 +368,7 @@ describe("GET /api/articles (pagination)", () => {
             votes: expect.any(Number),
             article_img_url: expect.any(String),
             comment_count: expect.any(Number),
-          })
+          }),
         );
       });
   });

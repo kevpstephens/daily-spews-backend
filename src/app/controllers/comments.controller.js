@@ -66,7 +66,7 @@ exports.deleteCommentById = async (req, res, next) => {
   // Extract comment ID from route parameters
   const { comment_id } = req.params;
 
-  if (Number.isNaN(comment_id)) {
+  if (Number.isNaN(Number(comment_id))) {
     return res.status(400).send({ msg: "Bad request!" });
   }
 
@@ -81,12 +81,15 @@ exports.deleteCommentById = async (req, res, next) => {
 
 //! PATCH /api/comments/:comment_id
 exports.patchCommentById = async (req, res, next) => {
-  // Extract comment ID and inc_votes from request body
   const { comment_id } = req.params;
   const { inc_votes } = req.body;
 
-  if (Number.isNaN(comment_id) || Number.isNaN(inc_votes)) {
-    return res.status(400).send({ msg: "Bad Request!" });
+  if (
+    Number.isNaN(Number(comment_id)) ||
+    inc_votes === undefined ||
+    Number.isNaN(Number(inc_votes))
+  ) {
+    return res.status(400).send({ msg: "Bad request!" });
   }
 
   try {

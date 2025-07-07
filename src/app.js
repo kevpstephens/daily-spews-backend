@@ -34,7 +34,7 @@ app.use(
       }
     },
     credentials: true, // allow cookies
-  })
+  }),
 );
 
 // app.use(
@@ -51,7 +51,7 @@ app.use("/api", apiRouter);
 
 // ~~~~~~~~~~~~~~~ CATCH-ALL ~~~~~~~~~~~~~~~
 app.use((req, res) => {
-  res.status(404).send({ msg: "404: Path Not Found!" });
+  res.status(404).send({ msg: "Path not found!" });
 });
 
 // ~~~~~~~~~~~~~~~ ERROR HANDLING ~~~~~~~~~~~~~~~

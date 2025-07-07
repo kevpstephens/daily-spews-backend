@@ -1,8 +1,8 @@
-const db = require("../src/db/connection.js");
-const seed = require("../src/db/seeds/seed.js");
-const data = require("../src/db/data/test-data/index.js");
-const app = require("../src/app.js");
 const request = require("supertest");
+const db = require("../src/db/connection");
+const seed = require("../src/db/seeds/seed");
+const data = require("../src/db/data/test-data/index");
+const app = require("../src/app");
 
 beforeEach(() => {
   return seed(data);
@@ -46,13 +46,13 @@ describe("POST /api/topics", () => {
       });
   });
 
-  test("ERROR 400: Should response with message'Missing required fields!'", () => {
+  test("ERROR - 400: Should respond with message 'Missing required fields!'", () => {
     return request(app)
       .post("/api/topics")
       .send({ slug: "half-baked" })
       .expect(400)
       .then((res) => {
-        expect(res.body.msg).toBe("Missing required fields!");
+        expect(res.body.msg).toBe("Missing required topic fields!");
       });
   });
 });

@@ -1,9 +1,9 @@
-const endpointsJson = require("../endpoints.json");
-const db = require("../src/db/connection.js");
-const seed = require("../src/db/seeds/seed.js");
-const data = require("../src/db/data/test-data/index.js");
-const app = require("../src/app.js");
 const request = require("supertest");
+const endpointsJson = require("../endpoints.json");
+const app = require("../src/app");
+const db = require("../src/db/connection");
+const seed = require("../src/db/seeds/seed");
+const data = require("../src/db/data/test-data/index");
 
 beforeEach(() => {
   return seed(data);
@@ -18,7 +18,7 @@ describe("Undefined Routes", () => {
       .get("/api/invalid-path")
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe("404: Path Not Found!");
+        expect(body.msg).toBe("Path not found!");
       });
   });
 });
