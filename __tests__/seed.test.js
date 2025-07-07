@@ -15,7 +15,7 @@ describe("seed", () => {
                 information_schema.tables 
             WHERE 
                 table_name = 'topics'
-            );`
+            );`,
         )
         .then(({ rows: [{ exists }] }) => {
           expect(exists).toBe(true);
@@ -28,7 +28,7 @@ describe("seed", () => {
           `SELECT *
             FROM information_schema.columns
             WHERE table_name = 'topics'
-            AND column_name = 'slug';`
+            AND column_name = 'slug';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("slug");
@@ -44,7 +44,7 @@ describe("seed", () => {
             JOIN information_schema.key_column_usage AS kcu
             ON tc.constraint_name = kcu.constraint_name
             WHERE tc.constraint_type = 'PRIMARY KEY'
-            AND tc.table_name = 'topics';`
+            AND tc.table_name = 'topics';`,
         )
         .then(({ rows: [{ column_name }] }) => {
           expect(column_name).toBe("slug");
@@ -57,7 +57,7 @@ describe("seed", () => {
           `SELECT column_name, data_type, column_default
             FROM information_schema.columns
             WHERE table_name = 'topics'
-            AND column_name = 'description';`
+            AND column_name = 'description';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("description");
@@ -71,7 +71,7 @@ describe("seed", () => {
           `SELECT column_name, data_type, character_maximum_length
             FROM information_schema.columns
             WHERE table_name = 'topics'
-            AND column_name = 'img_url';`
+            AND column_name = 'img_url';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("img_url");
@@ -90,7 +90,7 @@ describe("seed", () => {
                 information_schema.tables 
             WHERE 
                 table_name = 'users'
-            );`
+            );`,
         )
         .then(({ rows: [{ exists }] }) => {
           expect(exists).toBe(true);
@@ -103,7 +103,7 @@ describe("seed", () => {
           `SELECT column_name, data_type, column_default
             FROM information_schema.columns
             WHERE table_name = 'users'
-            AND column_name = 'username';`
+            AND column_name = 'username';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("username");
@@ -119,7 +119,7 @@ describe("seed", () => {
             JOIN information_schema.key_column_usage AS kcu
             ON tc.constraint_name = kcu.constraint_name
             WHERE tc.constraint_type = 'PRIMARY KEY'
-            AND tc.table_name = 'users';`
+            AND tc.table_name = 'users';`,
         )
         .then(({ rows: [{ column_name }] }) => {
           expect(column_name).toBe("username");
@@ -132,7 +132,7 @@ describe("seed", () => {
           `SELECT column_name, data_type
             FROM information_schema.columns
             WHERE table_name = 'users'
-            AND column_name = 'name';`
+            AND column_name = 'name';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("name");
@@ -146,7 +146,7 @@ describe("seed", () => {
           `SELECT column_name, character_maximum_length
             FROM information_schema.columns
             WHERE table_name = 'users'
-            AND column_name = 'avatar_url';`
+            AND column_name = 'avatar_url';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("avatar_url");
@@ -164,7 +164,7 @@ describe("seed", () => {
                 information_schema.tables 
             WHERE 
                 table_name = 'articles'
-            );`
+            );`,
         )
         .then(({ rows: [{ exists }] }) => {
           expect(exists).toBe(true);
@@ -177,13 +177,13 @@ describe("seed", () => {
           `SELECT column_name, data_type, column_default
             FROM information_schema.columns
             WHERE table_name = 'articles'
-            AND column_name = 'article_id';`
+            AND column_name = 'article_id';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("article_id");
           expect(column.data_type).toBe("integer");
           expect(column.column_default).toBe(
-            "nextval('articles_article_id_seq'::regclass)"
+            "nextval('articles_article_id_seq'::regclass)",
           );
         });
     });
@@ -196,7 +196,7 @@ describe("seed", () => {
             JOIN information_schema.key_column_usage AS kcu
             ON tc.constraint_name = kcu.constraint_name
             WHERE tc.constraint_type = 'PRIMARY KEY'
-            AND tc.table_name = 'articles';`
+            AND tc.table_name = 'articles';`,
         )
         .then(({ rows: [{ column_name }] }) => {
           expect(column_name).toBe("article_id");
@@ -209,7 +209,7 @@ describe("seed", () => {
           `SELECT column_name, data_type
             FROM information_schema.columns
             WHERE table_name = 'articles'
-            AND column_name = 'title';`
+            AND column_name = 'title';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("title");
@@ -223,7 +223,7 @@ describe("seed", () => {
           `SELECT column_name, data_type
             FROM information_schema.columns
             WHERE table_name = 'articles'
-            AND column_name = 'topic';`
+            AND column_name = 'topic';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("topic");
@@ -246,7 +246,7 @@ describe("seed", () => {
           AND kcu.column_name = 'topic'
           AND ccu.table_name = 'topics'
           AND ccu.column_name = 'slug';
-      `
+      `,
         )
         .then(({ rows }) => {
           expect(rows).toHaveLength(1);
@@ -259,7 +259,7 @@ describe("seed", () => {
           `SELECT column_name, data_type
             FROM information_schema.columns
             WHERE table_name = 'articles'
-            AND column_name = 'author';`
+            AND column_name = 'author';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("author");
@@ -282,7 +282,7 @@ describe("seed", () => {
           AND kcu.column_name = 'author'
           AND ccu.table_name = 'users'
           AND ccu.column_name = 'username';
-      `
+      `,
         )
         .then(({ rows }) => {
           expect(rows).toHaveLength(1);
@@ -295,7 +295,7 @@ describe("seed", () => {
           `SELECT column_name, data_type, character_maximum_length
               FROM information_schema.columns
               WHERE table_name = 'articles'
-              AND column_name = 'body';`
+              AND column_name = 'body';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("body");
@@ -309,7 +309,7 @@ describe("seed", () => {
           `SELECT column_name, data_type
               FROM information_schema.columns
               WHERE table_name = 'articles'
-              AND column_name = 'created_at';`
+              AND column_name = 'created_at';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("created_at");
@@ -323,7 +323,7 @@ describe("seed", () => {
           `SELECT column_default
         FROM information_schema.columns
         WHERE table_name = 'articles'
-        AND column_name = 'created_at';`
+        AND column_name = 'created_at';`,
         )
         .then(({ rows: [{ column_default }] }) => {
           expect(column_default).toBe("CURRENT_TIMESTAMP");
@@ -336,7 +336,7 @@ describe("seed", () => {
           `SELECT column_name, data_type
             FROM information_schema.columns
             WHERE table_name = 'articles'
-            AND column_name = 'votes';`
+            AND column_name = 'votes';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("votes");
@@ -350,7 +350,7 @@ describe("seed", () => {
           `SELECT column_default
           FROM information_schema.columns
           WHERE table_name = 'articles'
-          AND column_name = 'votes'`
+          AND column_name = 'votes'`,
         )
         .then(({ rows: [{ column_default }] }) => {
           expect(column_default).toBe("0");
@@ -363,7 +363,7 @@ describe("seed", () => {
           `SELECT column_name, data_type, character_maximum_length
             FROM information_schema.columns
             WHERE table_name = 'articles'
-            AND column_name = 'article_img_url';`
+            AND column_name = 'article_img_url';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("article_img_url");
@@ -382,7 +382,7 @@ describe("seed", () => {
                 information_schema.tables 
             WHERE 
                 table_name = 'comments'
-            );`
+            );`,
         )
         .then(({ rows: [{ exists }] }) => {
           expect(exists).toBe(true);
@@ -395,13 +395,13 @@ describe("seed", () => {
           `SELECT column_name, data_type, column_default
             FROM information_schema.columns
             WHERE table_name = 'comments'
-            AND column_name = 'comment_id';`
+            AND column_name = 'comment_id';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("comment_id");
           expect(column.data_type).toBe("integer");
           expect(column.column_default).toBe(
-            "nextval('comments_comment_id_seq'::regclass)"
+            "nextval('comments_comment_id_seq'::regclass)",
           );
         });
     });
@@ -414,7 +414,7 @@ describe("seed", () => {
             JOIN information_schema.key_column_usage AS kcu
             ON tc.constraint_name = kcu.constraint_name
             WHERE tc.constraint_type = 'PRIMARY KEY'
-            AND tc.table_name = 'comments';`
+            AND tc.table_name = 'comments';`,
         )
         .then(({ rows: [{ column_name }] }) => {
           expect(column_name).toBe("comment_id");
@@ -427,7 +427,7 @@ describe("seed", () => {
           `SELECT column_name, data_type
             FROM information_schema.columns
             WHERE table_name = 'comments'
-            AND column_name = 'article_id';`
+            AND column_name = 'article_id';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("article_id");
@@ -450,7 +450,7 @@ describe("seed", () => {
           AND kcu.column_name = 'article_id'
           AND ccu.table_name = 'articles'
           AND ccu.column_name = 'article_id';
-      `
+      `,
         )
         .then(({ rows }) => {
           expect(rows).toHaveLength(1);
@@ -463,7 +463,7 @@ describe("seed", () => {
           `SELECT column_name, data_type
             FROM information_schema.columns
             WHERE table_name = 'comments'
-            AND column_name = 'body';`
+            AND column_name = 'body';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("body");
@@ -477,7 +477,7 @@ describe("seed", () => {
           `SELECT column_name, data_type
             FROM information_schema.columns
             WHERE table_name = 'comments'
-            AND column_name = 'votes';`
+            AND column_name = 'votes';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("votes");
@@ -491,7 +491,7 @@ describe("seed", () => {
           `SELECT column_default
           FROM information_schema.columns
           WHERE table_name = 'comments'
-          AND column_name = 'votes'`
+          AND column_name = 'votes'`,
         )
         .then(({ rows: [{ column_default }] }) => {
           expect(column_default).toBe("0");
@@ -504,7 +504,7 @@ describe("seed", () => {
           `SELECT *
             FROM information_schema.columns
             WHERE table_name = 'comments'
-            AND column_name = 'author';`
+            AND column_name = 'author';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("author");
@@ -527,7 +527,7 @@ describe("seed", () => {
           AND kcu.column_name = 'author'
           AND ccu.table_name = 'users'
           AND ccu.column_name = 'username';
-      `
+      `,
         )
         .then(({ rows }) => {
           expect(rows).toHaveLength(1);
@@ -540,7 +540,7 @@ describe("seed", () => {
           `SELECT column_name, data_type
             FROM information_schema.columns
             WHERE table_name = 'comments'
-            AND column_name = 'created_at';`
+            AND column_name = 'created_at';`,
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe("created_at");
@@ -554,7 +554,7 @@ describe("seed", () => {
           `SELECT column_default
         FROM information_schema.columns
         WHERE table_name = 'comments'
-        AND column_name = 'created_at';`
+        AND column_name = 'created_at';`,
         )
         .then(({ rows: [{ column_default }] }) => {
           expect(column_default).toBe("CURRENT_TIMESTAMP");

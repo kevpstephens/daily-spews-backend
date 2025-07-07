@@ -1,8 +1,8 @@
-const db = require("../src/db/connection.js");
-const seed = require("../src/db/seeds/seed.js");
-const data = require("../src/db/data/test-data/index.js");
-const app = require("../src/app.js");
 const request = require("supertest");
+const db = require("../src/db/connection");
+const seed = require("../src/db/seeds/seed");
+const data = require("../src/db/data/test-data/index");
+const app = require("../src/app");
 
 beforeEach(() => {
   return seed(data);
@@ -30,7 +30,7 @@ describe("POST /api/auth/register", () => {
             name: "New User",
             email: "newuser@example.com",
             avatar_url: expect.any(String),
-          })
+          }),
         );
         expect(body.user).not.toHaveProperty("password");
         expect(body.user).not.toHaveProperty("password_hash");
@@ -75,7 +75,7 @@ describe("POST /api/auth/login", () => {
       });
   });
 
-  test("ERROR - 400: Responds with errorif email or password is missing", () => {
+  test("ERROR - 400: Responds with error if email or password is missing", () => {
     return request(app)
       .post("/api/auth/login")
       .send({ email: "some@example.com" }) // missing password
@@ -85,7 +85,7 @@ describe("POST /api/auth/login", () => {
       });
   });
 
-  test("ERROR 401: Responds with error for incorrect password", () => {
+  test("ERROR - 401: Responds with error for incorrect password", () => {
     return request(app)
       .post("/api/auth/login")
       .send({

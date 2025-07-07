@@ -1,8 +1,8 @@
-const db = require("../src/db/connection.js");
-const seed = require("../src/db/seeds/seed.js");
-const data = require("../src/db/data/test-data/index.js");
-const app = require("../src/app.js");
 const request = require("supertest");
+const db = require("../src/db/connection");
+const seed = require("../src/db/seeds/seed");
+const data = require("../src/db/data/test-data/index");
+const app = require("../src/app");
 
 beforeEach(() => {
   return seed(data);
@@ -16,8 +16,8 @@ describe("GET /api/articles/:article_id/comments", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
-      .then((result) => {
-        const { comments } = result.body;
+      .then(({ body }) => {
+        const { comments } = body;
 
         expect(Array.isArray(comments)).toBe(true);
         expect(comments.length).toBeGreaterThan(0);
@@ -37,27 +37,27 @@ describe("GET /api/articles/:article_id/comments", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
-      .then((result) => {
-        const { comments } = result.body;
+      .then(({ body }) => {
+        const { comments } = body;
 
         expect(comments.length).toBeGreaterThan(0);
         expect(comments).toBeSortedBy("created_at", { descending: true });
       });
   });
-  test("ERROR - 400: Responds with 'Bad request!' when when article_id is not a valid number", () => {
+  test("ERROR - 400: Responds with 'Bad request!' when article_id is not a valid number", () => {
     return request(app)
       .get("/api/articles/invalid-request/comments")
       .expect(400)
-      .then((result) => {
-        expect(result.body.msg).toBe("400: Bad Request!");
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request!");
       });
   });
   test("ERROR - 404: Responds with 'Article not found!' when requested article_id does not exist", () => {
     return request(app)
       .get("/api/articles/123456789/comments")
       .expect(404)
-      .then((result) => {
-        expect(result.body.msg).toBe("Article not found!");
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article not found!");
       });
   });
 });
@@ -83,7 +83,7 @@ describe("POST /api/articles/:article_id/comments", () => {
             body: "test body of text",
             votes: 0,
             created_at: expect.any(String),
-          })
+          }),
         );
       });
   });
@@ -125,9 +125,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       .send(testComment)
       .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toBe(
-          "404: Foreign key violation - Resource not found!"
-        );
+        expect(body.msg).toBe("Foreign key violation - resource not found!");
       });
   });
   test("ERROR - 404: Responds with 'Article not found!' when article requested does not exist", () => {
@@ -185,25 +183,25 @@ describe("PATCH /api/comments/:comment_id", () => {
       .send({})
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Bad Request!");
+        expect(body.msg).toBe("Bad request!");
       });
   });
-  test("ERROR - 400: Responds with 'Bad request!' when inv_votes inputted is not a number", () => {
+  test("ERROR - 400: Responds with 'Bad request!' when inc_votes inputted is not a number", () => {
     return request(app)
       .patch("/api/comments/1")
       .send({ inc_votes: "I'm literally not a number" })
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Bad Request!");
+        expect(body.msg).toBe("Bad request!");
       });
   });
-  test("ERROR - 400: Responds with 'Bad Request!' when trying to send inc_votes to an inavalid comment_id", () => {
+  test("ERROR - 400: Responds with 'Bad request!' when trying to send inc_votes to an invalid comment_id", () => {
     return request(app)
       .patch("/api/comments/invalid-comment-id")
       .send({ inc_votes: 1 })
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Bad Request!");
+        expect(body.msg).toBe("Bad request!");
       });
   });
   test("ERROR - 404: Responds with 'Comment does not exist!' when trying to send inc_votes to a non-existent comment", () => {

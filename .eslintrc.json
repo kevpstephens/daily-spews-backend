@@ -1,8 +1,19 @@
 {
   "extends": ["airbnb-base", "prettier"],
   "plugins": ["prettier"],
+  "env": {
+    "node": true,
+    "jest": true
+  },
   "rules": {
     "prettier/prettier": "error",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never"
+      }
+    ],
     "camelcase": [
       "error",
       {
@@ -23,5 +34,17 @@
         ]
       }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/__tests__/**/*.js", "**/*.test.js", "**/*.spec.js"],
+      "env": {
+        "jest": true
+      },
+      "rules": {
+        "arrow-body-style": "off",
+        "prefer-destructuring": "off"
+      }
+    }
+  ]
 }
