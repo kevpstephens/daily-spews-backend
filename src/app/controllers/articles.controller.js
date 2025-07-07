@@ -7,6 +7,7 @@ const {
 } = require("../models/articles.model");
 const { selectUserByUsername } = require("../models/users.model");
 const uploadToSupabase = require("../../utils/uploadToSupabase");
+const logger = require("../../utils/logger");
 
 //! GET /api/articles
 exports.getAllArticles = async (req, res, next) => {
@@ -24,9 +25,9 @@ exports.getAllArticles = async (req, res, next) => {
     });
 
     // Respond with array of articles and total count for pagination
-    res.status(200).send({ articles, total_count });
+    return res.status(200).send({ articles, total_count });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -35,22 +36,22 @@ exports.getArticlesById = async (req, res, next) => {
   // Extract article ID from route parameters
   const { article_id } = req.params;
 
-  if (isNaN(Number(article_id))) {
+  if (Number.isNaN(Number(article_id))) {
     return res.status(400).send({ msg: "Bad request!" });
   }
 
   try {
     const article = await selectArticleById(article_id);
-    res.status(200).send({ article });
+    return res.status(200).send({ article });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
 //! POST api/articles
 exports.postArticle = async (req, res, next) => {
   const { author, title, body, topic } = req.body;
-  let article_img_url = req.body.article_img_url;
+  let { article_img_url } = req.body;
 
   if (!author || !title || !body || !topic) {
     return res.status(400).send({ msg: "Missing required fields!" });
@@ -64,7 +65,7 @@ exports.postArticle = async (req, res, next) => {
       try {
         article_img_url = await uploadToSupabase(req.file, "article-images");
       } catch (uploadErr) {
-        console.error("❌ Failed to upload image to Supabase:", uploadErr);
+        logger.error("Failed to upload image to Supabase:", uploadErr);
         return res.status(500).send({ msg: "Image upload failed." });
       }
     }
@@ -77,10 +78,10 @@ exports.postArticle = async (req, res, next) => {
       article_img_url,
     });
 
-    res.status(201).send({ newArticle });
+    return res.status(201).send({ newArticle });
   } catch (err) {
-    console.error("❌ Server error in postArticle:", err);
-    next(err);
+    logger.error("Server error in postArticle:", err);
+    return next(err);
   }
 };
 
@@ -90,7 +91,7 @@ exports.patchArticleById = async (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
 
-  if (isNaN(inc_votes) || isNaN(article_id)) {
+  if (Number.isNaN(inc_votes) || Number.isNaN(article_id)) {
     return res.status(400).send({ msg: "Bad request!" });
   }
 
@@ -99,9 +100,9 @@ exports.patchArticleById = async (req, res, next) => {
     await selectArticleById(article_id);
     // Apply vote increment and respond with updated article
     const updatedArticle = await updateArticleById(inc_votes, article_id);
-    res.status(200).send({ article: updatedArticle });
+    return res.status(200).send({ article: updatedArticle });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -109,14 +110,14 @@ exports.patchArticleById = async (req, res, next) => {
 exports.deleteArticleById = async (req, res, next) => {
   const { article_id } = req.params;
 
-  if (isNaN(Number(article_id))) {
+  if (Number.isNaN(Number(article_id))) {
     return res.status(400).send({ msg: "Bad request!" });
   }
 
   try {
     await removeArticleById(article_id);
-    res.status(204).send();
+    return res.status(204).send();
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };

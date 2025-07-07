@@ -6,14 +6,16 @@ const {
   updateUserPasswordByUsername,
 } = require("../models/users.model");
 const uploadToSupabase = require("../../utils/uploadToSupabase");
+const logger = require("../../utils/logger");
 
 //! POST /api/auth/register
 exports.registerUser = async (req, res, next) => {
-  console.log("🔍 Registration attempt started");
-  console.log("🔍 req.files:", req.files);
-  console.log("🔍 req.file:", req.file);
-  console.log("🔍 req.body:", req.body);
-  console.log("🔍 req.body keys:", Object.keys(req.body));
+  logger.info("Registration attempt started");
+  logger.info("Request details", {
+    hasFiles: !!req.files,
+    hasFile: !!req.file,
+    bodyKeys: Object.keys(req.body),
+  });
 
   const { username, name, email, password, avatar_url } = req.body;
   let avatar = avatar_url;
@@ -26,10 +28,9 @@ exports.registerUser = async (req, res, next) => {
     // Also check req.file for backward compatibility
     const fileToUpload = avatarFile || req.file;
 
-    // Upload avatar if a file is provided
     if (fileToUpload) {
-      console.log("🔍 Attempting to upload file to Supabase...");
-      console.log("🔍 File details:", {
+      logger.info("Attempting to upload file to Supabase");
+      logger.info("File details", {
         fieldname: fileToUpload.fieldname,
         originalname: fileToUpload.originalname,
         mimetype: fileToUpload.mimetype,
@@ -45,16 +46,15 @@ exports.registerUser = async (req, res, next) => {
 
         // Upload to avatars bucket
         avatar = await uploadToSupabase(fileData, "avatars");
-        console.log("✅ File uploaded successfully:", avatar);
+        logger.info("File uploaded successfully", { avatar });
       } catch (uploadErr) {
-        console.error("❌ Error uploading avatar to Supabase:", uploadErr);
-        console.error("❌ Upload error details:", {
+        logger.error("Error uploading avatar to Supabase", {
           message: uploadErr.message,
           stack: uploadErr.stack,
         });
 
         // Continue with default avatar instead of failing registration
-        console.log("🔄 Continuing with default avatar due to upload failure");
+        logger.info("Continuing with default avatar due to upload failure");
         avatar =
           "https://daily-spews-api.onrender.com/images/default-profile.png";
       }
@@ -62,28 +62,27 @@ exports.registerUser = async (req, res, next) => {
 
     // Fallback to default image if neither file nor valid string provided
     if (!avatar || avatar.trim() === "") {
-      console.log("🔄 Using default avatar");
+      logger.info("Using default avatar");
       avatar =
         "https://daily-spews-api.onrender.com/images/default-profile.png";
     }
 
-    console.log("🔍 Final avatar URL:", avatar);
+    logger.info("Final avatar URL", { avatar });
 
-    // Validate required fields
     if (!username || !name || !email || !password) {
-      console.log("❌ Missing required fields");
-      console.log("🔍 username:", username);
-      console.log("🔍 name:", name);
-      console.log("🔍 email:", email);
-      console.log("🔍 password:", password ? "Present" : "Missing");
+      logger.warn("Missing required fields", {
+        hasUsername: !!username,
+        hasName: !!name,
+        hasEmail: !!email,
+        hasPassword: !!password,
+      });
       return res.status(400).send({ msg: "Missing required fields!" });
     }
 
-    // Hash the password
-    console.log("🔍 Hashing password...");
+    logger.info("Hashing password");
     const password_hash = await bcrypt.hash(password, 10);
 
-    console.log("🔍 Attempting to insert user into database...");
+    logger.info("Attempting to insert user into database");
     const user = await insertUser({
       username,
       name,
@@ -92,10 +91,10 @@ exports.registerUser = async (req, res, next) => {
       avatar_url: avatar,
     });
 
-    console.log("✅ User created successfully:", user.username);
-    res.status(201).send({ user });
+    logger.info("User created successfully", { username: user.username });
+    return res.status(201).send({ user });
   } catch (err) {
-    console.error("❌ Registration error:", err);
+    logger.error("Registration error", err);
 
     // Handle specific database errors
     if (err.code === "23505") {
@@ -108,13 +107,13 @@ exports.registerUser = async (req, res, next) => {
       }
     }
 
-    next(err);
+    return next(err);
   }
 };
 
 //! POST /api/auth/login
 exports.loginUser = async (req, res, next) => {
-  console.log("🔐 Login route hit");
+  logger.info("Login attempt started");
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -126,25 +125,26 @@ exports.loginUser = async (req, res, next) => {
   }
 
   try {
-    console.log("Email received:", email);
-    // Check if the user exists
+    logger.info("Looking up user by email");
     const user = await selectUserByEmail(email.toLowerCase());
-    console.log("User found:", user);
-    if (!user)
-      return res.status(401).send({ msg: "Invalid email or password!" });
 
-    console.log("Checking password...");
-    // Check if the password is correct
+    if (!user) {
+      logger.warn("Login failed - user not found", { email });
+      return res.status(401).send({ msg: "Invalid email or password!" });
+    }
+
+    logger.info("Verifying password");
     const valid = await bcrypt.compare(password, user.password_hash);
-    console.log("Password valid:", valid);
-    if (!valid)
-      return res.status(401).send({ msg: "Invalid email or password!" });
 
-    // Generate a token
+    if (!valid) {
+      logger.warn("Login failed - invalid password", { email });
+      return res.status(401).send({ msg: "Invalid email or password!" });
+    }
+
     const token = jwt.sign(
       { username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "1h" },
     );
 
     // Remove the password hash from the user object
@@ -158,35 +158,34 @@ exports.loginUser = async (req, res, next) => {
     res.cookie("token", token, {
       path: "/",
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production" ? true : false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 3600000, // 1 hour
     });
 
-    console.log("Login successful, sending response...");
-    // Respond with user data only
-    res.send({ user: safeUser });
+    logger.info("Login successful", { username: user.username });
+    return res.send({ user: safeUser });
   } catch (err) {
-    console.error("❌ Login error:", err);
-    next(err);
+    logger.error("Login error", err);
+    return next(err);
   }
 };
 
 //! POST /api/auth/logout
 exports.logoutUser = (req, res, next) => {
-  console.log("🔓 Logging out, clearing token cookie...");
+  logger.info("Logging out user");
   try {
     res.clearCookie("token", {
       path: "/",
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production" ? true : false,
+      secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
     });
 
-    res.status(200).send({ msg: "Logged out successfully!" });
+    return res.status(200).send({ msg: "Logged out successfully!" });
   } catch (err) {
-    console.error("❌ Logout error:", err);
-    next(err);
+    logger.error("Logout error", err);
+    return next(err);
   }
 };
 
@@ -205,11 +204,11 @@ exports.updateUserPassword = async (req, res, next) => {
     const hashed = await bcrypt.hash(newPassword, 10);
     const updatedUser = await updateUserPasswordByUsername(username, hashed);
 
-    res
+    return res
       .status(200)
       .send({ msg: `Password updated for ${updatedUser.username}` });
   } catch (err) {
-    console.error("❌ Password update error:", err);
-    next(err);
+    logger.error("Password update error", err);
+    return next(err);
   }
 };

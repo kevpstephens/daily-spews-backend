@@ -4,9 +4,9 @@ const { selectTopics, insertTopic } = require("../models/topics.model");
 exports.getTopics = async (req, res, next) => {
   try {
     const topics = await selectTopics();
-    res.status(200).send({ topics });
+    return res.status(200).send({ topics });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -14,10 +14,14 @@ exports.getTopics = async (req, res, next) => {
 exports.postTopic = async (req, res, next) => {
   const topicData = req.body;
 
+  if (!topicData || !topicData.slug || !topicData.description) {
+    return res.status(400).send({ msg: "Missing required topic fields!" });
+  }
+
   try {
     const newTopic = await insertTopic(topicData);
-    res.status(201).send({ topic: newTopic });
+    return res.status(201).send({ topic: newTopic });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };

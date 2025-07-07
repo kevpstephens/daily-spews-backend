@@ -4,40 +4,48 @@ const {
   selectUserByUsername,
   updateUserAvatar,
 } = require("../models/users.model");
+const logger = require("../../utils/logger");
 
 //! GET /api/users
 exports.getUsers = async (req, res, next) => {
   try {
     const users = await selectAllUsers();
-    res.status(200).send({ users });
+    return res.status(200).send({ users });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
-//! GET /api/users/me (protected) - DEBUG VERSION
+//! GET /api/users/me (protected)
 exports.getCurrentUser = async (req, res, next) => {
   try {
-    console.log("🔍 getCurrentUser called");
-    console.log("🔍 req.user:", req.user);
-    console.log("🔍 req.cookies:", req.cookies);
+    logger.info("getCurrentUser called", {
+      hasUser: !!req.user,
+      hasUsername: !!(req.user && req.user.username),
+    });
 
     if (!req.user || !req.user.username) {
-      console.log("❌ No username in req.user");
+      logger.warn("No username in req.user");
       return res.status(401).send({ msg: "No user data in token" });
     }
 
-    console.log("🔍 Looking for user:", req.user.username);
+    logger.info("Looking for user:", req.user.username);
     const user = await selectUserByUsername(req.user.username);
-    console.log("🔍 Found user:", user ? "YES" : "NO");
 
-    // Remove password_hash from response
+    if (!user) {
+      logger.warn("User not found:", req.user.username);
+      return res.status(404).send({ msg: "User not found" });
+    }
+
+    logger.info("User found successfully");
+
+    // Remove sensitive data before sending to client
     const { password_hash, ...safeUser } = user;
 
-    res.status(200).send({ user: safeUser });
+    return res.status(200).send({ user: safeUser });
   } catch (err) {
-    console.error("❌ getCurrentUser error:", err);
-    next(err);
+    logger.error("getCurrentUser error:", err);
+    return next(err);
   }
 };
 
@@ -47,9 +55,9 @@ exports.getUserByUsername = async (req, res, next) => {
 
   try {
     const user = await selectUserByUsername(username);
-    res.status(200).send({ user });
+    return res.status(200).send({ user });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -62,7 +70,9 @@ exports.updateAvatar = async (req, res, next) => {
   }
 
   try {
-    const file = req.file;
+    const { file } = req;
+
+    // Create unique path to prevent file name conflicts
     const uploadPath = `avatars/${username}/${Date.now()}-${file.originalname}`;
 
     const { publicUrl, error } = await uploadUserAvatar(uploadPath, file);
@@ -73,9 +83,9 @@ exports.updateAvatar = async (req, res, next) => {
 
     const updatedUser = await updateUserAvatar(username, publicUrl);
 
-    res.status(200).send({ user: updatedUser });
+    return res.status(200).send({ user: updatedUser });
   } catch (err) {
-    console.error("❌ Avatar upload failed:", err);
-    next(err);
+    logger.error("Avatar upload failed:", err);
+    return next(err);
   }
 };
