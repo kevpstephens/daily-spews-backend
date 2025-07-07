@@ -1,13 +1,19 @@
-const db = require("../../db/connection.js");
+const db = require("../../db/connection");
 
-//! GET /api/articles/:article_id/comments
-// Retrieves paginated comments for a given article along with the total count.
+/**
+ * ! GET /api/articles/:article_id/comments
+ * Retrieves paginated comments for a given article with total count
+ * @param {number} article_id - ID of the article to get comments for
+ * @param {number} limit - Number of comments per page (default: 10)
+ * @param {number} offset - Number of comments to skip (default: 0)
+ * @returns {Object} Object containing comments array and total_count
+ */
+
 exports.selectCommentsByArticleId = async (
   article_id,
   limit = 10,
-  offset = 0
+  offset = 0,
 ) => {
-  // Query to fetch paginated comments for the specified article_id
   const commentsQuery = `
     SELECT
       comments.comment_id,
@@ -27,7 +33,6 @@ exports.selectCommentsByArticleId = async (
     SELECT COUNT(*)::INT AS total_count FROM comments WHERE article_id = $1;
   `;
 
-  // Query to confirm the article exists before returning comments
   const articleCheckQuery = `
     SELECT * FROM articles WHERE article_id = $1;
   `;
@@ -39,10 +44,9 @@ exports.selectCommentsByArticleId = async (
   ]);
 
   if (!articleResult.rows.length) {
-    throw {
-      status: 404,
-      msg: "Article not found!",
-    };
+    const error = new Error("Article not found!");
+    error.status = 404;
+    throw error;
   }
 
   // Return paginated comments and total count
@@ -52,7 +56,16 @@ exports.selectCommentsByArticleId = async (
   };
 };
 
-// !POST /api/articles/:article_id/comments
+/**
+ * ! POST /api/articles/:article_id/comments
+ * Creates a new comment for an article
+ * @param {number} article_id - ID of the article to comment on
+ * @param {Object} commentData - Comment data
+ * @param {string} commentData.username - Author of the comment
+ * @param {string} commentData.body - Comment text content
+ * @returns {Object} Newly created comment object
+ */
+
 exports.insertCommentByArticleId = async (article_id, { username, body }) => {
   const queryStr = `
           INSERT INTO comments
@@ -67,7 +80,12 @@ exports.insertCommentByArticleId = async (article_id, { username, body }) => {
   return result.rows[0];
 };
 
-//! DELETE /api/comments/:comment_id
+/**
+ * ! DELETE /api/comments/:comment_id
+ * Removes a comment from the database
+ * @param {number} comment_id - ID of the comment to delete
+ */
+
 exports.removeCommentById = async (comment_id) => {
   const queryStr = `
           DELETE FROM comments
@@ -78,15 +96,20 @@ exports.removeCommentById = async (comment_id) => {
   const result = await db.query(queryStr, [comment_id]);
 
   if (!result.rows.length) {
-    throw {
-      status: 404,
-      msg: "Comment not found!",
-    };
+    const error = new Error("Comment not found!");
+    error.status = 404;
+    throw error;
   }
 };
 
-//! PATCH /api/comments/:comment_id
-// Updates vote count for a specified comment
+/**
+ * ! PATCH /api/comments/:comment_id
+ * Updates the vote count of a comment
+ * @param {number} comment_id - ID of the comment to update
+ * @param {number} inc_votes - Amount to increment votes by (can be negative)
+ * @returns {Object} Updated comment object
+ */
+
 exports.updateCommentVotesById = async (comment_id, inc_votes) => {
   const queryStr = `
     UPDATE comments
@@ -97,10 +120,9 @@ exports.updateCommentVotesById = async (comment_id, inc_votes) => {
   const result = await db.query(queryStr, [inc_votes, comment_id]);
 
   if (!result.rows.length) {
-    throw {
-      status: 404,
-      msg: "Comment does not exist!",
-    };
+    const error = new Error("Comment does not exist!");
+    error.status = 404;
+    throw error;
   }
 
   return result.rows[0];

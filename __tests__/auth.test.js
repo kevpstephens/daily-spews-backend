@@ -47,7 +47,7 @@ describe("POST /api/auth/register", () => {
       })
       .expect(500)
       .then(({ body }) => {
-        expect(body.msg).toBe("Internal server error!");
+        expect(body.msg).toBe("Email or username already exists!");
       });
   });
 });

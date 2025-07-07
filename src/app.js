@@ -1,8 +1,10 @@
 // ~~~~~~~~~~~~~~~ CORE MODULES ~~~~~~~~~~~~~~~
 const express = require("express");
+
 const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const logger = require("./utils/logger");
 
 // ~~~~~~~~~~~~~~~ ERROR HANDLERS ~~~~~~~~~~~~~~~
 const {
@@ -29,7 +31,7 @@ app.use(
       if (!origin || allowlist.includes(origin)) {
         callback(null, true);
       } else {
-        console.error("❌ Blocked by CORS:", origin);
+        logger.error("Blocked by CORS:", origin);
         callback(new Error("Not allowed by CORS"));
       }
     },

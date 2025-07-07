@@ -5,7 +5,16 @@
 ============================================================ */
 
 const axios = require("axios");
+const logger = require("../../src/utils/logger");
 
-for (let i = 0; i < 100; i++) {
-  axios.get("http://localhost:9090/api/articles").catch(console.error);
+const BASE_URL = process.env.API_URL || "http://localhost:9090";
+const REQUEST_COUNT = 100;
+
+logger.info(`Starting spam test with ${REQUEST_COUNT} requests to ${BASE_URL}`);
+
+for (let i = 0; i < REQUEST_COUNT; i += 1) {
+  axios
+    .get(`${BASE_URL}/api/articles`)
+    .then(() => logger.info(`Request ${i + 1} completed`))
+    .catch((error) => logger.error(`Request ${i + 1} failed:`, error.message));
 }
