@@ -1,9 +1,8 @@
 exports.handleCustomErrors = (err, req, res, next) => {
-  if (err.status && err.msg) {
-    return res.status(err.status).send({ msg: err.msg });
-  } else {
-    next(err);
+  if (err.status && err.message) {
+    return res.status(err.status).send({ msg: err.message });
   }
+  return next(err);
 };
 
 exports.handlePSQLErrors = (err, req, res, next) => {
@@ -14,11 +13,12 @@ exports.handlePSQLErrors = (err, req, res, next) => {
     return res
       .status(404)
       .send({ msg: "Foreign key violation - resource not found!" });
-  } else {
-    next(err);
   }
+  if (err.code === "23505") {
+    return res.status(500).send({ msg: "Email or username already exists!" });
+  }
+  return next(err);
 };
 
-exports.handleServerErrors = (err, req, res, next) => {
-  return res.status(500).send({ msg: "Internal server error!" });
-};
+exports.handleServerErrors = (err, req, res) =>
+  res.status(500).send({ msg: "Internal server error!" });

@@ -1,6 +1,17 @@
-const db = require("../../db/connection.js");
+const db = require("../../db/connection");
 
-//! GET /api/articles
+/**
+ * ! GET /api/articles
+ * Retrieves paginated articles with optional filtering and sorting
+ * @param {Object} params - Query parameters
+ * @param {string} params.sort_by - Column to sort by (default: "created_at")
+ * @param {string} params.order - Sort order "asc" or "desc" (default: "desc")
+ * @param {string} params.topic - Optional topic filter
+ * @param {number} params.limit - Number of articles per page (default: 10)
+ * @param {number} params.p - Page number (default: 1)
+ * @returns {Object} Object containing articles array and total_count
+ */
+
 exports.selectAllArticles = async ({
   sort_by = "created_at",
   order = "desc",
@@ -19,29 +30,30 @@ exports.selectAllArticles = async ({
     "article_img_url",
     "comment_count",
   ];
-  // Validate order parameter to be either ascending or descending
   const validSortByOrders = ["asc", "desc"];
 
   if (!validSortByColumns.includes(sort_by)) {
-    throw {
-      status: 400,
-      msg: "Invalid sort_by column!",
-    };
+    const error = new Error("Invalid sort_by column!");
+    error.status = 400;
+    throw error;
   }
 
   if (!validSortByOrders.includes(order)) {
-    throw {
-      status: 400,
-      msg: "Invalid order_by value!",
-    };
+    const error = new Error("Invalid order_by value!");
+    error.status = 400;
+    throw error;
   }
 
   // Validate pagination parameters to ensure positive integers
-  if (isNaN(limit) || limit < 1 || isNaN(p) || p < 1) {
-    throw {
-      status: 400,
-      msg: "Invalid pagination query!",
-    };
+  if (
+    Number.isNaN(Number(limit)) ||
+    limit < 1 ||
+    Number.isNaN(Number(p)) ||
+    p < 1
+  ) {
+    const error = new Error("Invalid pagination query!");
+    error.status = 400;
+    throw error;
   }
 
   // Calculate offset for pagination based on page number and limit
@@ -55,12 +67,10 @@ exports.selectAllArticles = async ({
     const checkTopicExists = await db.query(queryStr, [topic]);
 
     if (checkTopicExists.rows.length === 0) {
-      throw {
-        status: 404,
-        msg: "Topic does not exist!",
-      };
+      const error = new Error("Topic does not exist!");
+      error.status = 404;
+      throw error;
     }
-    // Add topic filter to query parameters and SQL WHERE clause
     queriedTopic.push(topic);
     whereClauseStr += `WHERE topic = $1`;
   }
@@ -91,7 +101,6 @@ exports.selectAllArticles = async ({
         OFFSET $${queriedTopic.length + 2};
         `;
 
-  // Execute total count and paginated article queries
   const totalResult = await db.query(totalCountQuery, queriedTopic);
   const articlesResult = await db.query(queryStr, [
     ...queriedTopic,
@@ -99,16 +108,20 @@ exports.selectAllArticles = async ({
     offset,
   ]);
 
-  // Return total count and the array of article objects
   return {
     total_count: totalResult.rows[0].total_count,
     articles: articlesResult.rows,
   };
 };
 
-//! GET /api/article/:article_id
+/**
+ * ! GET /api/article/:article_id
+ * Retrieves a single article by ID with comment count
+ * @param {number} article_id - The ID of the article to retrieve
+ * @returns {Object} Article object with comment count
+ */
+
 exports.selectArticleById = async (article_id) => {
-  // Query to fetch a single article by ID with a LEFT JOIN to count comments
   const queryStr = `
     SELECT 
       articles.author,
@@ -129,15 +142,26 @@ exports.selectArticleById = async (article_id) => {
   const result = await db.query(queryStr, [article_id]);
 
   if (!result.rows.length) {
-    throw {
-      status: 404,
-      msg: `Article not found!`,
-    };
+    const error = new Error("Article not found!");
+    error.status = 404;
+    throw error;
   }
+
   return result.rows[0];
 };
 
-//! POST api/articles
+/**
+ * ! POST /api/articles
+ * Creates a new article in the database
+ * @param {Object} articleData - Article data
+ * @param {string} articleData.author - Username of the author
+ * @param {string} articleData.title - Article title
+ * @param {string} articleData.body - Article content
+ * @param {string} articleData.topic - Article topic
+ * @param {string} articleData.article_img_url - Optional image URL (defaults to default image)
+ * @returns {Object} Newly created article with comment_count set to 0
+ */
+
 exports.insertArticle = async ({
   author,
   title,
@@ -145,9 +169,7 @@ exports.insertArticle = async ({
   topic,
   article_img_url = "/images/default-profile.png",
 }) => {
-  // Use default image URL if none provided
   const values = [author, title, body, topic, article_img_url];
-  // Insert a new article into the database
   const queryStr = `INSERT INTO articles 
     (author, title, body, topic, article_img_url)
     VALUES ($1, $2, $3, $4, $5)
@@ -155,15 +177,21 @@ exports.insertArticle = async ({
 
   const result = await db.query(queryStr, values);
   const newArticle = result.rows[0];
-  // Initialise comment count to zero for the new article
+  // Set initial comment count for new articles
   newArticle.comment_count = 0;
 
   return newArticle;
 };
 
-//! PATCH /api/articles/:article_id
+/**
+ * ! PATCH /api/articles/:article_id
+ * Updates the vote count of an article
+ * @param {number} inc_votes - Amount to increment votes by (can be negative)
+ * @param {number} article_id - ID of the article to update
+ * @returns {Object} Updated article object
+ */
+
 exports.updateArticleById = async (inc_votes, article_id) => {
-  // Safely update the votes count by incrementing with provided value
   const queryStr = `
         UPDATE articles
         SET votes = votes + $1
@@ -174,22 +202,28 @@ exports.updateArticleById = async (inc_votes, article_id) => {
   const result = await db.query(queryStr, [inc_votes, article_id]);
 
   if (!result.rows.length) {
-    throw {
-      status: 404,
-      msg: `Article not found!`,
-    };
+    const error = new Error("Article not found!");
+    error.status = 404;
+    throw error;
   }
+
   return result.rows[0];
 };
 
-//! DELETE /api/articles/:article_id
+/**
+ * ! DELETE /api/articles/:article_id
+ * Removes an article from the database
+ * @param {number} article_id - ID of the article to delete
+ */
 exports.removeArticleById = async (article_id) => {
   const result = await db.query(
     `DELETE FROM articles WHERE article_id = $1 RETURNING *;`,
-    [article_id]
+    [article_id],
   );
 
   if (result.rows.length === 0) {
-    throw { status: 404, msg: "Article not found!" };
+    const error = new Error("Article not found!");
+    error.status = 404;
+    throw error;
   }
 };
