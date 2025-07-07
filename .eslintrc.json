@@ -3,6 +3,25 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "camelcase": ["error", { "properties": "never" }]
+    "camelcase": [
+      "error",
+      {
+        "properties": "never",
+        "ignoreDestructuring": true,
+        "allow": [
+          "article_img_url",
+          "password_hash",
+          "created_at",
+          "article_id",
+          "comment_id",
+          "user_id",
+          "inc_votes",
+          "sort_by",
+          "total_count",
+          "avatar_url",
+          "img_url"
+        ]
+      }
+    ]
   }
 }
