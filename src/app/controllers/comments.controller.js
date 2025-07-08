@@ -95,7 +95,7 @@ exports.patchCommentById = async (req, res, next) => {
   try {
     // inc_votes can be positive (upvote) or negative (downvote)
     const updatedComment = await updateCommentVotesById(comment_id, inc_votes);
-    return res.status(200).send({ updatedComment });
+    return res.status(200).send({ comment: updatedComment });
   } catch (err) {
     return next(err);
   }

@@ -151,7 +151,7 @@ describe("PATCH /api/comments/:comment_id", () => {
       .send({ inc_votes: 1 })
       .expect(200)
       .then(({ body }) => {
-        expect(body.updatedComment).toMatchObject({
+        expect(body.comment).toMatchObject({
           comment_id: 1,
           article_id: 9,
           body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
@@ -167,7 +167,7 @@ describe("PATCH /api/comments/:comment_id", () => {
       .send({ inc_votes: -100 })
       .expect(200)
       .then(({ body }) => {
-        expect(body.updatedComment).toMatchObject({
+        expect(body.comment).toMatchObject({
           comment_id: 1,
           article_id: 9,
           body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
