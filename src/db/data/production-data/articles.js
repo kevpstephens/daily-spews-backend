@@ -2,7 +2,7 @@ module.exports = [
   {
     title: "Debugging Like a Pro: Strategies That Actually Work",
     topic: "coding",
-    author: "kevpstephenson",
+    author: "kevvycakes",
     body: `Struggling with mysterious bugs that vanish as soon as you add a console.log? You're not alone. This guide explores proven techniques like binary search debugging, stack trace triage, and using breakpoints effectively in modern editors.`,
     created_at: 1716798000000, // recent realistic date
     votes: 5,
@@ -83,7 +83,7 @@ module.exports = [
   {
     title: "Why We Can’t Stop Watching Dystopian TV",
     topic: "film-tv",
-    author: "kevpstephenson",
+    author: "kevvycakes",
     body: `From *Black Mirror* to *The Last of Us*, dystopian dramas are dominating streaming platforms. But why are we so drawn to bleak futures and morally complex characters?`,
     created_at: 1693785600000,
     votes: 9,
@@ -133,7 +133,7 @@ module.exports = [
   {
     title: "The Rise of Indie Game Studios in 2024",
     topic: "gaming",
-    author: "kevpstephenson",
+    author: "kevvycakes",
     body: `With accessible tools like Unity and Godot, plus distribution via Steam and Itch.io, indie studios are launching bold, experimental titles and reaching global audiences—without needing a AAA budget.`,
     created_at: 1711065600000, // 22 March 2024
     votes: 31,
@@ -203,7 +203,7 @@ module.exports = [
   {
     title: "How AI Is Changing the Way We Make Music",
     topic: "music",
-    author: "kevpstephenson",
+    author: "kevvycakes",
     body: `From generating beats to mastering tracks, artificial intelligence is revolutionizing music production. But can machines capture the soul of a song—or are they just tools in the hands of creative minds?`,
     created_at: 1706745600000, // 1 Feb 2024
     votes: 46,
@@ -273,7 +273,7 @@ module.exports = [
   {
     title: "AI and the Art of Code Generation",
     topic: "technology",
-    author: "kevpstephenson",
+    author: "kevvycakes",
     body: `AI tools like Copilot and ChatGPT are rapidly changing how developers write software. But as machines start coding, are we becoming better engineers—or just faster ones?`,
     created_at: 1702156800000, // 10 Dec 2023
     votes: 27,

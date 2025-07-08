@@ -31,7 +31,7 @@ module.exports = [
     article_title: "The Science of Perfect Pasta",
     body: "I’ve been making pasta wrong my whole life apparently.",
     votes: 5,
-    author: "kevpstephenson",
+    author: "kevvycakes",
     created_at: 1695131200000,
   },
   {
@@ -82,7 +82,7 @@ module.exports = [
       "Grassroots to Glory: How Local Football is Shaping National Teams",
     body: "Reminds me of my nephew’s team — they’re amazing.",
     votes: 3,
-    author: "kevpstephenson",
+    author: "kevvycakes",
     created_at: 1665622000000,
   },
   {
@@ -154,7 +154,7 @@ module.exports = [
     article_title: "How AI Is Changing the Way We Make Music",
     body: "I'm scared and excited all at once.",
     votes: 6,
-    author: "kevpstephenson",
+    author: "kevvycakes",
     created_at: 1706749200000,
   },
   {
@@ -189,7 +189,7 @@ module.exports = [
     article_title: "Is Democracy Still Working?",
     body: "We need mandatory voting. Just saying.",
     votes: 12,
-    author: "kevpstephenson",
+    author: "kevvycakes",
     created_at: 1700874000000,
   },
   {
@@ -245,7 +245,7 @@ module.exports = [
     article_title: "The Science Behind Blue Zones and Longevity",
     body: "Dan Buettner's work on Blue Zones changed my diet habits completely.",
     votes: 6,
-    author: "kevpstephenson",
+    author: "kevvycakes",
     created_at: 1708200000000,
   },
   {
@@ -274,7 +274,7 @@ module.exports = [
       "The Return of the Long Take: How TV is Embracing Cinematic Techniques",
     body: "Now I want to rewatch *Children of Men* and *True Detective* again.",
     votes: 4,
-    author: "kevpstephenson",
+    author: "kevvycakes",
     created_at: 1681856000000,
   },
   {
@@ -366,7 +366,7 @@ module.exports = [
     article_title: "Is Democracy Still Working?",
     body: "The answer is no. But thanks for making the case so well.",
     votes: 8,
-    author: "kevpstephenson",
+    author: "kevvycakes",
     created_at: 1700879000000,
   },
   {
@@ -403,7 +403,7 @@ module.exports = [
     article_title: "How Breathwork Is Transforming Modern Therapy",
     body: "Tried this before my thesis defence. Lifesaver.",
     votes: 3,
-    author: "kevpstephenson",
+    author: "kevvycakes",
     created_at: 1693858000000,
   },
   {
@@ -431,7 +431,7 @@ module.exports = [
     article_title: "From Neuralink to Mind Control: Ethics of Brain Tech",
     body: "I don’t want Elon near my skull, thanks.",
     votes: 7,
-    author: "kevpstephenson",
+    author: "kevvycakes",
     created_at: 1707617000000,
   },
   {
@@ -459,7 +459,7 @@ module.exports = [
     article_title: "The Science of Perfect Pasta",
     body: "Now I'm questioning every step of my pasta routine. Thanks!",
     votes: 2,
-    author: "kevpstephenson",
+    author: "kevvycakes",
     created_at: 1695133600000,
   },
   {
@@ -488,7 +488,7 @@ module.exports = [
     article_title: "What Makes a TV Finale Great?",
     body: "Succession did it right. Lost... not so much.",
     votes: 8,
-    author: "kevpstephenson",
+    author: "kevvycakes",
     created_at: 1700270000000,
   },
   {
@@ -546,7 +546,7 @@ module.exports = [
     article_title: "How Breathwork Is Transforming Modern Therapy",
     body: "Tried it last week. Legit calming.",
     votes: 4,
-    author: "kevpstephenson",
+    author: "kevvycakes",
     created_at: 1693858000000,
   },
   {
@@ -582,7 +582,7 @@ module.exports = [
     article_title: "How AI Is Changing the Way We Make Music",
     body: "I used an AI to remix my vocals — not bad!",
     votes: 8,
-    author: "kevpstephenson",
+    author: "kevvycakes",
     created_at: 1706748000000,
   },
   {

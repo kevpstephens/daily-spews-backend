@@ -2,10 +2,8 @@ const seed = require("./seed");
 const db = require("../connection");
 const logger = require("../../utils/logger");
 
-// Determine the environment (default to 'development' if not set)
 const ENV = process.env.NODE_ENV || "development";
 
-// Dynamically load the appropriate data set
 const data =
   ENV === "production"
     ? require("../data/production-data/index")

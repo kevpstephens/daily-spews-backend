@@ -50,15 +50,15 @@ module.exports = [
   {
     username: "admin",
     name: "Site Admin",
-    email: "kevpsteps@gmail.com",
+    email: "admin@example.com",
     password: "admin123",
     avatar_url: "https://daily-spews-api.onrender.com/images/users/admin.jpeg",
   },
   {
-    username: "kevpstephenson",
-    name: "Kevin Stephenson",
-    email: "kevpstephenson@gmail.com",
-    password: "kevpstephenson123",
+    username: "kevvycakes",
+    name: "Kevin",
+    email: "kevvycakes@example.com",
+    password: "kevvycakes123",
     avatar_url: "https://daily-spews-api.onrender.com/images/users/kevin.jpeg",
   },
   {
