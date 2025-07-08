@@ -1,4 +1,5 @@
 const { Pool } = require("pg");
+const logger = require("../utils/logger");
 
 const ENV = process.env.NODE_ENV || "development";
 
@@ -7,36 +8,74 @@ require("dotenv").config({ path: `${__dirname}/../../.env.${ENV}` });
 if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
   throw new Error("PGDATABASE or DATABASE_URL not set");
 } else {
-  console.log(
-    `🔗 Connected to ${process.env.PGDATABASE || process.env.DATABASE_URL}`,
-  );
+  logger.info("Database configuration loaded", {
+    environment: ENV,
+    database: process.env.PGDATABASE || "DATABASE_URL configured",
+  });
 }
 
-const config = {};
-if (ENV === "production") {
-  if (process.env.DATABASE_URL) {
-    config.connectionString = process.env.DATABASE_URL;
-    config.max = 2; // Limit max number of clients in the pool to prevent overloading Render
+// Configure connection pool with better defaults
+const getPoolConfig = () => {
+  const config = {};
+
+  // Allow custom pool size via environment variable
+  const poolSize = process.env.DB_POOL_SIZE
+    ? parseInt(process.env.DB_POOL_SIZE, 10)
+    : null;
+
+  if (ENV === "production") {
+    if (process.env.DATABASE_URL) {
+      config.connectionString = process.env.DATABASE_URL;
+      config.max = poolSize || 10;
+      config.ssl = { rejectUnauthorized: false }; // Required for most cloud providers
+      config.idleTimeoutMillis = 30000; // Close idle connections after 30s
+      config.connectionTimeoutMillis = 10000; // Timeout connection attempts after 10s
+
+      logger.info("Production database pool configured", {
+        maxConnections: config.max,
+        idleTimeout: config.idleTimeoutMillis,
+        connectionTimeout: config.connectionTimeoutMillis,
+      });
+    } else {
+      logger.warn(
+        "No DATABASE_URL found in production environment, falling back to PGDATABASE",
+      );
+    }
   } else {
-    console.warn("⚠️ No DATABASE_URL set. Falling back to PGDATABASE...");
+    // Development/test configuration
+    config.max = poolSize || 5;
+    config.idleTimeoutMillis = 10000; // Shorter timeout for development
+
+    logger.info("Development database pool configured", {
+      environment: ENV,
+      maxConnections: config.max,
+      idleTimeout: config.idleTimeoutMillis,
+    });
   }
+
+  return config;
+};
+
+const pool = new Pool(getPoolConfig());
+
+// Handle pool errors
+pool.on("error", (err) => {
+  logger.error("PostgreSQL pool error", {
+    error: err.message,
+    stack: err.stack,
+    environment: ENV,
+  });
+});
+
+// Optional: Log pool stats in development
+if (ENV === "development" && process.env.LOG_POOL_STATS === "true") {
+  setInterval(() => {
+    logger.debug("PostgreSQL pool statistics", {
+      totalClients: pool.totalCount,
+      idleClients: pool.idleCount,
+      pendingRequests: pool.waitingCount,
+    });
+  }, 30000); // Every 30 seconds
 }
-
-const pool = new Pool(config);
-
-// Log pool stats every 5 seconds (only outside of test environment)
-// if (ENV !== "test") {
-//   poolLogger = setInterval(() => {
-//     console.log("📊 PG Pool Stats:", {
-//       "Total clients": pool.totalCount,
-//       "Idle clients": pool.idleCount,
-//       "Pending requests": pool.waitingCount,
-//     });
-//   }, 5000);
-// }
-
-// pool.closeLogger = () => {
-//   if (poolLogger) clearInterval(poolLogger);
-// };
 
 module.exports = pool;

@@ -19,6 +19,11 @@ const logger = {
       console.error("❌ [ERROR]", ...args);
     }
   },
+  debug: (...args) => {
+    if (process.env.NODE_ENV !== "test") {
+      console.debug("🐛 [DEBUG]", ...args);
+    }
+  },
 };
 
 module.exports = logger;
