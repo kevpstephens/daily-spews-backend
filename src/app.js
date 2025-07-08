@@ -65,9 +65,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // ~~~~~~~~~~~~~~~ STATIC FILES ~~~~~~~~~~~~~~~
-// Add explicit CORS headers for images
 app.use("/images", (req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.header("Access-Control-Allow-Origin", "http://localhost:5173"); // Add explicit CORS headers for images
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Vary", "Origin");
   next();
@@ -78,7 +77,7 @@ app.use(express.static("public"));
 // ~~~~~~~~~~~~~~~ RATE LIMITING ~~~~~~~~~~~~~~~
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: process.env.NODE_ENV === "development" ? 10000 : 150, // Very high limit for dev
+  max: process.env.NODE_ENV === "development" ? 10000 : 150,
   message: { msg: "Too many requests, please try again later." },
   skip: () => process.env.NODE_ENV === "development", // Skip entirely in development
 });
