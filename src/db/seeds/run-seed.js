@@ -1,5 +1,6 @@
-const seed = require("./seed.js");
-const db = require("../connection.js");
+const seed = require("./seed");
+const db = require("../connection");
+const logger = require("../../utils/logger");
 
 // Determine the environment (default to 'development' if not set)
 const ENV = process.env.NODE_ENV || "development";
@@ -7,21 +8,30 @@ const ENV = process.env.NODE_ENV || "development";
 // Dynamically load the appropriate data set
 const data =
   ENV === "production"
-    ? require("../data/production-data/index.js")
-    : require("../data/development-data/index.js");
+    ? require("../data/production-data/index")
+    : require("../data/development-data/index");
 
-console.log(
+logger.info(
   `🫘 Seeding ${ENV} database with ${
     ENV === "production" ? "production" : "development"
-  } data...`
+  } data...`,
 );
 
-const runSeed = () => {
-  return seed(data).then(() => {
-    console.log("🚫 Now closing DB connection...");
-    // db.closeLogger();
-    db.end();
+const runSeed = () =>
+  seed(data).then(() => {
+    logger.info("🚫 Now closing DB connection...");
+    return db.end();
   });
-};
 
-runSeed();
+runSeed()
+  .then(() => {
+    logger.info("✅ Database seeding completed successfully");
+    process.exit(0);
+  })
+  .catch((error) => {
+    logger.error("❌ Database seeding failed", {
+      error: error.message,
+      stack: error.stack,
+    });
+    process.exit(1);
+  });
