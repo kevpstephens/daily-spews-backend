@@ -28,14 +28,7 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        imgSrc: [
-          "'self'",
-          "data:", // Allow data URLs for inline images
-          "blob:", // Allow blob URLs for dynamic images
-          "https:", // Allow all HTTPS images
-          "https://daily-spews-api.onrender.com",
-          "https://*.supabase.co",
-        ],
+        imgSrc: ["*"], // Allow all image sources
         connectSrc: ["'self'", "https://daily-spews.onrender.com"],
       },
     },
