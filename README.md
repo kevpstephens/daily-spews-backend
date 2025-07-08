@@ -18,7 +18,9 @@
 
 </div>
 
-> **Daily Spews** is a production-ready RESTful API for a Reddit-style satirical news platform. Built with **Node.js**, **Express**, and **PostgreSQL**, featuring JWT authentication, file uploads, comprehensive security middleware, and 123+ tests. Developed as part of the **Northcoders Software Engineering Bootcamp**.
+> - **Daily Spews** is a production-ready RESTful API for a Reddit-style satirical news platform.
+> - Built with **Node.js**, **Express**, and **PostgreSQL**, featuring JWT authentication, file uploads, comprehensive security middleware, and 123+ tests.
+> - Developed as part of the **Northcoders Software Engineering Bootcamp**.
 
 <br>
 <p align="center">
@@ -26,7 +28,14 @@
 </p>
 <br>
 
-A modern, scalable backend API showcasing professional-grade architecture, security best practices, and comprehensive testing. Features full CRUD operations, JWT authentication, file storage integration, and robust error handling.
+A robust, production-ready RESTful API for Daily Spews - a satirical news platform built as part of the Northcoders Software Development Bootcamp.
+
+- Built with Node.js, Express, and PostgreSQL for scalable, secure server-side operations
+- Features comprehensive JWT authentication, file uploads, and data validation
+- Includes full CRUD operations for articles, comments, users, and topics with voting systems
+- Production-grade security with rate limiting, CORS protection, and input sanitisation
+- Extensive test coverage with 123+ tests and comprehensive error handling
+- Serves data to the Daily Spews React frontend with optimised API endpoints
 
 <br>
 
@@ -330,7 +339,7 @@ CREATE TABLE comments (
 
 ### **🚀 Next Development Phase**
 
-- **Database optimization** with indexing strategies and query performance improvements
+- **Database optimisation** with indexing strategies and query performance improvements
 - **Redis caching layer** for frequently accessed articles and user sessions
 - **Real-time features** using WebSocket integration for live comments and voting
 - **Full-text search** with PostgreSQL GIN indexes for enhanced article discovery
