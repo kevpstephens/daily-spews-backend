@@ -1,4 +1,4 @@
-const db = require("../../db/connection");
+import db from "../../db/connection.js";
 
 /**
  * ! GET /api/topics
@@ -6,7 +6,7 @@ const db = require("../../db/connection");
  * @returns {Array} Array of topic objects
  */
 
-exports.selectTopics = async () => {
+export const selectTopics = async () => {
   const queryStr = `SELECT * FROM topics;`;
 
   const result = await db.query(queryStr);
@@ -24,7 +24,7 @@ exports.selectTopics = async () => {
  * @returns {Object} Newly created topic object
  */
 
-exports.insertTopic = async ({ slug, description, img_url }) => {
+export const insertTopic = async ({ slug, description, img_url }) => {
   if (!slug || !description || !img_url) {
     const error = new Error("Missing required topic fields!");
     error.status = 400;

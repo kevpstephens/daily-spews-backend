@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const db = require("./connection");
+import db from "./connection.js";
 
 const runQueries = async () => {
   try {

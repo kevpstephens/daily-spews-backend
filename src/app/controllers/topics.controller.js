@@ -1,7 +1,7 @@
-const { selectTopics, insertTopic } = require("../models/topics.model");
+import { selectTopics, insertTopic } from "../models/topics.model.js";
 
 //! GET /api/topics
-exports.getTopics = async (req, res, next) => {
+export const getTopics = async (req, res, next) => {
   try {
     const topics = await selectTopics();
     return res.status(200).send({ topics });
@@ -11,7 +11,7 @@ exports.getTopics = async (req, res, next) => {
 };
 
 //! POST /api/topics
-exports.postTopic = async (req, res, next) => {
+export const postTopic = async (req, res, next) => {
   const topicData = req.body;
 
   if (!topicData || !topicData.slug || !topicData.description) {

@@ -1,16 +1,16 @@
-const {
+import {
   selectArticleById,
   selectAllArticles,
   updateArticleById,
   insertArticle,
   removeArticleById,
-} = require("../models/articles.model");
-const { selectUserByUsername } = require("../models/users.model");
-const uploadToSupabase = require("../../utils/uploadToSupabase");
-const logger = require("../../utils/logger");
+} from "../models/articles.model.js";
+import { selectUserByUsername } from "../models/users.model.js";
+import uploadToSupabase from "../../utils/uploadToSupabase.js";
+import logger from "../../utils/logger.js";
 
 //! GET /api/articles
-exports.getAllArticles = async (req, res, next) => {
+export const getAllArticles = async (req, res, next) => {
   // Extract query parameters for sorting, ordering, filtering, and pagination
   const { sort_by, order, topic, limit, p } = req.query;
 
@@ -32,7 +32,7 @@ exports.getAllArticles = async (req, res, next) => {
 };
 
 //! GET /api/article/:article_id
-exports.getArticlesById = async (req, res, next) => {
+export const getArticlesById = async (req, res, next) => {
   // Extract article ID from route parameters
   const { article_id } = req.params;
 
@@ -49,7 +49,7 @@ exports.getArticlesById = async (req, res, next) => {
 };
 
 //! POST api/articles
-exports.postArticle = async (req, res, next) => {
+export const postArticle = async (req, res, next) => {
   const { author, title, body, topic } = req.body;
   let { article_img_url } = req.body;
 
@@ -86,7 +86,7 @@ exports.postArticle = async (req, res, next) => {
 };
 
 //! PATCH /api/articles/:article_id
-exports.patchArticleById = async (req, res, next) => {
+export const patchArticleById = async (req, res, next) => {
   // Extract article ID and vote increment value from request
   const { article_id } = req.params;
   const { inc_votes } = req.body;
@@ -107,7 +107,7 @@ exports.patchArticleById = async (req, res, next) => {
 };
 
 //! DELETE /api/articles/:article_id
-exports.deleteArticleById = async (req, res, next) => {
+export const deleteArticleById = async (req, res, next) => {
   const { article_id } = req.params;
 
   if (Number.isNaN(Number(article_id))) {

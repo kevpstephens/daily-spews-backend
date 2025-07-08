@@ -1,4 +1,4 @@
-const { convertTimestampToDate, createRef } = require("../src/db/seeds/utils");
+import { convertTimestampToDate, createRef } from "../src/db/seeds/utils.js";
 
 describe("convertTimestampToDate", () => {
   test("returns a new object", () => {

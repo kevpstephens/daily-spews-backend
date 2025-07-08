@@ -1,33 +1,36 @@
-const express = require("express");
-const cors = require("cors");
-const cookieParser = require("cookie-parser");
-const compression = require("compression");
-const rateLimit = require("express-rate-limit");
-const helmet = require("helmet");
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import compression from "compression";
+import rateLimit from "express-rate-limit";
+import helmet from "helmet";
+import {
+  handleCustomErrors,
+  handleServerErrors,
+  handlePSQLErrors,
+} from "./errors/errorHandlers.js";
+import apiRouter from "./app/routes/api.routes.js";
+import logger from "./utils/logger.js";
 
 const app = express();
 
-// ~~~~~~~~~~~~~~~ COMPRESSIONMIDDLEWARE ~~~~~~~~~~~~~~~
+//! =========================================
+//! COMPRESSION MIDDLEWARE
+//! =========================================
 app.use(compression());
 
-// ~~~~~~~~~~~~~~~ SECURITY MIDDLEWARE ~~~~~~~~~~~~~~~
+//! =========================================
+//! SECURITY MIDDLEWARE
+//! =========================================
 app.use(
   helmet({
     crossOriginResourcePolicy: false,
   }),
 );
 
-// ~~~~~~~~~~~~~~~ ERROR HANDLERS ~~~~~~~~~~~~~~~
-const {
-  handleCustomErrors,
-  handleServerErrors,
-  handlePSQLErrors,
-} = require("./errors/errorHandlers");
-
-// ~~~~~~~~~~~~~~~ ROUTERS ~~~~~~~~~~~~~~~
-const apiRouter = require("./app/routes/api.routes");
-
-// ~~~~~~~~~~~~~~~ CORS ~~~~~~~~~~~~~~~
+//! =========================================
+//! CORS MIDDLEWARE
+//! =========================================
 app.use(
   cors({
     origin: [
@@ -39,7 +42,9 @@ app.use(
   }),
 );
 
-// ~~~~~~~~~~~~~~~ REQUEST LOGGING ~~~~~~~~~~~~~~~
+//! =========================================
+//! REQUEST LOGGING MIDDLEWARE
+//! =========================================
 app.use((req, res, next) => {
   const start = Date.now();
 
@@ -48,23 +53,26 @@ app.use((req, res, next) => {
     const { statusCode: status } = res;
     const { method, url } = req;
 
-    // Color code by status
     let statusColor = "🟢";
     if (status >= 400) statusColor = "🔴";
     else if (status >= 300) statusColor = "🟡";
 
-    console.log(`${statusColor} ${method} ${url} - ${status} (${duration}ms)`);
+    logger.info(`${statusColor} ${method} ${url} - ${status} (${duration}ms)`);
   });
 
   next();
 });
 
-// ~~~~~~~~~~~~~~~ REQUEST PARSING ~~~~~~~~~~~~~~~
+//! =========================================
+//! REQUEST PARSING MIDDLEWARE
+//! =========================================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// ~~~~~~~~~~~~~~~ STATIC FILES ~~~~~~~~~~~~~~~
+//! =========================================
+//! STATIC FILES MIDDLEWARE
+//! =========================================
 app.use("/images", (req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:5173"); // Add explicit CORS headers for images
   res.header("Access-Control-Allow-Credentials", "true");
@@ -74,7 +82,9 @@ app.use("/images", (req, res, next) => {
 
 app.use(express.static("public"));
 
-// ~~~~~~~~~~~~~~~ RATE LIMITING ~~~~~~~~~~~~~~~
+//! =========================================
+//! RATE LIMITING MIDDLEWARE
+//! =========================================
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: process.env.NODE_ENV === "development" ? 10000 : 150,
@@ -82,25 +92,35 @@ const limiter = rateLimit({
   skip: () => process.env.NODE_ENV === "development", // Skip entirely in development
 });
 
-// ~~~~~~~~~~~~~~~ HEALTH CHECK ~~~~~~~~~~~~~~~
-app.use("/api", limiter);
-
-// ~~~~~~~~~~~~~~~ HEALTH CHECK ~~~~~~~~~~~~~~~
+//! =========================================
+//! HEALTH CHECK MIDDLEWARE
+//! =========================================
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "healthy" });
 });
 
-// ~~~~~~~~~~~~~~~ API ROUTES ~~~~~~~~~~~~~~~
+//! =========================================
+//! RATE LIMITING MIDDLEWARE
+//! =========================================
+app.use("/api", limiter);
+
+//! =========================================
+//! API ROUTES MIDDLEWARE
+//! =========================================
 app.use("/api", apiRouter);
 
-// ~~~~~~~~~~~~~~~ 404 HANDLER ~~~~~~~~~~~~~~~
+//! =========================================
+//! 404 HANDLER MIDDLEWARE
+//! =========================================
 app.use((req, res) => {
   res.status(404).send({ msg: "Path not found!" });
 });
 
-// ~~~~~~~~~~~~~~~ ERROR HANDLING ~~~~~~~~~~~~~~~
+//! =========================================
+//! ERROR HANDLING MIDDLEWARE
+//! =========================================
 app.use(handleCustomErrors);
 app.use(handlePSQLErrors);
 app.use(handleServerErrors);
 
-module.exports = app;
+export default app;

@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   {
     title: "Debugging Like a Pro: Strategies That Actually Work",
     topic: "coding",

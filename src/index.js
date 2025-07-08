@@ -1,5 +1,5 @@
-const app = require("./app");
-const logger = require("./utils/logger");
+import app from "./app.js";
+import logger from "./utils/logger.js";
 
 const { PORT = 9090 } = process.env;
 

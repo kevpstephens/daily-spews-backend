@@ -1,13 +1,8 @@
-const seed = require("./seed");
-const db = require("../connection");
-const logger = require("../../utils/logger");
+import seed from "./seed.js";
+import db from "../connection.js";
+import logger from "../../utils/logger.js";
 
 const ENV = process.env.NODE_ENV || "development";
-
-const data =
-  ENV === "production"
-    ? require("../data/production-data/index")
-    : require("../data/development-data/index");
 
 logger.info(
   `🫘 Seeding ${ENV} database with ${
@@ -15,11 +10,16 @@ logger.info(
   } data...`,
 );
 
-const runSeed = () =>
-  seed(data).then(() => {
-    logger.info("🚫 Now closing DB connection...");
-    return db.end();
-  });
+const runSeed = async () => {
+  const data =
+    ENV === "production"
+      ? await import("../data/production-data/index.js")
+      : await import("../data/development-data/index.js");
+
+  await seed(data);
+  logger.info("🚫 Now closing DB connection...");
+  return db.end();
+};
 
 runSeed()
   .then(() => {

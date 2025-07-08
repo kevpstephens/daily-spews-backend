@@ -1,12 +1,12 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   getArticlesById,
   getAllArticles,
   patchArticleById,
   postArticle,
   deleteArticleById,
-} = require("../controllers/articles.controller");
-const upload = require("../middleware/multer");
+} from "../controllers/articles.controller.js";
+import upload from "../middleware/multer.js";
 
 const articlesRouter = express.Router();
 
@@ -25,4 +25,4 @@ articlesRouter.patch("/:article_id", patchArticleById);
 //! DELETE /api/articles/:article_id
 articlesRouter.delete("/:article_id", deleteArticleById);
 
-module.exports = articlesRouter;
+export default articlesRouter;

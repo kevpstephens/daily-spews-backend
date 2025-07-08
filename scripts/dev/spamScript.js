@@ -4,8 +4,8 @@
  It is run using `npm run spam:dev`
 ============================================================ */
 
-const axios = require("axios");
-const logger = require("../../src/utils/logger");
+import axios from "axios";
+import logger from "../../src/utils/logger.js";
 
 const BASE_URL = process.env.API_URL || "http://localhost:9090";
 const REQUEST_COUNT = 100;

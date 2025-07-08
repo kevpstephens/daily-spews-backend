@@ -1,15 +1,15 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const {
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import {
   insertUser,
   selectUserByEmail,
   updateUserPasswordByUsername,
-} = require("../models/users.model");
-const uploadToSupabase = require("../../utils/uploadToSupabase");
-const logger = require("../../utils/logger");
+} from "../models/users.model.js";
+import uploadToSupabase from "../../utils/uploadToSupabase.js";
+import logger from "../../utils/logger.js";
 
 //! POST /api/auth/register
-exports.registerUser = async (req, res, next) => {
+export const registerUser = async (req, res, next) => {
   logger.info("Registration attempt started");
   logger.info("Request details", {
     hasFiles: !!req.files,
@@ -112,7 +112,7 @@ exports.registerUser = async (req, res, next) => {
 };
 
 //! POST /api/auth/login
-exports.loginUser = async (req, res, next) => {
+export const loginUser = async (req, res, next) => {
   logger.info("Login attempt started");
   const { email, password } = req.body;
 
@@ -172,7 +172,7 @@ exports.loginUser = async (req, res, next) => {
 };
 
 //! POST /api/auth/logout
-exports.logoutUser = (req, res, next) => {
+export const logoutUser = (req, res, next) => {
   logger.info("Logging out user");
   try {
     res.clearCookie("token", {
@@ -190,7 +190,7 @@ exports.logoutUser = (req, res, next) => {
 };
 
 //! PATCH /api/auth/:username/password
-exports.updateUserPassword = async (req, res, next) => {
+export const updateUserPassword = async (req, res, next) => {
   const { username } = req.params;
   const { newPassword } = req.body;
 

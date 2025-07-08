@@ -9,10 +9,10 @@
     2. Authorization header with Bearer token (for API clients)
  ============================================================ */
 
-const jwt = require("jsonwebtoken");
-const logger = require("../../utils/logger");
+import jwt from "jsonwebtoken";
+import logger from "../../utils/logger.js";
 
-exports.verifyToken = (req, res, next) => {
+export default function verifyToken(req, res, next) {
   try {
     // Extract token from cookie (primary method for web clients)
     const cookieToken = req.cookies?.token;
@@ -61,4 +61,4 @@ exports.verifyToken = (req, res, next) => {
 
     return res.status(401).send({ msg: "Invalid or expired token!" });
   }
-};
+}

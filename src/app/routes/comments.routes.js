@@ -1,10 +1,10 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   getCommentsByArticleId,
   postCommentByArticleId,
   deleteCommentById,
   patchCommentById,
-} = require("../controllers/comments.controller");
+} from "../controllers/comments.controller.js";
 
 const commentsRouter = express.Router();
 
@@ -20,4 +20,4 @@ commentsRouter.patch("/comments/:comment_id", patchCommentById);
 //! DELETE /api/comments/:comment_id
 commentsRouter.delete("/comments/:comment_id", deleteCommentById);
 
-module.exports = commentsRouter;
+export default commentsRouter;

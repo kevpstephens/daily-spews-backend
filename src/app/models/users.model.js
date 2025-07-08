@@ -1,4 +1,4 @@
-const db = require("../../db/connection");
+import db from "../../db/connection.js";
 
 /**
  * ! GET /api/users
@@ -6,7 +6,7 @@ const db = require("../../db/connection");
  * @returns {Array} Array of complete user objects (including password_hash)
  */
 
-exports.selectAllUsers = async () => {
+export const selectAllUsers = async () => {
   const queryStr = `SELECT * FROM users;`;
   const result = await db.query(queryStr);
 
@@ -20,7 +20,7 @@ exports.selectAllUsers = async () => {
  * @returns {Object} Complete user object (including password_hash)
  */
 
-exports.selectUserByUsername = async (username) => {
+export const selectUserByUsername = async (username) => {
   const queryStr = `SELECT * FROM users WHERE username = $1`;
   const result = await db.query(queryStr, [username]);
 
@@ -45,7 +45,7 @@ exports.selectUserByUsername = async (username) => {
  * @returns {Object} Created user object (excluding password_hash)
  */
 
-exports.insertUser = async ({
+export const insertUser = async ({
   username,
   name,
   email,
@@ -68,7 +68,7 @@ exports.insertUser = async ({
  * @returns {Object|undefined} Complete user object (including password_hash) or undefined if not found
  */
 
-exports.selectUserByEmail = async (email) => {
+export const selectUserByEmail = async (email) => {
   const result = await db.query(`SELECT * FROM users WHERE email = $1;`, [
     email,
   ]);
@@ -84,7 +84,7 @@ exports.selectUserByEmail = async (email) => {
  * @returns {Object} Updated user object (excluding password_hash)
  */
 
-exports.updateUserAvatar = async (username, avatar_url) => {
+export const updateUserAvatar = async (username, avatar_url) => {
   const result = await db.query(
     `
     UPDATE users
@@ -112,7 +112,10 @@ exports.updateUserAvatar = async (username, avatar_url) => {
  * @returns {Object} Updated user object with just username
  */
 
-exports.updateUserPasswordByUsername = async (username, hashedPassword) => {
+export const updateUserPasswordByUsername = async (
+  username,
+  hashedPassword,
+) => {
   const queryStr = `
     UPDATE users
     SET password_hash = $1

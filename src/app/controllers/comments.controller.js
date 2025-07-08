@@ -1,13 +1,13 @@
-const { selectArticleById } = require("../models/articles.model");
-const {
+import { selectArticleById } from "../models/articles.model.js";
+import {
   selectCommentsByArticleId,
   removeCommentById,
   insertCommentByArticleId,
   updateCommentVotesById,
-} = require("../models/comments.model");
+} from "../models/comments.model.js";
 
 //! GET /api/articles/:article_id/comments
-exports.getCommentsByArticleId = async (req, res, next) => {
+export const getCommentsByArticleId = async (req, res, next) => {
   const { article_id } = req.params;
   const { limit = 10, p = 1 } = req.query;
 
@@ -39,7 +39,7 @@ exports.getCommentsByArticleId = async (req, res, next) => {
 };
 
 // !POST /api/articles/:article_id/comments
-exports.postCommentByArticleId = async (req, res, next) => {
+export const postCommentByArticleId = async (req, res, next) => {
   const { article_id } = req.params;
   const { username, body } = req.body;
 
@@ -62,7 +62,7 @@ exports.postCommentByArticleId = async (req, res, next) => {
 };
 
 //! DELETE /api/comments/:comment_id
-exports.deleteCommentById = async (req, res, next) => {
+export const deleteCommentById = async (req, res, next) => {
   // Extract comment ID from route parameters
   const { comment_id } = req.params;
 
@@ -80,7 +80,7 @@ exports.deleteCommentById = async (req, res, next) => {
 };
 
 //! PATCH /api/comments/:comment_id
-exports.patchCommentById = async (req, res, next) => {
+export const patchCommentById = async (req, res, next) => {
   const { comment_id } = req.params;
   const { inc_votes } = req.body;
 

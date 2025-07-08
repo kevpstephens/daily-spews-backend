@@ -5,8 +5,8 @@
 // Generates unique filenames using UUIDs to prevent conflicts.
 /* ======================================================= */
 
-const { v4: uuid } = require("uuid");
-const { supabase } = require("./supabaseClient");
+import { v4 as uuid } from "uuid";
+import { supabase } from "./supabaseClient.js";
 
 /**
  *! UploadToSupabase
@@ -43,4 +43,4 @@ async function uploadToSupabase(
   return publicUrl.publicUrl;
 }
 
-module.exports = uploadToSupabase;
+export default uploadToSupabase;

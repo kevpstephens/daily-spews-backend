@@ -1,5 +1,5 @@
-const express = require("express");
-const { getTopics, postTopic } = require("../controllers/topics.controller");
+import express from "express";
+import { getTopics, postTopic } from "../controllers/topics.controller.js";
 
 const topicsRouter = express.Router();
 
@@ -9,4 +9,4 @@ topicsRouter.get("/", getTopics);
 //! POST /api/topics
 topicsRouter.post("/", postTopic);
 
-module.exports = topicsRouter;
+export default topicsRouter;

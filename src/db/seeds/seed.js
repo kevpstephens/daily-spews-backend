@@ -1,9 +1,9 @@
-const bcrypt = require("bcrypt");
-const format = require("pg-format");
-const db = require("../connection");
-const { convertTimestampToDate, createRef } = require("./utils");
-const createTables = require("../schemas/createTables");
-const logger = require("../../utils/logger");
+import bcrypt from "bcrypt";
+import format from "pg-format";
+import db from "../connection.js";
+import { convertTimestampToDate, createRef } from "./utils.js";
+import createTables from "../schemas/createTables.js";
+import logger from "../../utils/logger.js";
 
 const seed = async ({ topicData, userData, articleData, commentData }) => {
   try {
@@ -84,4 +84,4 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
   }
 };
 
-module.exports = seed;
+export default seed;
