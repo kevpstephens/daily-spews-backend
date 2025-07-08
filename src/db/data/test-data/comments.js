@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   {
     article_title: "They're not exactly dogs, are they?",
     body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",

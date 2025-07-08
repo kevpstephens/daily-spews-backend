@@ -5,8 +5,8 @@
 // Uses service role key for admin-level operations.
 /* ======================================================= */
 
-const { createClient } = require("@supabase/supabase-js");
-const logger = require("./logger");
+import { createClient } from "@supabase/supabase-js";
+import logger from "./logger.js";
 
 // Initialise Supabase client with service role for storage operations
 const supabase = createClient(
@@ -63,7 +63,4 @@ const uploadUserAvatar = async (path, file) => {
   }
 };
 
-module.exports = {
-  supabase,
-  uploadUserAvatar,
-};
+export { supabase, uploadUserAvatar };

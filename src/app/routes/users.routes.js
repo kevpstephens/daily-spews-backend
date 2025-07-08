@@ -1,12 +1,12 @@
-const express = require("express");
-const upload = require("../middleware/multer");
-const {
+import express from "express";
+import upload from "../middleware/multer.js";
+import {
   getUsers,
   getUserByUsername,
   getCurrentUser,
   updateAvatar,
-} = require("../controllers/users.controller");
-const { verifyToken } = require("../middleware/auth");
+} from "../controllers/users.controller.js";
+import verifyToken from "../middleware/auth.js";
 
 const usersRouter = express.Router();
 
@@ -22,4 +22,4 @@ usersRouter.get("/:username", getUserByUsername);
 //! POST /api/users/:username/avatar
 usersRouter.post("/:username/avatar", upload.single("avatar"), updateAvatar);
 
-module.exports = usersRouter;
+export default usersRouter;

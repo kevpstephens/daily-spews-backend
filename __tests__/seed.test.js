@@ -1,6 +1,6 @@
-const db = require("../src/db/connection");
-const seed = require("../src/db/seeds/seed");
-const data = require("../src/db/data/test-data/index");
+import db from "../src/db/connection.js";
+import seed from "../src/db/seeds/seed.js";
+import * as data from "../src/db/data/test-data/index.js";
 
 beforeAll(() => seed(data));
 afterAll(() => db.end());

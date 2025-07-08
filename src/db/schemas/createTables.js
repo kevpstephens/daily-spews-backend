@@ -1,4 +1,4 @@
-const db = require("../connection");
+import db from "../connection.js";
 
 const createTables = async () => {
   await db.query(`DROP TABLE IF EXISTS comments CASCADE;`);
@@ -46,4 +46,4 @@ const createTables = async () => {
   );`);
 };
 
-module.exports = createTables;
+export default createTables;

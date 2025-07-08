@@ -1,9 +1,17 @@
-const { Pool } = require("pg");
-const logger = require("../utils/logger");
+import pkg from "pg";
+import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+import logger from "../utils/logger.js";
+
+const { Pool } = pkg;
+
+const __filename = fileURLToPath(import.meta.url); // eslint-disable-line no-underscore-dangle
+const __dirname = dirname(__filename); // eslint-disable-line no-underscore-dangle
 
 const ENV = process.env.NODE_ENV || "development";
 
-require("dotenv").config({ path: `${__dirname}/../../.env.${ENV}` });
+dotenv.config({ path: join(__dirname, `../../.env.${ENV}`) });
 
 if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
   throw new Error("PGDATABASE or DATABASE_URL not set");
@@ -78,4 +86,4 @@ if (ENV === "development" && process.env.LOG_POOL_STATS === "true") {
   }, 30000); // Every 30 seconds
 }
 
-module.exports = pool;
+export default pool;

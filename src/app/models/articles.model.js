@@ -1,4 +1,4 @@
-const db = require("../../db/connection");
+import db from "../../db/connection.js";
 
 /**
  * ! GET /api/articles
@@ -12,7 +12,7 @@ const db = require("../../db/connection");
  * @returns {Object} Object containing articles array and total_count
  */
 
-exports.selectAllArticles = async ({
+export const selectAllArticles = async ({
   sort_by = "created_at",
   order = "desc",
   topic,
@@ -121,7 +121,7 @@ exports.selectAllArticles = async ({
  * @returns {Object} Article object with comment count
  */
 
-exports.selectArticleById = async (article_id) => {
+export const selectArticleById = async (article_id) => {
   const queryStr = `
     SELECT 
       articles.author,
@@ -162,7 +162,7 @@ exports.selectArticleById = async (article_id) => {
  * @returns {Object} Newly created article with comment_count set to 0
  */
 
-exports.insertArticle = async ({
+export const insertArticle = async ({
   author,
   title,
   body,
@@ -191,7 +191,7 @@ exports.insertArticle = async ({
  * @returns {Object} Updated article object
  */
 
-exports.updateArticleById = async (inc_votes, article_id) => {
+export const updateArticleById = async (inc_votes, article_id) => {
   const queryStr = `
         UPDATE articles
         SET votes = votes + $1
@@ -215,7 +215,7 @@ exports.updateArticleById = async (inc_votes, article_id) => {
  * Removes an article from the database
  * @param {number} article_id - ID of the article to delete
  */
-exports.removeArticleById = async (article_id) => {
+export const removeArticleById = async (article_id) => {
   const result = await db.query(
     `DELETE FROM articles WHERE article_id = $1 RETURNING *;`,
     [article_id],

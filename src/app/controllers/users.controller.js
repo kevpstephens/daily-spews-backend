@@ -1,13 +1,13 @@
-const { uploadUserAvatar } = require("../../utils/supabaseClient");
-const {
+import { uploadUserAvatar } from "../../utils/supabaseClient.js";
+import {
   selectAllUsers,
   selectUserByUsername,
   updateUserAvatar,
-} = require("../models/users.model");
-const logger = require("../../utils/logger");
+} from "../models/users.model.js";
+import logger from "../../utils/logger.js";
 
 //! GET /api/users
-exports.getUsers = async (req, res, next) => {
+export const getUsers = async (req, res, next) => {
   try {
     const users = await selectAllUsers();
     return res.status(200).send({ users });
@@ -17,7 +17,7 @@ exports.getUsers = async (req, res, next) => {
 };
 
 //! GET /api/users/me (protected)
-exports.getCurrentUser = async (req, res, next) => {
+export const getCurrentUser = async (req, res, next) => {
   try {
     logger.info("getCurrentUser called", {
       hasUser: !!req.user,
@@ -50,7 +50,7 @@ exports.getCurrentUser = async (req, res, next) => {
 };
 
 //! GET /api/users/:username
-exports.getUserByUsername = async (req, res, next) => {
+export const getUserByUsername = async (req, res, next) => {
   const { username } = req.params;
 
   try {
@@ -62,7 +62,7 @@ exports.getUserByUsername = async (req, res, next) => {
 };
 
 //! POST /api/users/:username/avatar
-exports.updateAvatar = async (req, res, next) => {
+export const updateAvatar = async (req, res, next) => {
   const { username } = req.params;
 
   if (!req.file) {

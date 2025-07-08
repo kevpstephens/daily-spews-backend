@@ -1,3 +1,16 @@
+<!-- markdownlint-disable MD033 MD041 MD026 MD012 MD024 MD001 MD040 -->
+
+<!-- {
+  "default": true,
+  "MD033": false,  // Allow inline HTML (e.g. <br>, <img>, <div>)
+  "MD041": false,  // Don't force first line to be a top-level heading
+  "MD026": false,  // Allow trailing punctuation in headings
+  "MD012": false,  // Allow multiple consecutive blank lines
+  "MD024": false,  // Allow duplicate headings
+  "MD001": false,  // Don't enforce heading increments (h1 -> h2 -> h3...)
+  "MD040": false   // Don't require language for fenced code blocks
+} -->
+
 <div align="center">
 
 # Daily Spews - Backend API

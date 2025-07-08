@@ -1,11 +1,11 @@
-exports.handleCustomErrors = (err, req, res, next) => {
+export const handleCustomErrors = (err, req, res, next) => {
   if (err.status && err.message) {
     return res.status(err.status).send({ msg: err.message });
   }
   return next(err);
 };
 
-exports.handlePSQLErrors = (err, req, res, next) => {
+export const handlePSQLErrors = (err, req, res, next) => {
   if (err.code === "22P02") {
     return res.status(400).send({ msg: "Bad request!" });
   }
@@ -20,5 +20,5 @@ exports.handlePSQLErrors = (err, req, res, next) => {
   return next(err);
 };
 
-exports.handleServerErrors = (err, req, res) =>
+export const handleServerErrors = (err, req, res) =>
   res.status(500).send({ msg: "Internal server error!" });

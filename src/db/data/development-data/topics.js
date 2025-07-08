@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   { description: "Code is love, code is life", slug: "coding", img_url: "" },
   {
     description: "FOOTIE!",

@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   {
     article_title:
       "The People Tracking Every Touch, Pass And Tackle in the World Cup",

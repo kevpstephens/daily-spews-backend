@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   {
     slug: "coding",
     description:

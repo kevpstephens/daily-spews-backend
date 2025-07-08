@@ -1,4 +1,4 @@
-const db = require("../../db/connection");
+import db from "../../db/connection.js";
 
 /**
  * ! GET /api/articles/:article_id/comments
@@ -9,7 +9,7 @@ const db = require("../../db/connection");
  * @returns {Object} Object containing comments array and total_count
  */
 
-exports.selectCommentsByArticleId = async (
+export const selectCommentsByArticleId = async (
   article_id,
   limit = 10,
   offset = 0,
@@ -66,7 +66,10 @@ exports.selectCommentsByArticleId = async (
  * @returns {Object} Newly created comment object
  */
 
-exports.insertCommentByArticleId = async (article_id, { username, body }) => {
+export const insertCommentByArticleId = async (
+  article_id,
+  { username, body },
+) => {
   const queryStr = `
           INSERT INTO comments
               (article_id, author, body)
@@ -86,7 +89,7 @@ exports.insertCommentByArticleId = async (article_id, { username, body }) => {
  * @param {number} comment_id - ID of the comment to delete
  */
 
-exports.removeCommentById = async (comment_id) => {
+export const removeCommentById = async (comment_id) => {
   const queryStr = `
           DELETE FROM comments
           WHERE comment_id = $1
@@ -110,7 +113,7 @@ exports.removeCommentById = async (comment_id) => {
  * @returns {Object} Updated comment object
  */
 
-exports.updateCommentVotesById = async (comment_id, inc_votes) => {
+export const updateCommentVotesById = async (comment_id, inc_votes) => {
   const queryStr = `
     UPDATE comments
     SET votes = votes + $1

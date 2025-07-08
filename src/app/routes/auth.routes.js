@@ -1,11 +1,11 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   registerUser,
   loginUser,
   logoutUser,
   updateUserPassword,
-} = require("../controllers/auth.controller");
-const upload = require("../middleware/multer");
+} from "../controllers/auth.controller.js";
+import upload from "../middleware/multer.js";
 
 const authRouter = express.Router();
 
@@ -22,4 +22,4 @@ authRouter.post("/logout", logoutUser);
 //! PATCH /api/auth/:username/password
 authRouter.patch("/:username/password", updateUserPassword);
 
-module.exports = authRouter;
+export default authRouter;

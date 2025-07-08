@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   {
     article_title: "Debugging Like a Pro: Strategies That Actually Work",
     body: "Great tips! The binary search method saved me more times than I can count.",

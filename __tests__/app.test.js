@@ -1,9 +1,9 @@
-const request = require("supertest");
-const endpointsJson = require("../endpoints.json");
-const app = require("../src/app");
-const db = require("../src/db/connection");
-const seed = require("../src/db/seeds/seed");
-const data = require("../src/db/data/test-data/index");
+import request from "supertest";
+import endpointsJson from "../endpoints.json" with { type: "json" };
+import app from "../src/app.js";
+import db from "../src/db/connection.js";
+import seed from "../src/db/seeds/seed.js";
+import * as data from "../src/db/data/test-data/index.js";
 
 beforeEach(() => {
   return seed(data);
