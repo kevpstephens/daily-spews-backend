@@ -1,16 +1,21 @@
-// ~~~~~~~~~~~~~~~ CORE MODULES ~~~~~~~~~~~~~~~
 const express = require("express");
-const helmet = require("helmet");
-const compression = require("compression");
-const rateLimit = require("express-rate-limit");
-
-const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const logger = require("./utils/logger");
+const compression = require("compression");
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
 
-// ~~~~~~~~~~~~~~~ ENVIRONMENT DETECTION ~~~~~~~~~~~~~~~
-const isDevelopment = process.env.NODE_ENV === "development";
+const app = express();
+
+// ~~~~~~~~~~~~~~~ COMPRESSIONMIDDLEWARE ~~~~~~~~~~~~~~~
+app.use(compression());
+
+// ~~~~~~~~~~~~~~~ SECURITY MIDDLEWARE ~~~~~~~~~~~~~~~
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  }),
+);
 
 // ~~~~~~~~~~~~~~~ ERROR HANDLERS ~~~~~~~~~~~~~~~
 const {
@@ -22,119 +27,74 @@ const {
 // ~~~~~~~~~~~~~~~ ROUTERS ~~~~~~~~~~~~~~~
 const apiRouter = require("./app/routes/api.routes");
 
-// ~~~~~~~~~~~~~~~ SECURITY MIDDLEWARE ~~~~~~~~~~~~~~~
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        imgSrc: ["*"], // Allow all image sources
-        connectSrc: ["'self'", "https://daily-spews.onrender.com"],
-      },
-    },
-    crossOriginEmbedderPolicy: false, // For Supabase compatibility
-  }),
-);
-
-// ~~~~~~~~~~~~~~~ PERFORMANCE MIDDLEWARE ~~~~~~~~~~~~~~~
-app.use(compression());
-
-// ~~~~~~~~~~~~~~~ STATIC FILES ~~~~~~~~~~~~~~~
-app.use(express.static("public")); // Serve static files from the 'public' directory
-
-// ~~~~~~~~~~~~~~~ CORS CONFIGURATION ~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~ CORS ~~~~~~~~~~~~~~~
 app.use(
   cors({
-    origin: (origin, callback) => {
-      const allowlist = [
-        "http://localhost:5173",
-        "https://daily-spews.onrender.com",
-        "https://daily-spews-preview.onrender.com",
-      ];
-      if (!origin || allowlist.includes(origin)) {
-        callback(null, true);
-      } else {
-        logger.error("Blocked by CORS:", origin);
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true, // allow cookies
+    origin: [
+      "http://localhost:5173",
+      "https://daily-spews.onrender.com",
+      "https://daily-spews-preview.onrender.com",
+    ],
+    credentials: true,
   }),
 );
-
-// ~~~~~~~~~~~~~~~ RATE LIMITING ~~~~~~~~~~~~~~~
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 150, // limit each IP to 150 requests per windowMs
-  message: { msg: "Too many requests, please try again later." },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-// ~~~~~~~~~~~~~~~ REQUEST PARSING ~~~~~~~~~~~~~~~
-app.use(
-  express.json({
-    limit: "10mb",
-    verify: (req, res, buf) => {
-      try {
-        JSON.parse(buf);
-      } catch (e) {
-        res.status(400).send({ msg: "Invalid JSON format" });
-      }
-    },
-  }),
-);
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-app.use(cookieParser());
 
 // ~~~~~~~~~~~~~~~ REQUEST LOGGING ~~~~~~~~~~~~~~~
-const requestLogger = (req, res, next) => {
+app.use((req, res, next) => {
   const start = Date.now();
 
   res.on("finish", () => {
     const duration = Date.now() - start;
-    logger.info("Request completed", {
-      method: req.method,
-      url: req.url,
-      status: res.statusCode,
-      duration: `${duration}ms`,
-      userAgent: req.get("User-Agent"),
-      ip: req.ip,
-    });
+    const { statusCode: status } = res;
+    const { method, url } = req;
+
+    // Color code by status
+    let statusColor = "🟢";
+    if (status >= 400) statusColor = "🔴";
+    else if (status >= 300) statusColor = "🟡";
+
+    console.log(`${statusColor} ${method} ${url} - ${status} (${duration}ms)`);
   });
 
   next();
-};
+});
 
-app.use(requestLogger);
+// ~~~~~~~~~~~~~~~ REQUEST PARSING ~~~~~~~~~~~~~~~
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-// ~~~~~~~~~~~~~~~ DEVELOPMENT MIDDLEWARE ~~~~~~~~~~~~~~~
-if (isDevelopment) {
-  app.use((req, res, next) => {
-    logger.debug("Development request details", {
-      headers: req.headers,
-      body: req.body,
-      query: req.query,
-    });
-    next();
-  });
-}
+// ~~~~~~~~~~~~~~~ STATIC FILES ~~~~~~~~~~~~~~~
+// Add explicit CORS headers for images
+app.use("/images", (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Vary", "Origin");
+  next();
+});
+
+app.use(express.static("public"));
+
+// ~~~~~~~~~~~~~~~ RATE LIMITING ~~~~~~~~~~~~~~~
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: process.env.NODE_ENV === "development" ? 10000 : 150, // Very high limit for dev
+  message: { msg: "Too many requests, please try again later." },
+  skip: () => process.env.NODE_ENV === "development", // Skip entirely in development
+});
+
+// ~~~~~~~~~~~~~~~ HEALTH CHECK ~~~~~~~~~~~~~~~
+app.use("/api", limiter);
 
 // ~~~~~~~~~~~~~~~ HEALTH CHECK ~~~~~~~~~~~~~~~
 app.get("/health", (req, res) => {
-  res.status(200).json({
-    status: "healthy",
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    environment: process.env.NODE_ENV,
-    version: process.env.npm_package_version || "1.0.0",
-  });
+  res.status(200).json({ status: "healthy" });
 });
 
-// ~~~~~~~~~~~~~~~ API ROUTER ~~~~~~~~~~~~~~~
-app.use("/api", limiter, apiRouter);
+// ~~~~~~~~~~~~~~~ API ROUTES ~~~~~~~~~~~~~~~
+app.use("/api", apiRouter);
 
-// ~~~~~~~~~~~~~~~ CATCH-ALL ~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~ 404 HANDLER ~~~~~~~~~~~~~~~
 app.use((req, res) => {
   res.status(404).send({ msg: "Path not found!" });
 });
