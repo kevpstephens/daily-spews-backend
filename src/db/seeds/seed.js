@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
-const db = require("../connection");
 const format = require("pg-format");
+const db = require("../connection");
 const { convertTimestampToDate, createRef } = require("./utils");
 const createTables = require("../schemas/createTables");
 const logger = require("../../utils/logger");
@@ -64,24 +64,22 @@ const seed = async ({ topicData, userData, articleData, commentData }) => {
       convertTimestampToDate,
     );
     const formattedComments = createdAtErrorCorrectedCommentsData.map(
-      (comment) => {
-        return [
-          articlesRefObject[comment.article_title],
-          comment.body,
-          comment.votes,
-          comment.author,
-          comment.created_at,
-        ];
-      },
+      (comment) => [
+        articlesRefObject[comment.article_title],
+        comment.body,
+        comment.votes,
+        comment.author,
+        comment.created_at,
+      ],
     );
     const insertCommentsData = format(
       `INSERT INTO comments (article_id, body, votes, author, created_at) VALUES %L;`,
       formattedComments,
     );
     await db.query(insertCommentsData);
-    logger.info("Seed complete!");
+    logger.info("✅ Seed complete!");
   } catch (err) {
-    logger.error("Error seeding database:", err.message);
+    logger.error("❌ Error seeding database:", err.message);
     throw err;
   }
 };
