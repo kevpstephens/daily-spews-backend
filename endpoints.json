@@ -42,6 +42,21 @@
     }
   },
 
+  "GET /api/users/me": {
+    "description": "Returns the current authenticated user's information. Requires valid JWT token via cookie or Authorisation header.",
+    "queries": [],
+    "exampleRequest": "/api/users/me",
+    "exampleResponse": {
+      "user": {
+        "username": "jessjelly",
+        "name": "Jess Jelly",
+        "email": "jessjelly@example.com",
+        "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141",
+        "created_at": "2020-04-06T12:17:00.000Z"
+      }
+    }
+  },
+
   "GET /api/articles": {
     "description": "Returns a paginated array of article objects. Each object includes comment_count and excludes the body field. Supports sorting, ordering, topic filtering, and pagination via query parameters.",
     "queries": ["sort_by", "order", "topic", "limit", "p"],
@@ -208,6 +223,18 @@
     "exampleRequest": "/api/auth/logout",
     "exampleResponse": {
       "msg": "Logged out successfully!"
+    }
+  },
+
+  "PATCH /api/auth/:username/password": {
+    "description": "Updates a user's password. Requires the new password in the request body.",
+    "queries": [],
+    "exampleRequest": "/api/auth/jessjelly/password",
+    "exampleBody": {
+      "newPassword": "mynewsecurepassword123"
+    },
+    "exampleResponse": {
+      "msg": "Password updated for jessjelly"
     }
   },
 
