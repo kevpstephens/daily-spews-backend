@@ -31,7 +31,7 @@
 
 </div>
 
-> - **Daily Spews** is a production-ready RESTful API for a Reddit-style satirical news platform.
+> - **Daily Spews** is a modern RESTful API for a Reddit-style satirical news platform.
 > - Built with **Node.js**, **Express**, and **PostgreSQL**, featuring JWT authentication, file uploads, comprehensive security middleware, and 123+ tests.
 > - Developed as part of the **Northcoders Software Engineering Bootcamp**.
 
@@ -41,7 +41,7 @@
 </p>
 <br>
 
-A robust, production-ready RESTful API for Daily Spews - a satirical news platform built as part of the Northcoders Software Development Bootcamp.
+A robust, modern RESTful API for Daily Spews - a satirical news platform built as part of the Northcoders Software Development Bootcamp.
 
 - Built with Node.js, Express, and PostgreSQL for scalable, secure server-side operations
 - Features comprehensive JWT authentication, file uploads, and data validation
