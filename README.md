@@ -69,7 +69,7 @@ A robust, modern RESTful API for Daily Spews - a satirical news platform built a
 - [API Endpoints](#api-endpoints)
 - [Database Schema](#database-schema)
 - [Deployment](#deployment)
-- [Future Considerations](#future-considerations)
+- [Future Enhancements](#future-enhancements)
 
 ## <br><br>
 
@@ -348,16 +348,14 @@ CREATE TABLE comments (
 
 ## <br><br>
 
-# Future Considerations:
+# Future Enhancements:
 
-### **🚀 Next Development Phase**
-
-- **Database optimisation** with indexing strategies and query performance improvements
-- **Redis caching layer** for frequently accessed articles and user sessions
-- **Real-time features** using WebSocket integration for live comments and voting
-- **Full-text search** with PostgreSQL GIN indexes for enhanced article discovery
-- **Enhanced rate limiting** with user-specific controls and API throttling
-- **JWT refresh tokens** for improved authentication security and session management
+- 🗃️ **Database optimisation** – Indexing strategies and query performance improvements
+- 🧠 **Redis caching layer** – Faster access to frequent articles and active user sessions
+- 🔁 **Real-time comments & voting** – WebSocket integration for live interactions
+- 🔍 **Full-text search** - PostgreSQL GIN indexes for better article discovery
+- 🚦 **Enhanced rate limiting** – User-based controls and advanced API throttling
+- 🔐 **JWT refresh tokens** – Improved authentication and session security
 
 <br>
 <br>
